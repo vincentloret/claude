@@ -135,4 +135,3 @@ L'avantage : pas de bruit. Seulement ce qui me concerne vraiment, vu mes objecti
 - L'historique se construit naturellement au fil des sessions, pas besoin de tout y mettre
 - Pour les documents externes (PDFs, exports Notion, captures d'écran), utilisez systématiquement `context/import/`
 - Ne modifiez pas manuellement HISTORY.md, laissez Claude s'en charger via `/update`
-- 
