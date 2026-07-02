@@ -9,6 +9,18 @@
 
 ## 2026-07-02
 
+### Enrichissement de CONTEXT.md à partir du bilan de compétences
+- Lecture du document `context/import/Bilan_de_competences_pour_reconversion_professionnelle.md` (4311 lignes)
+- Reformulation de la démarche : ce n'est pas une reconversion, c'est un **repositionnement professionnel** (quitter le contexte ESN, garder le métier)
+- Cible clarifiée : Lead UX / UX Strategist / Senior Product Designer orienté stratégie chez un annonceur, en priorité dans le bassin nantais
+- Positionnement rédigé pour LinkedIn (narratif) et pour le portfolio (serviciel)
+- Contraintes explicitées : périmètre Nantes / hybride, refus du full remote, refus ESN/agence de com
+- Réseau : petit réseau nantais actif à mobiliser autrement (parler concrètement du projet)
+- Trait de personnalité identifié : modestie/humilité à respecter, mais fin de l'effacement stratégique ("il ne s'agit pas de se cacher mais de se présenter")
+- Chantiers principaux identifiés : refonte CV, refonte portfolio (structure en 6 blocs validée), activation du réseau, candidature Maisons du Monde à retravailler
+- Cas emblématiques repérés : Stereolux (changement de business model), Interakting (création de marque), ADEME (repositionnement stratégique)
+- Formations à cibler via l'employeur : IA appliquée au design, UI avancé / design system mature
+
 ### Installation initiale de Luna
 - Workspace personnalisé pour Vincent, basé à Nantes
 - Assistant renommé de Jarvis en **Luna**
@@ -20,4 +32,3 @@
 - Outils du quotidien : Figma, Notion, Miro, Claude Design
 - Domaine d'aide prioritaire : recherche et préparation d'entretiens pour un changement d'employeur
 - Style de communication choisi : mélange selon le contexte (direct + pédagogique)
-- À prévoir : import du contenu de la discussion Claude "Bilan de compétences pour reconversion professionnelle" dans `context/import/` pour enrichir CONTEXT.md
