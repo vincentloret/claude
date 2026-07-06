@@ -68,14 +68,18 @@ Une fois que je confirme, Claude met à jour le fichier en question et ajoute un
 ├── context/
 │   ├── CONTEXT.md               # Qui je suis, ce que je fais, mes objectifs
 │   ├── HISTORY.md               # Journal évolutif de mes sessions
-│   └── import/                  # Documents externes à analyser
+│   └── import/                  # Documents que je fournis (INPUTS)
+├── livrables/                   # Ce que Luna produit pour moi (OUTPUTS)
+│   ├── sites-web/               # Sites internet
+│   ├── applications/            # Outils, scripts, automatisations
+│   └── youtube/                 # Briefs vidéo, scripts
 ├── .claude/
 │   ├── commands/
 │   │   ├── prime.md             # /prime pour démarrer une session
 │   │   ├── update.md            # /update pour mettre à jour le contexte
 │   │   └── morning.md           # /morning pour démarrer la journée
 │   └── skills/
-│       └── recherche-actualites/ # Skill veille personnalisée
+│       └── recherche-actualites-contextualisees/ # Skill veille personnalisée
 └── module-installs/
     └── jarvis-install/          # Module d'installation initial
 ```
@@ -83,10 +87,18 @@ Une fois que je confirme, Claude met à jour le fichier en question et ajoute un
 | Dossier | Utilité |
 |---------|---------|
 | `context/` | Tout ce qui me concerne et que Claude doit savoir |
-| `context/import/` | Documents externes (PDFs, exports, notes) à analyser |
+| `context/import/` | Documents que je fournis à Luna (INPUTS) |
+| `livrables/` | Ce que Luna produit pour moi (OUTPUTS) |
 | `.claude/commands/` | Commandes personnalisées de mon Luna |
 | `.claude/skills/` | Skills (super-pouvoirs) de mon Luna |
 | `module-installs/` | Modules d'installation (initial et futurs) |
+
+### Règle d'or : inputs vs outputs
+
+- **Inputs** (documents que je fournis) → `context/import/`
+- **Outputs** (ce que Luna produit pour moi) → `livrables/`
+
+Voir `livrables/README.md` pour la convention de nommage des projets (`AAAA-MM-JJ_nom-du-projet/`) et le détail par sous-dossier.
 
 ---
 

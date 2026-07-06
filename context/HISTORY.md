@@ -7,6 +7,19 @@
 
 ---
 
+## 2026-07-06
+
+### Structuration du workspace : commandes, skill, arborescence livrables
+- Installation partielle du Jarvis Starter Kit sans passer par le questionnaire initial, pour préserver CONTEXT.md et HISTORY.md déjà enrichis
+- Commandes personnalisées créées : `/prime`, `/update`, `/morning`
+- Skill de veille créée : `recherche-actualites-contextualisees` (filtrage strict sur le contexte UX/IA/Nantes/repositionnement pro)
+- Arborescence `livrables/` créée à la racine du workspace avec 3 sous-dossiers thématiques : `sites-web/`, `applications/`, `youtube/`
+- Convention de nommage projet arrêtée : `AAAA-MM-JJ_nom-du-projet/` (kebab-case, sans accents)
+- Règle d'or documentée dans `CLAUDE.md` et `livrables/README.md` : inputs (documents fournis) → `context/import/`, outputs (produits par Luna) → `livrables/`
+- Mise à jour de `CLAUDE.md` : arborescence + tableau des dossiers + section "Règle d'or inputs/outputs"
+
+---
+
 ## 2026-07-02
 
 ### Enrichissement de CONTEXT.md à partir du bilan de compétences
