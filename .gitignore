@@ -1,0 +1,12 @@
+# Fichiers de secrets locaux, à ne JAMAIS pousser sur GitHub
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+secrets/
+context/import/secrets/
+
+# Fichiers de config Claude Code locaux
+.claude/settings.local.json
+.claude/.credentials
