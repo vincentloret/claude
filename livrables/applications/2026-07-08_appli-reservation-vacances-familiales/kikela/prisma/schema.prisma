@@ -1,0 +1,77 @@
+// Schéma Prisma de Kikela — planning partagé des lieux de vacances familiaux.
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+enum StatutSejour {
+  confirme
+  souhait
+}
+
+enum Ambiance {
+  montagne
+  mer
+}
+
+model Lieu {
+  id                 String        @id
+  slug               String        @unique
+  nom                String
+  region             String
+  ambiance           Ambiance
+  couleur            String
+  couleurContainer   String
+  couleurOnContainer String
+  icone              String
+  capacite           Int
+  chambres           Int
+  description        String
+  equipements        Equipement[]
+  photos             LieuPhoto[]
+  sejours            Sejour[]
+}
+
+model Equipement {
+  id     Int    @id @default(autoincrement())
+  icone  String
+  label  String
+  ordre  Int    @default(0)
+  lieu   Lieu   @relation(fields: [lieuId], references: [id], onDelete: Cascade)
+  lieuId String
+}
+
+model LieuPhoto {
+  id     Int    @id @default(autoincrement())
+  url    String
+  ordre  Int    @default(0)
+  lieu   Lieu   @relation(fields: [lieuId], references: [id], onDelete: Cascade)
+  lieuId String
+}
+
+model Foyer {
+  id         String   @id
+  nom        String
+  initiales  String
+  couleur    String
+  sejours    Sejour[]
+}
+
+model Sejour {
+  id        String       @id @default(cuid())
+  lieu      Lieu         @relation(fields: [lieuId], references: [id], onDelete: Cascade)
+  lieuId    String
+  foyer     Foyer        @relation(fields: [foyerId], references: [id], onDelete: Cascade)
+  foyerId   String
+  debut     DateTime
+  fin       DateTime
+  personnes Int
+  statut    StatutSejour
+  note      String?
+  creeLe    DateTime     @default(now())
+}

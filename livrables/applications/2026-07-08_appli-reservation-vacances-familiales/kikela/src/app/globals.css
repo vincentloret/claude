@@ -1,0 +1,113 @@
+@import "tailwindcss";
+
+:root {
+  /* Neutrals (warm, from the Kikela mockup) */
+  --md-surface: #fff8f6;
+  --md-surface-container: #fbf1ed;
+  --md-surface-container-high: #efe0d9;
+  --md-surface-variant: #e9e4de;
+  --md-outline: #b79a91;
+  --md-outline-variant: #dcc7bf;
+  --md-on-surface: #211a17;
+  --md-on-surface-variant: #6a554d;
+  --md-on-surface-muted: #8a756d;
+
+  /* Primary (terracotta seed) */
+  --md-primary: #a5492a;
+  --md-primary-hover: #7e3417;
+  --md-on-primary: #ffffff;
+  --md-primary-container: #ffdbcf;
+  --md-on-primary-container: #3b0a00;
+
+  /* Lieux accents */
+  --lieu-bolquere: #2f8f4e;
+  --lieu-bolquere-container: #cdebd9;
+  --lieu-bolquere-on-container: #0c2a18;
+
+  --lieu-gedre: #565693;
+  --lieu-gedre-container: #e2e0ff;
+  --lieu-gedre-on-container: #191a46;
+
+  --lieu-saint-gilles: #1f6fb2;
+  --lieu-saint-gilles-container: #c6e9f7;
+  --lieu-saint-gilles-on-container: #062634;
+
+  /* Status */
+  --status-warning-container: #fdecc8;
+  --status-warning-on-container: #7a5a12;
+
+  --background: var(--md-surface);
+  --foreground: var(--md-on-surface);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  --color-surface: var(--md-surface);
+  --color-surface-container: var(--md-surface-container);
+  --color-surface-container-high: var(--md-surface-container-high);
+  --color-surface-variant: var(--md-surface-variant);
+  --color-outline: var(--md-outline);
+  --color-outline-variant: var(--md-outline-variant);
+  --color-on-surface: var(--md-on-surface);
+  --color-on-surface-variant: var(--md-on-surface-variant);
+  --color-on-surface-muted: var(--md-on-surface-muted);
+
+  --color-primary: var(--md-primary);
+  --color-primary-hover: var(--md-primary-hover);
+  --color-on-primary: var(--md-on-primary);
+  --color-primary-container: var(--md-primary-container);
+  --color-on-primary-container: var(--md-on-primary-container);
+
+  --color-bolquere: var(--lieu-bolquere);
+  --color-bolquere-container: var(--lieu-bolquere-container);
+  --color-bolquere-on-container: var(--lieu-bolquere-on-container);
+
+  --color-gedre: var(--lieu-gedre);
+  --color-gedre-container: var(--lieu-gedre-container);
+  --color-gedre-on-container: var(--lieu-gedre-on-container);
+
+  --color-saint-gilles: var(--lieu-saint-gilles);
+  --color-saint-gilles-container: var(--lieu-saint-gilles-container);
+  --color-saint-gilles-on-container: var(--lieu-saint-gilles-on-container);
+
+  --color-warning-container: var(--status-warning-container);
+  --color-warning-on-container: var(--status-warning-on-container);
+
+  --font-sans: "Roboto", system-ui, sans-serif;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+}
+
+.msym {
+  font-family: "Material Symbols Rounded";
+  font-weight: 400;
+  font-style: normal;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-flex;
+  white-space: nowrap;
+  -webkit-font-feature-settings: "liga";
+  -webkit-font-smoothing: antialiased;
+}
+
+.msym-fill {
+  font-variation-settings: "FILL" 1;
+}
+
+::-webkit-scrollbar {
+  height: 8px;
+  width: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.16);
+  border-radius: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}

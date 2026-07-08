@@ -1,0 +1,8 @@
+-- CreateTable
+CREATE TABLE "LieuPhoto" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "url" TEXT NOT NULL,
+    "ordre" INTEGER NOT NULL DEFAULT 0,
+    "lieuId" TEXT NOT NULL,
+    CONSTRAINT "LieuPhoto_lieuId_fkey" FOREIGN KEY ("lieuId") REFERENCES "Lieu" ("id") ON DELETE CASCADE ON UPDATE CASCADE
+);

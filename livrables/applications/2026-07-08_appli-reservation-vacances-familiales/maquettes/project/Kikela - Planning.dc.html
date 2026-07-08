@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,400,0..1,0&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#E9E4DE;font-family:'Roboto',system-ui,sans-serif;-webkit-font-smoothing:antialiased;color:#211A17}
+a{color:#A5492A;text-decoration:none}a:hover{color:#7E3417}
+::-webkit-scrollbar{height:8px;width:8px}::-webkit-scrollbar-thumb{background:rgba(0,0,0,.16);border-radius:8px}::-webkit-scrollbar-track{background:transparent}
+@keyframes spin{to{transform:rotate(360deg)}}
+.msym{font-family:'Material Symbols Rounded';font-weight:400;font-style:normal;line-height:1;letter-spacing:normal;text-transform:none;display:inline-flex;white-space:nowrap;-webkit-font-feature-settings:'liga';-webkit-font-smoothing:antialiased}
+</style>
+</helmet>
+
+<div style="padding:40px 48px 64px">
+
+  <!-- ===== canvas header ===== -->
+  <div style="max-width:1760px;margin:0 auto 34px">
+    <div style="display:flex;align-items:center;gap:12px">
+      <div style="width:36px;height:36px;border-radius:12px;background:#A5492A;display:flex;align-items:center;justify-content:center"><span class="msym" style="font-size:22px;color:#fff">holiday_village</span></div>
+      <div style="font:700 26px/1 Roboto;letter-spacing:-.5px;color:#3B0A00">Kikela</div>
+      <div style="margin-left:6px;padding:4px 10px;border-radius:20px;background:#FFDBCF;color:#6E2000;font:500 12px Roboto">Parcours · 4 écrans</div>
+    </div>
+    <p style="margin:14px 0 0;max-width:760px;font:400 14px/1.6 Roboto;color:#6A554D">
+      Vue partagée du planning des 3 lieux familiaux. Réservations confirmées (Google Calendar) en <b style="color:#211A17">plein</b>, souhaits exprimés par foyer en <b style="color:#211A17">pointillés + avatar</b>. Material 3, palette dynamique terracotta. Chaque lieu porte sa couleur &amp; son icône : <span style="color:#2F8F4E;font-weight:500">Bolquère</span> · <span style="color:#565693;font-weight:500">Gèdre</span> · <span style="color:#1F6FB2;font-weight:500">Saint-Gilles</span>.
+    </p>
+  </div>
+
+  <!-- ####### SECTION HEADING : AUTH ####### -->
+  <div style="max-width:1760px;margin:0 auto;display:flex;align-items:center;gap:12px;padding:8px 0 20px">
+    <span style="width:28px;height:28px;border-radius:9px;background:#3B0A00;color:#fff;font:600 14px Roboto;display:flex;align-items:center;justify-content:center">1</span>
+    <span style="font:600 20px Roboto;color:#3B0A00">Authentification</span>
+    <span style="font:400 14px Roboto;color:#8A756D">— connexion Google &amp; synchronisation des calendriers</span>
+  </div>
+
+  <div style="display:flex;flex-wrap:wrap;gap:56px;align-items:flex-start;max-width:1760px;margin:0 auto 72px">
+
+    <!-- AUTH DESKTOP -->
+    <div>
+      <div style="font:600 12px/1 Roboto;letter-spacing:.06em;text-transform:uppercase;color:#8A756D;margin:0 0 14px">Desktop</div>
+      <div data-screen-label="Auth · Desktop" style="width:1240px;height:720px;background:#FFF8F6;border-radius:22px;overflow:hidden;display:flex;box-shadow:0 24px 60px -20px rgba(59,10,0,.28),0 4px 12px rgba(0,0,0,.08)">
+        <!-- left brand -->
+        <div style="width:54%;background:#F7E4DC;padding:52px 48px;display:flex;flex-direction:column">
+          <div style="display:flex;align-items:center;gap:12px">
+            <div style="width:44px;height:44px;border-radius:14px;background:#A5492A;display:flex;align-items:center;justify-content:center"><span class="msym" style="font-size:26px;color:#fff">holiday_village</span></div>
+            <div style="font:700 26px/1 Roboto;letter-spacing:-.5px;color:#3B0A00">Kikela</div>
+          </div>
+          <div style="font:700 40px/1.1 Roboto;letter-spacing:-1px;color:#3B0A00;margin:40px 0 14px;max-width:440px">Réservez vos vacances en famille.</div>
+          <div style="font:400 16px/1.55 Roboto;color:#7A5A4E;max-width:400px;margin-bottom:32px">Un planning partagé pour les 3 lieux familiaux. Voyez qui vient, quand, et posez vos souhaits de séjour en quelques secondes.</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:auto">
+            <div style="grid-column:1 / -1;height:150px;border-radius:18px;overflow:hidden;position:relative;background:repeating-linear-gradient(135deg,#D5E6F2 0 13px,#C8DCEC 13px 26px)"><span style="position:absolute;top:12px;left:14px;font:500 11px ui-monospace,monospace;color:#41586A;background:rgba(255,255,255,.72);padding:3px 8px;border-radius:20px">photo · bord de mer</span><span style="position:absolute;bottom:12px;left:14px;display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.9);padding:4px 10px;border-radius:20px;font:500 12px Roboto;color:#06283A"><span style="width:9px;height:9px;border-radius:50%;background:#1F6FB2"></span>Saint-Gilles</span></div>
+            <div style="height:120px;border-radius:18px;overflow:hidden;position:relative;background:repeating-linear-gradient(135deg,#DCE7DE 0 13px,#D0E0D2 13px 26px)"><span style="position:absolute;bottom:10px;left:12px;display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.9);padding:4px 9px;border-radius:20px;font:500 12px Roboto;color:#0C2A18"><span style="width:9px;height:9px;border-radius:50%;background:#2F8F4E"></span>Bolquère</span></div>
+            <div style="height:120px;border-radius:18px;overflow:hidden;position:relative;background:repeating-linear-gradient(135deg,#E4E2F0 0 13px,#D9D6EA 13px 26px)"><span style="position:absolute;bottom:10px;left:12px;display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.9);padding:4px 9px;border-radius:20px;font:500 12px Roboto;color:#191A46"><span style="width:9px;height:9px;border-radius:50%;background:#565693"></span>Gèdre</span></div>
+          </div>
+        </div>
+        <!-- right signin -->
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:48px 56px">
+          <div style="width:100%;max-width:360px">
+            <div style="font:400 28px/1.15 Roboto;color:#211A17;margin-bottom:10px">Bon retour !</div>
+            <div style="font:400 15px/1.5 Roboto;color:#6A554D;margin-bottom:36px">Connectez-vous avec le compte Google de la famille pour accéder au calendrier partagé.</div>
+            <div style="display:flex;align-items:center;justify-content:center;gap:12px;height:52px;width:100%;border-radius:14px;background:#fff;border:1px solid #DADCE0;box-shadow:0 1px 2px rgba(0,0,0,.08);font:500 15px Roboto;color:#3C4043;cursor:pointer">
+              <svg width="20" height="20" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+              Se connecter avec Google
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;color:#8A756D;margin:22px 0 22px;font:400 13px Roboto"><span style="flex:1;height:1px;background:#EFE0D9"></span>accès sécurisé<span style="flex:1;height:1px;background:#EFE0D9"></span></div>
+            <div style="display:flex;gap:10px;align-items:flex-start;color:#8A756D;font:400 12.5px/1.5 Roboto"><span class="msym" style="font-size:18px;color:#A5492A;margin-top:1px">shield</span>Kikela consulte et ajoute des événements dans votre Google Agenda familial. Vos autres calendriers restent privés.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AUTH MOBILE -->
+    <div>
+      <div style="font:600 12px/1 Roboto;letter-spacing:.06em;text-transform:uppercase;color:#8A756D;margin:0 0 14px">Mobile</div>
+      <div style="width:408px;padding:10px;border-radius:54px;background:#1C1512;box-shadow:0 24px 60px -20px rgba(59,10,0,.32)">
+        <div data-screen-label="Auth · Mobile" style="width:388px;height:840px;border-radius:44px;overflow:hidden;background:#FFF8F6;position:relative">
+          <!-- hero image -->
+          <div style="position:absolute;inset:0;height:560px;background:repeating-linear-gradient(135deg,#D5E6F2 0 15px,#C8DCEC 15px 30px)"></div>
+          <div style="position:absolute;top:20px;left:20px;font:500 11px ui-monospace,monospace;color:#41586A;background:rgba(255,255,255,.72);padding:4px 10px;border-radius:20px">photo · vacances en famille</div>
+          <div style="position:absolute;left:0;right:0;top:300px;height:280px;background:linear-gradient(to bottom,rgba(255,248,246,0),#FFF8F6 78%)"></div>
+          <!-- status bar -->
+          <div style="position:absolute;top:0;left:0;right:0;height:44px;display:flex;align-items:center;justify-content:space-between;padding:0 26px 0 30px"><span style="font:600 14px Roboto;color:#0F2A3C">9:41</span><div style="display:flex;align-items:center;gap:6px;color:#0F2A3C"><span class="msym" style="font-size:16px">signal_cellular_alt</span><span class="msym" style="font-size:16px">wifi</span><span class="msym" style="font-size:18px">battery_full</span></div></div>
+          <!-- brand over image -->
+          <div style="position:absolute;left:0;right:0;top:360px;display:flex;flex-direction:column;align-items:center;padding:0 32px;text-align:center">
+            <div style="width:60px;height:60px;border-radius:20px;background:#A5492A;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 20px -4px rgba(59,10,0,.4)"><span class="msym" style="font-size:34px;color:#fff">holiday_village</span></div>
+            <div style="font:700 30px/1 Roboto;letter-spacing:-.5px;color:#3B0A00;margin:18px 0 8px">Kikela</div>
+            <div style="font:400 16px/1.45 Roboto;color:#7A5A4E">Réservez vos vacances<br>en famille</div>
+          </div>
+          <!-- bottom sheet -->
+          <div style="position:absolute;left:0;right:0;bottom:0;padding:0 24px 40px;display:flex;flex-direction:column;align-items:center">
+            <div style="display:flex;align-items:center;justify-content:center;gap:12px;height:54px;width:100%;border-radius:16px;background:#fff;border:1px solid #DADCE0;box-shadow:0 2px 6px rgba(0,0,0,.1);font:500 15px Roboto;color:#3C4043">
+              <svg width="20" height="20" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+              Se connecter avec Google
+            </div>
+            <div style="font:400 12px/1.5 Roboto;color:#8A756D;text-align:center;margin-top:16px;padding:0 8px">En continuant, vous autorisez Kikela à gérer les événements du Google Agenda familial.</div>
+            <div style="width:130px;height:5px;border-radius:3px;background:rgba(0,0,0,.28);margin-top:20px"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AUTH LOADING -->
+    <div>
+      <div style="font:600 12px/1 Roboto;letter-spacing:.06em;text-transform:uppercase;color:#8A756D;margin:0 0 14px">Mobile · synchronisation</div>
+      <div style="width:408px;padding:10px;border-radius:54px;background:#1C1512;box-shadow:0 24px 60px -20px rgba(59,10,0,.32)">
+        <div data-screen-label="Auth · Chargement" style="width:388px;height:840px;border-radius:44px;overflow:hidden;background:#FBEAE3;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 40px">
+          <div style="position:absolute;top:0;left:0;right:0;height:44px;display:flex;align-items:center;justify-content:space-between;padding:0 26px 0 30px"><span style="font:600 14px Roboto;color:#3B0A00">9:41</span><div style="display:flex;align-items:center;gap:6px;color:#3B0A00"><span class="msym" style="font-size:16px">signal_cellular_alt</span><span class="msym" style="font-size:16px">wifi</span><span class="msym" style="font-size:18px">battery_full</span></div></div>
+          <div style="width:56px;height:56px;border-radius:50%;border:4px solid #F0D8CD;border-top-color:#A5492A;animation:spin .9s linear infinite"></div>
+          <div style="font:500 19px Roboto;color:#3B0A00;margin:28px 0 8px;text-align:center">Synchronisation en cours…</div>
+          <div style="font:400 14px/1.5 Roboto;color:#7A5A4E;text-align:center;margin-bottom:36px">Récupération des calendriers Google des 3 lieux</div>
+          <div style="width:100%;display:flex;flex-direction:column;gap:10px">
+            <div style="display:flex;align-items:center;gap:12px;background:#fff;border-radius:14px;padding:12px 14px"><span class="msym" style="font-size:20px;color:#2F8F4E">apartment</span><span style="flex:1;font:500 14px Roboto;color:#211A17">Bolquère</span><span class="msym" style="font-size:20px;color:#2F8F4E">check_circle</span></div>
+            <div style="display:flex;align-items:center;gap:12px;background:#fff;border-radius:14px;padding:12px 14px"><span class="msym" style="font-size:20px;color:#565693">cottage</span><span style="flex:1;font:500 14px Roboto;color:#211A17">Gèdre</span><span class="msym" style="font-size:20px;color:#565693">check_circle</span></div>
+            <div style="display:flex;align-items:center;gap:12px;background:#fff;border-radius:14px;padding:12px 14px"><span class="msym" style="font-size:20px;color:#1F6FB2">waves</span><span style="flex:1;font:500 14px Roboto;color:#211A17">Saint-Gilles</span><div style="width:18px;height:18px;border-radius:50%;border:2.5px solid #E3D3CB;border-top-color:#1F6FB2;animation:spin .8s linear infinite"></div></div>
+          </div>
+          <div style="width:130px;height:5px;border-radius:3px;background:rgba(59,10,0,.18);position:absolute;bottom:12px"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ####### SECTION HEADING : PLANNING ####### -->
+  <div style="max-width:1760px;margin:0 auto;display:flex;align-items:center;gap:12px;padding:8px 0 20px">
+    <span style="width:28px;height:28px;border-radius:9px;background:#3B0A00;color:#fff;font:600 14px Roboto;display:flex;align-items:center;justify-content:center">2</span>
+    <span style="font:600 20px Roboto;color:#3B0A00">Planning</span>
+    <span style="font:400 14px Roboto;color:#8A756D">— vue partagée du calendrier des 3 lieux</span>
+  </div>
+
+  <div style="display:flex;flex-wrap:wrap;gap:56px;align-items:flex-start;max-width:1760px;margin:0 auto">
+
+  <!-- ============================================================ -->
+  <!-- ============== DESKTOP ==================================== -->
+  <!-- ============================================================ -->
+  <div>
+    <div style="font:600 12px/1 Roboto;letter-spacing:.06em;text-transform:uppercase;color:#8A756D;margin:0 0 14px">Desktop</div>
+    <div data-screen-label="Planning · Desktop" style="width:1240px;background:#FFF8F6;border-radius:22px;overflow:hidden;box-shadow:0 24px 60px -20px rgba(59,10,0,.28),0 4px 12px rgba(0,0,0,.08)">
+      <!-- browser chrome -->
+      <div style="height:42px;background:#EFE0D9;display:flex;align-items:center;gap:8px;padding:0 16px;border-bottom:1px solid #E6D2CA">
+        <div style="width:11px;height:11px;border-radius:50%;background:#E4886F"></div>
+        <div style="width:11px;height:11px;border-radius:50%;background:#E6BE7A"></div>
+        <div style="width:11px;height:11px;border-radius:50%;background:#9FC79B"></div>
+        <div style="margin:0 auto;display:flex;align-items:center;gap:8px;height:26px;padding:0 16px;background:#FBF1ED;border-radius:20px;font:400 12px Roboto;color:#8A756D"><span class="msym" style="font-size:14px">lock</span>kikela.app/planning</div>
+        <div style="width:52px"></div>
+      </div>
+
+      <div style="display:flex;height:812px">
+        <!-- nav rail -->
+        <div style="width:88px;background:#FBF1ED;border-right:1px solid #F0E0D9;display:flex;flex-direction:column;align-items:center;padding:14px 0;gap:6px">
+          <div style="width:44px;height:44px;border-radius:14px;background:#A5492A;display:flex;align-items:center;justify-content:center;margin-bottom:12px"><span class="msym" style="font-size:24px;color:#fff">holiday_village</span></div>
+          <!-- Planning active -->
+          <div style="display:flex;flex-direction:column;align-items:center;gap:5px;width:100%;cursor:pointer">
+            <div style="width:56px;height:32px;border-radius:16px;background:#FFDBCF;display:flex;align-items:center;justify-content:center"><span class="msym" style="font-size:24px;color:#3B0A00;font-variation-settings:'FILL' 1">calendar_month</span></div>
+            <div style="font:500 12px Roboto;color:#3B0A00">Planning</div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:5px;width:100%;margin-top:6px;cursor:pointer">
+            <div style="width:56px;height:32px;display:flex;align-items:center;justify-content:center"><span class="msym" style="font-size:24px;color:#6A554D">cottage</span></div>
+            <div style="font:500 12px Roboto;color:#6A554D">Lieux</div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:5px;width:100%;margin-top:6px;cursor:pointer">
+            <div style="width:56px;height:32px;display:flex;align-items:center;justify-content:center"><span class="msym" style="font-size:24px;color:#6A554D">groups</span></div>
+            <div style="font:500 12px Roboto;color:#6A554D">Mon foyer</div>
+          </div>
+          <div style="margin-top:auto;width:40px;height:40px;border-radius:50%;background:#6D4C7D;display:flex;align-items:center;justify-content:center;color:#fff;font:500 15px Roboto">CV</div>
+        </div>
+
+        <!-- main -->
+        <div style="flex:1;display:flex;flex-direction:column;min-width:0">
+          <!-- top app bar -->
+          <div style="height:68px;display:flex;align-items:center;padding:0 24px;border-bottom:1px solid #F0E0D9;gap:16px">
+            <div style="font:400 22px/1 Roboto;color:#211A17">Planning</div>
+            <div style="margin-left:auto;display:flex;align-items:center;height:40px;padding:0 16px;border-radius:20px;border:1px solid #DCC7BF;color:#6A554D;font:500 14px Roboto;gap:8px;cursor:pointer"><span class="msym" style="font-size:18px">search</span>Rechercher un foyer</div>
+            <div style="width:40px;height:40px;border-radius:50%;background:#EFE0D9;display:flex;align-items:center;justify-content:center;cursor:pointer"><span class="msym" style="font-size:22px;color:#6A554D">notifications</span></div>
+            <div style="width:40px;height:40px;border-radius:50%;background:#6D4C7D;display:flex;align-items:center;justify-content:center;color:#fff;font:500 15px Roboto">CV</div>
+          </div>
+
+          <div style="flex:1;display:flex;min-height:0">
+            <!-- sidebar : filtres + légende -->
+            <div style="width:248px;border-right:1px solid #F0E0D9;padding:22px 18px;overflow-y:auto">
+              <div style="font:500 12px/1 Roboto;letter-spacing:.06em;text-transform:uppercase;color:#8A756D;margin:0 0 12px">Lieux</div>
+              <div style="display:flex;flex-direction:column;gap:8px">
+                <div style="display:flex;align-items:center;gap:10px;height:44px;padding:0 12px;border-radius:14px;background:#CDEBD9;cursor:pointer"><span class="msym" style="font-size:20px;color:#2F8F4E">apartment</span><span style="font:500 14px Roboto;color:#0C2A18;flex:1">Bolquère</span><span class="msym" style="font-size:18px;color:#2F8F4E">check</span></div>
+                <div style="display:flex;align-items:center;gap:10px;height:44px;padding:0 12px;border-radius:14px;background:#E2E0FF;cursor:pointer"><span class="msym" style="font-size:20px;color:#565693">cottage</span><span style="font:500 14px Roboto;color:#191A46;flex:1">Gèdre</span><span class="msym" style="font-size:18px;color:#565693">check</span></div>
+                <div style="display:flex;align-items:center;gap:10px;height:44px;padding:0 12px;border-radius:14px;background:#C6E9F7;cursor:pointer"><span class="msym" style="font-size:20px;color:#1F6FB2">waves</span><span style="font:500 14px Roboto;color:#062634;flex:1">Saint-Gilles</span><span class="msym" style="font-size:18px;color:#1F6FB2">check</span></div>
+              </div>
+
+              <div style="height:1px;background:#F0E0D9;margin:22px 0"></div>
+
+              <div style="font:500 12px/1 Roboto;letter-spacing:.06em;text-transform:uppercase;color:#8A756D;margin:0 0 14px">Légende</div>
+              <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px"><div style="width:34px;height:16px;border-radius:5px;background:#6A554D"></div><span style="font:400 13px Roboto;color:#4A3B34">Réservation confirmée</span></div>
+              <div style="display:flex;align-items:center;gap:10px;margin-bottom:22px"><div style="width:34px;height:16px;border-radius:5px;border:1.5px dashed #6A554D;background:repeating-linear-gradient(45deg,rgba(106,85,77,.10) 0 4px,transparent 4px 8px)"></div><span style="font:400 13px Roboto;color:#4A3B34">Souhait exprimé</span></div>
+
+              <div style="display:flex;flex-direction:column;gap:10px">
+                <div style="display:flex;align-items:center;gap:10px"><span style="width:12px;height:12px;border-radius:50%;background:#2F8F4E"></span><span style="font:400 13px Roboto;color:#4A3B34">Bolquère · Pyrénées</span></div>
+                <div style="display:flex;align-items:center;gap:10px"><span style="width:12px;height:12px;border-radius:50%;background:#565693"></span><span style="font:400 13px Roboto;color:#4A3B34">Gèdre · Gavarnie</span></div>
+                <div style="display:flex;align-items:center;gap:10px"><span style="width:12px;height:12px;border-radius:50%;background:#1F6FB2"></span><span style="font:400 13px Roboto;color:#4A3B34">Saint-Gilles · Vendée</span></div>
+              </div>
+            </div>
+
+            <!-- calendar -->
+            <div style="flex:1;display:flex;flex-direction:column;min-width:0;padding:20px 22px">
+              <!-- calendar toolbar -->
+              <div style="display:flex;align-items:center;gap:16px;margin-bottom:18px">
+                <div style="display:flex;align-items:center;gap:4px">
+                  <div style="width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer"><span class="msym" style="font-size:22px;color:#6A554D">chevron_left</span></div>
+                  <div style="font:500 20px/1 Roboto;color:#211A17;min-width:150px;text-align:center">Août 2026</div>
+                  <div style="width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer"><span class="msym" style="font-size:22px;color:#6A554D">chevron_right</span></div>
+                </div>
+                <div style="font:500 14px Roboto;color:#A5492A;cursor:pointer">Aujourd'hui</div>
+                <!-- segmented -->
+                <div style="margin-left:auto;display:flex;border:1px solid #DCC7BF;border-radius:20px;overflow:hidden;height:36px">
+                  <div style="display:flex;align-items:center;gap:6px;padding:0 16px;background:#F7DDD2;color:#3B0A00;font:500 13px Roboto"><span class="msym" style="font-size:16px">check</span>Mois</div>
+                  <div style="display:flex;align-items:center;padding:0 18px;color:#6A554D;font:500 13px Roboto;border-left:1px solid #DCC7BF;cursor:pointer">Semaine</div>
+                  <div style="display:flex;align-items:center;padding:0 18px;color:#6A554D;font:500 13px Roboto;border-left:1px solid #DCC7BF;cursor:pointer">Liste</div>
+                </div>
+              </div>
+
+              <!-- weekday header -->
+              <div style="display:grid;grid-template-columns:repeat(7,1fr);border-bottom:1px solid #EFE0D9;padding-bottom:8px">
+                <div style="font:500 12px Roboto;color:#8A756D;text-align:left;padding-left:4px">LUN</div>
+                <div style="font:500 12px Roboto;color:#8A756D;padding-left:4px">MAR</div>
+                <div style="font:500 12px Roboto;color:#8A756D;padding-left:4px">MER</div>
+                <div style="font:500 12px Roboto;color:#8A756D;padding-left:4px">JEU</div>
+                <div style="font:500 12px Roboto;color:#8A756D;padding-left:4px">VEN</div>
+                <div style="font:500 12px Roboto;color:#8A756D;padding-left:4px">SAM</div>
+                <div style="font:500 12px Roboto;color:#8A756D;padding-left:4px">DIM</div>
+              </div>
+
+              <!-- ===== WEEK 1 : 27-31 Jul, 1-2 Aug ===== -->
+              <div style="position:relative;height:104px;border-bottom:1px solid #F3E6E0">
+                <div style="position:absolute;inset:0;display:grid;grid-template-columns:repeat(7,1fr)">
+                  <div style="border-right:1px solid #F3E6E0;padding:6px 8px;font:500 12px Roboto;color:#C9B7B0">27</div>
+                  <div style="border-right:1px solid #F3E6E0;padding:6px 8px;font:500 12px Roboto;color:#C9B7B0">28</div>
+                  <div style="border-right:1px solid #F3E6E0;padding:6px 8px;font:500 12px Roboto;color:#C9B7B0">29</div>
+                  <div style="border-right:1px solid #F3E6E0;padding:6px 8px;font:500 12px Roboto;color:#C9B7B0">30</div>
+                  <div style="border-right:1px solid #F3E6E0;padding:6px 8px;font:500 12px Roboto;color:#C9B7B0">31</div>
+                  <div style="border-right:1px solid #F3E6E0;padding:6px 8px;font:500 12px Roboto;color:#6A554D">1</div>
+                  <div style="padding:6px 8px;font:500 12px Roboto;color:#6A554D">2</div>
+                </div>
+              </div>
+
+              <!-- ===== WEEK 2 : 3-9 Aug ===== -->
+              <div style="position:relative;height:104px;border-bottom:1px solid #F3E6E0">
+                <div style="position:absolute;inset:0;display:grid;grid-template-columns:repeat(7,1fr)">
+                  <div style="border-right:1px solid #F3E6E0;padding:6px 8px;font:500 12px Roboto;color:#211A17">3</div>
+                  <div style="border-right:1px solid #F3E6E0;padding:6px 8px;font:500 12px Roboto;color:#211A17">4</div>
+                  <div style="border-right:1px solid #F3E6E0;padding:6px 8px;font:500 12px Roboto;color:#211A17">5</div>
+                  <div style="border-right:1px solid #F3E6E0;padding:6px 8px;font:500 12px Roboto;color:#211A17">6</div>
+                  <div style="border-right:1px solid #F3E6E0;padding:6px 8px;font:500 12px Roboto;color:#211A17">7</div>
+                  <div style="border-right:1px solid #F3E6E0;padding:6px 8px;font:500 12px Roboto;color:#211A17">8</div>
+                  <div style="padding:6px 8px;font:500 12px Roboto;color:#211A17">9</div>
+                </div>
+                <div style="position:absolute;top:30px;left:calc(0% + 4px);width:calc(100% - 8px);height:22px;border-radius:6px;background:#2F8F4E;color:#fff;display:flex;align-items:center;gap:6px;padding:0 10px;font:500 12px Roboto;overflow:hidden;white-space:nowrap"><span class="msym" style="font-size:14px">apartment</span>Papy Mamie</div>
+                <div style="position:absolute;top:56px;left:calc(71.4286% + 4px);width:calc(28.5714% - 8px);height:22px;border-radius:6px;background:#565693;color:#fff;display:flex;align-items:center;gap:6px;padding:0 10px;font:500 12px Roboto;overflow:hidden;white-space:nowrap"><span class="msym" style="font-size:14px">cottage</span>Claire &amp; Vincent</div>
+              </div>
+
+              <!-- ===== WEEK 3 : 10-16 Aug ===== -->
+              <div style="position:relative;height:104px;border-bottom:1px solid #F3E6E0">
+                <div style="position:absolute;inset:0;display:grid;grid-template-columns:repeat(7,1fr)">
+                  <div style="border-right:1px solid #F3E6E0;padding:6px 8px;font:500 12px Roboto;color:#211A17">10</div>
+                  <div style="border-right:1px solid #F3E6E0;padding:6px 8px;font:500 12px Roboto;color:#211A17">11</div>
+                  <div style="border-right:1px solid #F3E6E0;padding:6px 8px;font:500 12px Roboto;color:#211A17">12</div>
+                  <div style="border-right:1px solid #F3E6E0;padding:6px 8px;font:500 12px Roboto;color:#211A17">13</div>
+                  <div style="border-right:1px solid #F3E6E0;padding:6px 8px;font:500 12px Roboto;color:#211A17">14</div>
+                  <div style="border-right:1px solid #F3E6E0;padding:6px 8px;font:500 12px Roboto;color:#211A17">15</div>
+                  <div style="padding:6px 8px;font:500 12px Roboto;color:#211A17">16</div>
+                </div>
+                <div style="position:absolute;top:30px;left:calc(0% + 4px);width:calc(71.4286% - 8px);height:22px;border-radius:6px;background:#565693;color:#fff;display:flex;align-items:center;gap:6px;padding:0 10px;font:500 12px Roboto;overflow:hidden;white-space:nowrap"><span class="msym" style="font-size:14px">cottage</span>Claire &amp; Vincent</div>
+                <div style="position:absolute;top:56px;left:calc(0% + 4px);width:calc(100% - 8px);height:22px;border-radius:6px;background:#1F6FB2;color:#fff;display:flex;align-items:center;gap:6px;padding:0 10px;font:500 12px Roboto;overflow:hidden;white-space:nowrap"><span class="msym" style="font-size:14px">waves</span>Michael &amp; Christelle</div>
+                <div style="position:absolute;top:82px;left:calc(71.4286% + 4px);width:calc(28.5714% - 8px);height:22px;border-radius:6px;background:#C6E9F7;border:1.5px dashed #1F6FB2;color:#062634;display:flex;align-items:center;gap:5px;padding:0 8px;font:500 12px Roboto;overflow:hidden;white-space:nowrap"><span style="width:15px;height:15px;border-radius:50%;background:#B4632E;color:#fff;font:600 8px Roboto;display:flex;align-items:center;justify-content:center;flex:none">CL</span>Clara &amp; Louka</div>
+              </div>
+
+              <!-- ===== WEEK 4 : 17-23 Aug ===== -->
+              <div style="position:relative;height:104px;border-bottom:1px solid #F3E6E0">
+                <div style="position:absolute;inset:0;display:grid;grid-template-columns:repeat(7,1fr)">
+                  <div style="border-right:1px solid #F3E6E0;padding:6px 8px;font:500 12px Roboto;color:#211A17">17</div>
+                  <div style="border-right:1px solid #F3E6E0;padding:6px 8px;font:500 12px Roboto;color:#211A17">18</div>
+                  <div style="border-right:1px solid #F3E6E0;padding:6px 8px;font:500 12px Roboto;color:#211A17">19</div>
+                  <div style="border-right:1px solid #F3E6E0;padding:6px 8px;font:500 12px Roboto;color:#211A17">20</div>
+                  <div style="border-right:1px solid #F3E6E0;padding:6px 8px;font:500 12px Roboto;color:#211A17">21</div>
+                  <div style="border-right:1px solid #F3E6E0;padding:6px 8px;font:500 12px Roboto;color:#211A17">22</div>
+                  <div style="padding:6px 8px;font:500 12px Roboto;color:#211A17">23</div>
+                </div>
+                <div style="position:absolute;top:30px;left:calc(0% + 4px);width:calc(14.2857% - 8px);height:22px;border-radius:6px;background:#1F6FB2;color:#fff;display:flex;align-items:center;gap:6px;padding:0 8px;font:500 12px Roboto;overflow:hidden;white-space:nowrap"><span class="msym" style="font-size:14px">waves</span></div>
+                <div style="position:absolute;top:56px;left:calc(0% + 4px);width:calc(100% - 8px);height:22px;border-radius:6px;background:#E2E0FF;border:1.5px dashed #565693;color:#191A46;display:flex;align-items:center;gap:5px;padding:0 8px;font:500 12px Roboto;overflow:hidden;white-space:nowrap"><span style="width:15px;height:15px;border-radius:50%;background:#4A6D8C;color:#fff;font:600 8px Roboto;display:flex;align-items:center;justify-content:center;flex:none">CM</span>Carole &amp; Marc</div>
+                <div style="position:absolute;top:82px;left:calc(71.4286% + 4px);width:calc(28.5714% - 8px);height:22px;border-radius:6px;background:#CDEBD9;border:1.5px dashed #2F8F4E;color:#0C2A18;display:flex;align-items:center;gap:5px;padding:0 8px;font:500 12px Roboto;overflow:hidden;white-space:nowrap"><span style="width:15px;height:15px;border-radius:50%;background:#8C5A5A;color:#fff;font:600 8px Roboto;display:flex;align-items:center;justify-content:center;flex:none">J</span>Juliette</div>
+              </div>
+
+              <!-- ===== WEEK 5 : 24-30 Aug ===== -->
+              <div style="position:relative;height:104px;border-bottom:1px solid #F3E6E0">
+                <div style="position:absolute;inset:0;display:grid;grid-template-columns:repeat(7,1fr)">
+                  <div style="border-right:1px solid #F3E6E0;padding:6px 8px;font:500 12px Roboto;color:#211A17">24</div>
+                  <div style="border-right:1px solid #F3E6E0;padding:6px 8px;font:500 12px Roboto;color:#211A17">25</div>
+                  <div style="border-right:1px solid #F3E6E0;padding:6px 8px;font:500 12px Roboto;color:#211A17">26</div>
+                  <div style="border-right:1px solid #F3E6E0;padding:6px 8px;font:500 12px Roboto;color:#211A17">27</div>
+                  <div style="border-right:1px solid #F3E6E0;padding:6px 8px;font:500 12px Roboto;color:#211A17">28</div>
+                  <div style="border-right:1px solid #F3E6E0;padding:6px 8px;font:500 12px Roboto;color:#211A17">29</div>
+                  <div style="padding:6px 8px;font:500 12px Roboto;color:#211A17">30</div>
+                </div>
+                <div style="position:absolute;top:30px;left:calc(0% + 4px);width:calc(71.4286% - 8px);height:22px;border-radius:6px;background:#CDEBD9;border:1.5px dashed #2F8F4E;color:#0C2A18;display:flex;align-items:center;gap:5px;padding:0 8px;font:500 12px Roboto;overflow:hidden;white-space:nowrap"><span style="width:15px;height:15px;border-radius:50%;background:#8C5A5A;color:#fff;font:600 8px Roboto;display:flex;align-items:center;justify-content:center;flex:none">J</span>Juliette</div>
+                <div style="position:absolute;top:56px;left:calc(0% + 4px);width:calc(100% - 8px);height:22px;border-radius:6px;background:#C6E9F7;border:1.5px dashed #1F6FB2;color:#062634;display:flex;align-items:center;gap:5px;padding:0 8px;font:500 12px Roboto;overflow:hidden;white-space:nowrap"><span style="width:15px;height:15px;border-radius:50%;background:#5E6B3E;color:#fff;font:600 8px Roboto;display:flex;align-items:center;justify-content:center;flex:none">IS</span>Isabelle &amp; Sébastien</div>
+              </div>
+
+              <!-- ===== WEEK 6 : 31 Aug, 1-6 Sep ===== -->
+              <div style="position:relative;height:76px">
+                <div style="position:absolute;inset:0;display:grid;grid-template-columns:repeat(7,1fr)">
+                  <div style="border-right:1px solid #F3E6E0;padding:6px 8px;font:500 12px Roboto;color:#211A17">31</div>
+                  <div style="border-right:1px solid #F3E6E0;padding:6px 8px;font:500 12px Roboto;color:#C9B7B0">1</div>
+                  <div style="border-right:1px solid #F3E6E0;padding:6px 8px;font:500 12px Roboto;color:#C9B7B0">2</div>
+                  <div style="border-right:1px solid #F3E6E0;padding:6px 8px;font:500 12px Roboto;color:#C9B7B0">3</div>
+                  <div style="border-right:1px solid #F3E6E0;padding:6px 8px;font:500 12px Roboto;color:#C9B7B0">4</div>
+                  <div style="border-right:1px solid #F3E6E0;padding:6px 8px;font:500 12px Roboto;color:#C9B7B0">5</div>
+                  <div style="padding:6px 8px;font:500 12px Roboto;color:#C9B7B0">6</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- right : prochains séjours -->
+            <div style="width:326px;border-left:1px solid #F0E0D9;padding:22px 18px;overflow-y:auto;background:#FBF1ED">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+                <div style="font:500 15px Roboto;color:#211A17">Prochains séjours</div>
+                <span class="msym" style="font-size:20px;color:#8A756D">unfold_more</span>
+              </div>
+
+              <!-- card confirmed Bolquère -->
+              <div style="background:#fff;border-radius:16px;padding:14px;margin-bottom:12px;border:1px solid #F0E0D9;display:flex;gap:12px">
+                <div style="width:4px;border-radius:4px;background:#2F8F4E;flex:none"></div>
+                <div style="flex:1;min-width:0">
+                  <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px"><span class="msym" style="font-size:16px;color:#2F8F4E">apartment</span><span style="font:500 14px Roboto;color:#211A17">Bolquère</span><span style="margin-left:auto;padding:2px 8px;border-radius:20px;background:#CDEBD9;color:#0C2A18;font:500 11px Roboto">Confirmé</span></div>
+                  <div style="font:400 13px Roboto;color:#6A554D;margin-bottom:8px">3 – 9 août</div>
+                  <div style="display:flex;align-items:center;gap:8px"><span style="width:26px;height:26px;border-radius:50%;background:#7A5B2E;color:#fff;font:600 10px Roboto;display:flex;align-items:center;justify-content:center">PM</span><span style="font:400 13px Roboto;color:#4A3B34;flex:1">Papy Mamie</span><span style="display:flex;align-items:center;gap:3px;color:#8A756D;font:500 12px Roboto"><span class="msym" style="font-size:15px">group</span>2</span></div>
+                </div>
+              </div>
+
+              <!-- card confirmed Gèdre -->
+              <div style="background:#fff;border-radius:16px;padding:14px;margin-bottom:12px;border:1px solid #F0E0D9;display:flex;gap:12px">
+                <div style="width:4px;border-radius:4px;background:#565693;flex:none"></div>
+                <div style="flex:1;min-width:0">
+                  <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px"><span class="msym" style="font-size:16px;color:#565693">cottage</span><span style="font:500 14px Roboto;color:#211A17">Gèdre</span><span style="margin-left:auto;padding:2px 8px;border-radius:20px;background:#E2E0FF;color:#191A46;font:500 11px Roboto">Confirmé</span></div>
+                  <div style="font:400 13px Roboto;color:#6A554D;margin-bottom:8px">8 – 14 août</div>
+                  <div style="display:flex;align-items:center;gap:8px"><span style="width:26px;height:26px;border-radius:50%;background:#6D4C7D;color:#fff;font:600 10px Roboto;display:flex;align-items:center;justify-content:center">CV</span><span style="font:400 13px Roboto;color:#4A3B34;flex:1">Claire &amp; Vincent</span><span style="display:flex;align-items:center;gap:3px;color:#8A756D;font:500 12px Roboto"><span class="msym" style="font-size:15px">group</span>4</span></div>
+                </div>
+              </div>
+
+              <!-- card wish St-Gilles (conflict) -->
+              <div style="background:#fff;border-radius:16px;padding:14px;margin-bottom:12px;border:1px dashed #C7A9CE;display:flex;gap:12px">
+                <div style="width:4px;border-radius:4px;background:#1F6FB2;flex:none;opacity:.5"></div>
+                <div style="flex:1;min-width:0">
+                  <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px"><span class="msym" style="font-size:16px;color:#1F6FB2">waves</span><span style="font:500 14px Roboto;color:#211A17">Saint-Gilles</span><span style="margin-left:auto;padding:2px 8px;border-radius:20px;background:#F1E3DC;color:#6A554D;font:500 11px Roboto">Souhait</span></div>
+                  <div style="font:400 13px Roboto;color:#6A554D;margin-bottom:8px">15 – 16 août</div>
+                  <div style="display:flex;align-items:center;gap:8px"><span style="width:26px;height:26px;border-radius:50%;background:#B4632E;color:#fff;font:600 10px Roboto;display:flex;align-items:center;justify-content:center">CL</span><span style="font:400 13px Roboto;color:#4A3B34;flex:1">Clara &amp; Louka</span><span style="display:flex;align-items:center;gap:3px;color:#8A756D;font:500 12px Roboto"><span class="msym" style="font-size:15px">group</span>3</span></div>
+                  <div style="margin-top:8px;padding:6px 10px;border-radius:8px;background:#FDECC8;color:#7A5A12;font:400 11.5px/1.35 Roboto;display:flex;gap:6px;align-items:flex-start"><span class="msym" style="font-size:14px;margin-top:1px">info</span>Créneau déjà réservé — à confirmer entre foyers.</div>
+                </div>
+              </div>
+
+              <!-- card wish Gèdre -->
+              <div style="background:#fff;border-radius:16px;padding:14px;margin-bottom:12px;border:1px dashed #C7A9CE;display:flex;gap:12px">
+                <div style="width:4px;border-radius:4px;background:#565693;flex:none;opacity:.5"></div>
+                <div style="flex:1;min-width:0">
+                  <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px"><span class="msym" style="font-size:16px;color:#565693">cottage</span><span style="font:500 14px Roboto;color:#211A17">Gèdre</span><span style="margin-left:auto;padding:2px 8px;border-radius:20px;background:#F1E3DC;color:#6A554D;font:500 11px Roboto">Souhait</span></div>
+                  <div style="font:400 13px Roboto;color:#6A554D;margin-bottom:8px">17 – 23 août · « 2ᵉ quinzaine idéale »</div>
+                  <div style="display:flex;align-items:center;gap:8px"><span style="width:26px;height:26px;border-radius:50%;background:#4A6D8C;color:#fff;font:600 10px Roboto;display:flex;align-items:center;justify-content:center">CM</span><span style="font:400 13px Roboto;color:#4A3B34;flex:1">Carole &amp; Marc</span><span style="display:flex;align-items:center;gap:3px;color:#8A756D;font:500 12px Roboto"><span class="msym" style="font-size:15px">group</span>4</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- extended FAB (over calendar, bottom-right) -->
+      <div style="position:absolute"></div>
+    </div>
+    <div style="position:relative;margin-top:-70px;margin-right:352px;display:flex;justify-content:flex-end;pointer-events:none">
+      <div style="display:flex;align-items:center;gap:10px;height:56px;padding:0 22px;border-radius:18px;background:#A5492A;color:#fff;box-shadow:0 8px 20px -4px rgba(59,10,0,.5);font:500 15px Roboto"><span class="msym" style="font-size:22px">add</span>Exprimer un souhait</div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- ============== MOBILE ===================================== -->
+  <!-- ============================================================ -->
+  <div>
+    <div style="font:600 12px/1 Roboto;letter-spacing:.06em;text-transform:uppercase;color:#8A756D;margin:0 0 14px">Mobile</div>
+    <div style="width:408px;padding:10px;border-radius:54px;background:#1C1512;box-shadow:0 24px 60px -20px rgba(59,10,0,.32)">
+      <div data-screen-label="Planning · Mobile" style="width:388px;height:840px;border-radius:44px;overflow:hidden;background:#FFF8F6;position:relative">
+
+        <!-- status bar -->
+        <div style="height:44px;display:flex;align-items:center;justify-content:space-between;padding:0 26px 0 30px">
+          <span style="font:600 14px Roboto;color:#211A17">9:41</span>
+          <div style="display:flex;align-items:center;gap:6px;color:#211A17"><span class="msym" style="font-size:16px">signal_cellular_alt</span><span class="msym" style="font-size:16px">wifi</span><span class="msym" style="font-size:18px">battery_full</span></div>
+        </div>
+
+        <!-- top app bar -->
+        <div style="height:56px;display:flex;align-items:center;padding:0 8px 0 20px;gap:4px">
+          <div style="font:400 22px/1 Roboto;color:#211A17;flex:1">Planning</div>
+          <div style="width:44px;height:44px;display:flex;align-items:center;justify-content:center"><span class="msym" style="font-size:24px;color:#6A554D">tune</span></div>
+          <div style="width:36px;height:36px;border-radius:50%;background:#6D4C7D;display:flex;align-items:center;justify-content:center;color:#fff;font:500 14px Roboto;margin-right:4px">CV</div>
+        </div>
+
+        <!-- segmented buttons -->
+        <div style="padding:4px 16px 12px">
+          <div style="display:flex;border:1px solid #DCC7BF;border-radius:20px;overflow:hidden;height:38px">
+            <div style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;background:#F7DDD2;color:#3B0A00;font:500 13px Roboto"><span class="msym" style="font-size:16px">check</span>Mois</div>
+            <div style="flex:1;display:flex;align-items:center;justify-content:center;color:#6A554D;font:500 13px Roboto;border-left:1px solid #DCC7BF">Semaine</div>
+            <div style="flex:1;display:flex;align-items:center;justify-content:center;color:#6A554D;font:500 13px Roboto;border-left:1px solid #DCC7BF">Liste</div>
+          </div>
+        </div>
+
+        <!-- filter chips -->
+        <div style="display:flex;gap:8px;padding:0 16px 12px;overflow-x:auto">
+          <div style="flex:none;display:flex;align-items:center;gap:6px;height:34px;padding:0 14px;border-radius:10px;background:#CDEBD9"><span class="msym" style="font-size:18px;color:#2F8F4E">apartment</span><span style="font:500 13px Roboto;color:#0C2A18">Bolquère</span></div>
+          <div style="flex:none;display:flex;align-items:center;gap:6px;height:34px;padding:0 14px;border-radius:10px;background:#E2E0FF"><span class="msym" style="font-size:18px;color:#565693">cottage</span><span style="font:500 13px Roboto;color:#191A46">Gèdre</span></div>
+          <div style="flex:none;display:flex;align-items:center;gap:6px;height:34px;padding:0 14px;border-radius:10px;background:#C6E9F7"><span class="msym" style="font-size:18px;color:#1F6FB2">waves</span><span style="font:500 13px Roboto;color:#062634">Saint-Gilles</span></div>
+        </div>
+
+        <!-- month header -->
+        <div style="display:flex;align-items:center;justify-content:center;gap:10px;padding:2px 16px 10px">
+          <span class="msym" style="font-size:22px;color:#6A554D">chevron_left</span>
+          <span style="font:500 18px Roboto;color:#211A17;min-width:130px;text-align:center">Août 2026</span>
+          <span class="msym" style="font-size:22px;color:#6A554D">chevron_right</span>
+        </div>
+
+        <!-- weekday header -->
+        <div style="display:grid;grid-template-columns:repeat(7,1fr);padding:0 10px 4px">
+          <div style="text-align:center;font:500 11px Roboto;color:#8A756D">L</div>
+          <div style="text-align:center;font:500 11px Roboto;color:#8A756D">M</div>
+          <div style="text-align:center;font:500 11px Roboto;color:#8A756D">M</div>
+          <div style="text-align:center;font:500 11px Roboto;color:#8A756D">J</div>
+          <div style="text-align:center;font:500 11px Roboto;color:#8A756D">V</div>
+          <div style="text-align:center;font:500 11px Roboto;color:#8A756D">S</div>
+          <div style="text-align:center;font:500 11px Roboto;color:#8A756D">D</div>
+        </div>
+
+        <!-- month grid -->
+        <div style="display:grid;grid-template-columns:repeat(7,1fr);padding:0 10px;row-gap:2px">
+          <!-- w1 -->
+          <div style="height:46px;display:flex;flex-direction:column;align-items:center;padding-top:7px"><span style="font:500 13px Roboto;color:#C9B7B0">27</span></div>
+          <div style="height:46px;display:flex;flex-direction:column;align-items:center;padding-top:7px"><span style="font:500 13px Roboto;color:#C9B7B0">28</span></div>
+          <div style="height:46px;display:flex;flex-direction:column;align-items:center;padding-top:7px"><span style="font:500 13px Roboto;color:#C9B7B0">29</span></div>
+          <div style="height:46px;display:flex;flex-direction:column;align-items:center;padding-top:7px"><span style="font:500 13px Roboto;color:#C9B7B0">30</span></div>
+          <div style="height:46px;display:flex;flex-direction:column;align-items:center;padding-top:7px"><span style="font:500 13px Roboto;color:#C9B7B0">31</span></div>
+          <div style="height:46px;display:flex;flex-direction:column;align-items:center;padding-top:7px"><span style="font:500 13px Roboto;color:#6A554D">1</span></div>
+          <div style="height:46px;display:flex;flex-direction:column;align-items:center;padding-top:7px"><span style="font:500 13px Roboto;color:#6A554D">2</span></div>
+          <!-- w2 -->
+          <div style="height:46px;display:flex;flex-direction:column;align-items:center;padding-top:7px"><span style="font:500 13px Roboto;color:#211A17">3</span><div style="display:flex;gap:3px;margin-top:4px"><span style="width:9px;height:9px;border-radius:50%;background:#2F8F4E"></span></div></div>
+          <div style="height:46px;display:flex;flex-direction:column;align-items:center;padding-top:7px"><span style="font:500 13px Roboto;color:#211A17">4</span><div style="display:flex;gap:3px;margin-top:4px"><span style="width:9px;height:9px;border-radius:50%;background:#2F8F4E"></span></div></div>
+          <div style="height:46px;display:flex;flex-direction:column;align-items:center;padding-top:7px"><span style="font:500 13px Roboto;color:#211A17">5</span><div style="display:flex;gap:3px;margin-top:4px"><span style="width:9px;height:9px;border-radius:50%;background:#2F8F4E"></span></div></div>
+          <div style="height:46px;display:flex;flex-direction:column;align-items:center;padding-top:7px"><span style="font:500 13px Roboto;color:#211A17">6</span><div style="display:flex;gap:3px;margin-top:4px"><span style="width:9px;height:9px;border-radius:50%;background:#2F8F4E"></span></div></div>
+          <div style="height:46px;display:flex;flex-direction:column;align-items:center;padding-top:7px"><span style="font:500 13px Roboto;color:#211A17">7</span><div style="display:flex;gap:3px;margin-top:4px"><span style="width:9px;height:9px;border-radius:50%;background:#2F8F4E"></span></div></div>
+          <div style="height:46px;display:flex;flex-direction:column;align-items:center;padding-top:7px"><span style="font:500 13px Roboto;color:#211A17">8</span><div style="display:flex;gap:3px;margin-top:4px"><span style="width:9px;height:9px;border-radius:50%;background:#2F8F4E"></span><span style="width:9px;height:9px;border-radius:50%;background:#565693"></span></div></div>
+          <div style="height:46px;display:flex;flex-direction:column;align-items:center;padding-top:7px"><span style="font:500 13px Roboto;color:#211A17">9</span><div style="display:flex;gap:3px;margin-top:4px"><span style="width:9px;height:9px;border-radius:50%;background:#2F8F4E"></span><span style="width:9px;height:9px;border-radius:50%;background:#565693"></span></div></div>
+          <!-- w3 -->
+          <div style="height:46px;display:flex;flex-direction:column;align-items:center;padding-top:7px"><span style="font:500 13px Roboto;color:#211A17">10</span><div style="display:flex;gap:3px;margin-top:4px"><span style="width:9px;height:9px;border-radius:50%;background:#565693"></span><span style="width:9px;height:9px;border-radius:50%;background:#1F6FB2"></span></div></div>
+          <div style="height:46px;display:flex;flex-direction:column;align-items:center;padding-top:7px"><span style="font:500 13px Roboto;color:#211A17">11</span><div style="display:flex;gap:3px;margin-top:4px"><span style="width:9px;height:9px;border-radius:50%;background:#565693"></span><span style="width:9px;height:9px;border-radius:50%;background:#1F6FB2"></span></div></div>
+          <div style="height:46px;display:flex;flex-direction:column;align-items:center;padding-top:7px"><span style="font:500 13px Roboto;color:#211A17">12</span><div style="display:flex;gap:3px;margin-top:4px"><span style="width:9px;height:9px;border-radius:50%;background:#565693"></span><span style="width:9px;height:9px;border-radius:50%;background:#1F6FB2"></span></div></div>
+          <div style="height:46px;display:flex;flex-direction:column;align-items:center;padding-top:7px"><span style="font:500 13px Roboto;color:#211A17">13</span><div style="display:flex;gap:3px;margin-top:4px"><span style="width:9px;height:9px;border-radius:50%;background:#565693"></span><span style="width:9px;height:9px;border-radius:50%;background:#1F6FB2"></span></div></div>
+          <div style="height:46px;display:flex;flex-direction:column;align-items:center;padding-top:7px"><span style="font:500 13px Roboto;color:#211A17">14</span><div style="display:flex;gap:3px;margin-top:4px"><span style="width:9px;height:9px;border-radius:50%;background:#565693"></span><span style="width:9px;height:9px;border-radius:50%;background:#1F6FB2"></span></div></div>
+          <div style="height:46px;display:flex;flex-direction:column;align-items:center;padding-top:7px"><span style="font:500 13px Roboto;color:#211A17">15</span><div style="display:flex;gap:3px;margin-top:4px"><span style="width:9px;height:9px;border-radius:50%;background:#1F6FB2"></span><span style="width:9px;height:9px;border-radius:50%;border:2px solid #1F6FB2;box-sizing:border-box"></span></div></div>
+          <div style="height:46px;display:flex;flex-direction:column;align-items:center;padding-top:7px"><span style="font:500 13px Roboto;color:#211A17">16</span><div style="display:flex;gap:3px;margin-top:4px"><span style="width:9px;height:9px;border-radius:50%;background:#1F6FB2"></span><span style="width:9px;height:9px;border-radius:50%;border:2px solid #1F6FB2;box-sizing:border-box"></span></div></div>
+          <!-- w4 -->
+          <div style="height:46px;display:flex;flex-direction:column;align-items:center;padding-top:7px"><span style="font:500 13px Roboto;color:#211A17">17</span><div style="display:flex;gap:3px;margin-top:4px"><span style="width:9px;height:9px;border-radius:50%;border:2px solid #565693;box-sizing:border-box"></span></div></div>
+          <div style="height:46px;display:flex;flex-direction:column;align-items:center;padding-top:7px"><span style="font:500 13px Roboto;color:#211A17">18</span><div style="display:flex;gap:3px;margin-top:4px"><span style="width:9px;height:9px;border-radius:50%;border:2px solid #565693;box-sizing:border-box"></span></div></div>
+          <div style="height:46px;display:flex;flex-direction:column;align-items:center;padding-top:7px"><span style="font:500 13px Roboto;color:#211A17">19</span><div style="display:flex;gap:3px;margin-top:4px"><span style="width:9px;height:9px;border-radius:50%;border:2px solid #565693;box-sizing:border-box"></span></div></div>
+          <div style="height:46px;display:flex;flex-direction:column;align-items:center;padding-top:7px"><span style="font:500 13px Roboto;color:#211A17">20</span><div style="display:flex;gap:3px;margin-top:4px"><span style="width:9px;height:9px;border-radius:50%;border:2px solid #565693;box-sizing:border-box"></span></div></div>
+          <div style="height:46px;display:flex;flex-direction:column;align-items:center;padding-top:7px"><span style="font:500 13px Roboto;color:#211A17">21</span><div style="display:flex;gap:3px;margin-top:4px"><span style="width:9px;height:9px;border-radius:50%;border:2px solid #565693;box-sizing:border-box"></span></div></div>
+          <div style="height:46px;display:flex;flex-direction:column;align-items:center;padding-top:7px"><span style="font:500 13px Roboto;color:#211A17">22</span><div style="display:flex;gap:3px;margin-top:4px"><span style="width:9px;height:9px;border-radius:50%;border:2px solid #565693;box-sizing:border-box"></span><span style="width:9px;height:9px;border-radius:50%;border:2px solid #2F8F4E;box-sizing:border-box"></span></div></div>
+          <div style="height:46px;display:flex;flex-direction:column;align-items:center;padding-top:7px"><span style="font:500 13px Roboto;color:#211A17">23</span><div style="display:flex;gap:3px;margin-top:4px"><span style="width:9px;height:9px;border-radius:50%;border:2px solid #565693;box-sizing:border-box"></span><span style="width:9px;height:9px;border-radius:50%;border:2px solid #2F8F4E;box-sizing:border-box"></span></div></div>
+          <!-- w5 -->
+          <div style="height:46px;display:flex;flex-direction:column;align-items:center;padding-top:7px"><span style="font:500 13px Roboto;color:#211A17">24</span><div style="display:flex;gap:3px;margin-top:4px"><span style="width:9px;height:9px;border-radius:50%;border:2px solid #2F8F4E;box-sizing:border-box"></span><span style="width:9px;height:9px;border-radius:50%;border:2px solid #1F6FB2;box-sizing:border-box"></span></div></div>
+          <div style="height:46px;display:flex;flex-direction:column;align-items:center;padding-top:7px"><span style="font:500 13px Roboto;color:#211A17">25</span><div style="display:flex;gap:3px;margin-top:4px"><span style="width:9px;height:9px;border-radius:50%;border:2px solid #2F8F4E;box-sizing:border-box"></span><span style="width:9px;height:9px;border-radius:50%;border:2px solid #1F6FB2;box-sizing:border-box"></span></div></div>
+          <div style="height:46px;display:flex;flex-direction:column;align-items:center;padding-top:7px"><span style="font:500 13px Roboto;color:#211A17">26</span><div style="display:flex;gap:3px;margin-top:4px"><span style="width:9px;height:9px;border-radius:50%;border:2px solid #2F8F4E;box-sizing:border-box"></span><span style="width:9px;height:9px;border-radius:50%;border:2px solid #1F6FB2;box-sizing:border-box"></span></div></div>
+          <div style="height:46px;display:flex;flex-direction:column;align-items:center;padding-top:7px"><span style="font:500 13px Roboto;color:#211A17">27</span><div style="display:flex;gap:3px;margin-top:4px"><span style="width:9px;height:9px;border-radius:50%;border:2px solid #2F8F4E;box-sizing:border-box"></span><span style="width:9px;height:9px;border-radius:50%;border:2px solid #1F6FB2;box-sizing:border-box"></span></div></div>
+          <div style="height:46px;display:flex;flex-direction:column;align-items:center;padding-top:7px"><span style="font:500 13px Roboto;color:#211A17">28</span><div style="display:flex;gap:3px;margin-top:4px"><span style="width:9px;height:9px;border-radius:50%;border:2px solid #2F8F4E;box-sizing:border-box"></span><span style="width:9px;height:9px;border-radius:50%;border:2px solid #1F6FB2;box-sizing:border-box"></span></div></div>
+          <div style="height:46px;display:flex;flex-direction:column;align-items:center;padding-top:7px"><span style="font:500 13px Roboto;color:#211A17">29</span><div style="display:flex;gap:3px;margin-top:4px"><span style="width:9px;height:9px;border-radius:50%;border:2px solid #1F6FB2;box-sizing:border-box"></span></div></div>
+          <div style="height:46px;display:flex;flex-direction:column;align-items:center;padding-top:7px"><span style="font:500 13px Roboto;color:#211A17">30</span><div style="display:flex;gap:3px;margin-top:4px"><span style="width:9px;height:9px;border-radius:50%;border:2px solid #1F6FB2;box-sizing:border-box"></span></div></div>
+          <!-- w6 -->
+          <div style="height:46px;display:flex;flex-direction:column;align-items:center;padding-top:7px"><span style="font:500 13px Roboto;color:#211A17">31</span></div>
+          <div style="height:46px;display:flex;flex-direction:column;align-items:center;padding-top:7px"><span style="font:500 13px Roboto;color:#C9B7B0">1</span></div>
+          <div style="height:46px;display:flex;flex-direction:column;align-items:center;padding-top:7px"><span style="font:500 13px Roboto;color:#C9B7B0">2</span></div>
+          <div style="height:46px;display:flex;flex-direction:column;align-items:center;padding-top:7px"><span style="font:500 13px Roboto;color:#C9B7B0">3</span></div>
+          <div style="height:46px;display:flex;flex-direction:column;align-items:center;padding-top:7px"><span style="font:500 13px Roboto;color:#C9B7B0">4</span></div>
+          <div style="height:46px;display:flex;flex-direction:column;align-items:center;padding-top:7px"><span style="font:500 13px Roboto;color:#C9B7B0">5</span></div>
+          <div style="height:46px;display:flex;flex-direction:column;align-items:center;padding-top:7px"><span style="font:500 13px Roboto;color:#C9B7B0">6</span></div>
+        </div>
+
+        <!-- legend strip -->
+        <div style="display:flex;align-items:center;gap:16px;padding:14px 20px 0">
+          <div style="display:flex;align-items:center;gap:7px"><span style="width:22px;height:11px;border-radius:4px;background:#6A554D"></span><span style="font:400 12px Roboto;color:#6A554D">Confirmé</span></div>
+          <div style="display:flex;align-items:center;gap:7px"><span style="width:11px;height:11px;border-radius:50%;border:1.5px solid #6A554D;box-sizing:border-box"></span><span style="font:400 12px Roboto;color:#6A554D">Souhait</span></div>
+        </div>
+
+        <!-- prochains séjours (compact) -->
+        <div style="padding:18px 16px 0">
+          <div style="font:500 13px Roboto;color:#8A756D;margin-bottom:10px">Prochains séjours</div>
+          <div style="display:flex;align-items:center;gap:10px;background:#fff;border:1px solid #F0E0D9;border-radius:14px;padding:10px 12px;margin-bottom:8px">
+            <div style="width:3px;height:34px;border-radius:3px;background:#2F8F4E"></div>
+            <span style="width:30px;height:30px;border-radius:50%;background:#7A5B2E;color:#fff;font:600 11px Roboto;display:flex;align-items:center;justify-content:center">PM</span>
+            <div style="flex:1;min-width:0"><div style="font:500 13px Roboto;color:#211A17">Papy Mamie · Bolquère</div><div style="font:400 12px Roboto;color:#6A554D">3 – 9 août · 2 pers.</div></div>
+            <span style="padding:2px 8px;border-radius:20px;background:#CDEBD9;color:#0C2A18;font:500 11px Roboto">Confirmé</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;background:#fff;border:1px dashed #C7A9CE;border-radius:14px;padding:10px 12px">
+            <div style="width:3px;height:34px;border-radius:3px;background:#1F6FB2;opacity:.5"></div>
+            <span style="width:30px;height:30px;border-radius:50%;background:#B4632E;color:#fff;font:600 11px Roboto;display:flex;align-items:center;justify-content:center">CL</span>
+            <div style="flex:1;min-width:0"><div style="font:500 13px Roboto;color:#211A17">Clara &amp; Louka · Saint-Gilles</div><div style="font:400 12px Roboto;color:#6A554D">15 – 16 août · 3 pers.</div></div>
+            <span style="padding:2px 8px;border-radius:20px;background:#F1E3DC;color:#6A554D;font:500 11px Roboto">Souhait</span>
+          </div>
+        </div>
+
+        <!-- extended FAB -->
+        <div style="position:absolute;right:16px;bottom:92px;display:flex;align-items:center;gap:10px;height:56px;padding:0 20px;border-radius:18px;background:#A5492A;color:#fff;box-shadow:0 8px 20px -4px rgba(59,10,0,.5);font:500 15px Roboto"><span class="msym" style="font-size:22px">add</span>Exprimer un souhait</div>
+
+        <!-- bottom nav -->
+        <div style="position:absolute;left:0;right:0;bottom:0;height:78px;background:#FBF1ED;border-top:1px solid #F0E0D9;display:flex;padding:10px 6px 0">
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px">
+            <div style="width:60px;height:30px;border-radius:16px;background:#FFDBCF;display:flex;align-items:center;justify-content:center"><span class="msym" style="font-size:22px;color:#3B0A00;font-variation-settings:'FILL' 1">calendar_month</span></div>
+            <span style="font:500 12px Roboto;color:#3B0A00">Planning</span>
+          </div>
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px">
+            <div style="width:60px;height:30px;display:flex;align-items:center;justify-content:center"><span class="msym" style="font-size:22px;color:#6A554D">cottage</span></div>
+            <span style="font:500 12px Roboto;color:#6A554D">Lieux</span>
+          </div>
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px">
+            <div style="width:60px;height:30px;display:flex;align-items:center;justify-content:center"><span class="msym" style="font-size:22px;color:#6A554D">groups</span></div>
+            <span style="font:500 12px Roboto;color:#6A554D">Mon foyer</span>
+          </div>
+        </div>
+
+        <!-- home indicator -->
+        <div style="position:absolute;left:50%;transform:translateX(-50%);bottom:8px;width:130px;height:5px;border-radius:3px;background:rgba(0,0,0,.28)"></div>
+      </div>
+    </div>
+  </div>
+
+  </div>
+</div>
+
+<div style="padding:0 48px 64px">
+  <!-- ####### SECTION HEADING : FORMULAIRE ####### -->
+  <div style="max-width:1760px;margin:0 auto;display:flex;align-items:center;gap:12px;padding:8px 0 20px">
+    <span style="width:28px;height:28px;border-radius:9px;background:#3B0A00;color:#fff;font:600 14px Roboto;display:flex;align-items:center;justify-content:center">3</span>
+    <span style="font:600 20px Roboto;color:#3B0A00">Formulaire d'ajout de souhait</span>
+    <span style="font:400 14px Roboto;color:#8A756D">— lieu, dates, foyer, personnes, note &amp; confirmation</span>
+  </div>
+
+  <div style="display:flex;flex-wrap:wrap;gap:56px;align-items:flex-start;max-width:1760px;margin:0 auto">
+
+    <!-- FORM DESKTOP (dialog) -->
+    <div>
+      <div style="font:600 12px/1 Roboto;letter-spacing:.06em;text-transform:uppercase;color:#8A756D;margin:0 0 14px">Desktop · dialog</div>
+      <div style="width:640px;padding:36px;border-radius:28px;background:#EEE2DC">
+        <div data-screen-label="Souhait · Desktop" style="width:568px;background:#FFF8F6;border-radius:28px;overflow:hidden;box-shadow:0 24px 60px -16px rgba(59,10,0,.4)">
+          <div style="padding:24px 28px 20px;display:flex;align-items:center;gap:12px;border-bottom:1px solid #F0E0D9">
+            <div style="font:400 22px/1 Roboto;color:#211A17;flex:1">Exprimer un souhait</div>
+            <div style="width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer"><span class="msym" style="font-size:24px;color:#6A554D">close</span></div>
+          </div>
+          <div style="padding:24px 28px;max-height:560px;overflow-y:auto">
+            <!-- lieu -->
+            <div style="font:500 13px Roboto;color:#6A554D;margin-bottom:12px">Lieu</div>
+            <div style="display:flex;gap:12px;margin-bottom:26px">
+              <div style="flex:1;border:2px solid #2F8F4E;border-radius:16px;overflow:hidden;position:relative;cursor:pointer">
+                <div style="height:64px;background:repeating-linear-gradient(135deg,#DCE7DE 0 11px,#D0E0D2 11px 22px)"></div>
+                <div style="position:absolute;top:8px;right:8px;width:22px;height:22px;border-radius:50%;background:#2F8F4E;display:flex;align-items:center;justify-content:center"><span class="msym" style="font-size:16px;color:#fff">check</span></div>
+                <div style="padding:8px 10px;display:flex;align-items:center;gap:6px"><span class="msym" style="font-size:16px;color:#2F8F4E">apartment</span><span style="font:500 13px Roboto;color:#211A17">Bolquère</span></div>
+              </div>
+              <div style="flex:1;border:1.5px solid #E6D2CA;border-radius:16px;overflow:hidden;cursor:pointer">
+                <div style="height:64px;background:repeating-linear-gradient(135deg,#E4E2F0 0 11px,#D9D6EA 11px 22px)"></div>
+                <div style="padding:8px 10px;display:flex;align-items:center;gap:6px"><span class="msym" style="font-size:16px;color:#565693">cottage</span><span style="font:500 13px Roboto;color:#6A554D">Gèdre</span></div>
+              </div>
+              <div style="flex:1;border:1.5px solid #E6D2CA;border-radius:16px;overflow:hidden;cursor:pointer">
+                <div style="height:64px;background:repeating-linear-gradient(135deg,#D5E6F2 0 11px,#C8DCEC 11px 22px)"></div>
+                <div style="padding:8px 10px;display:flex;align-items:center;gap:6px"><span class="msym" style="font-size:16px;color:#1F6FB2">waves</span><span style="font:500 13px Roboto;color:#6A554D">Saint-Gilles</span></div>
+              </div>
+            </div>
+
+            <!-- dates -->
+            <div style="font:500 13px Roboto;color:#6A554D;margin-bottom:12px">Dates du séjour</div>
+            <div style="display:flex;gap:12px;margin-bottom:14px">
+              <div style="flex:1;border:1px solid #B79A91;border-radius:12px;padding:10px 14px;position:relative">
+                <div style="font:400 11px Roboto;color:#6A554D;margin-bottom:2px">Arrivée</div>
+                <div style="font:400 15px Roboto;color:#211A17">sam. 22 août</div>
+              </div>
+              <div style="display:flex;align-items:center;color:#8A756D"><span class="msym" style="font-size:20px">arrow_forward</span></div>
+              <div style="flex:1;border:1px solid #B79A91;border-radius:12px;padding:10px 14px">
+                <div style="font:400 11px Roboto;color:#6A554D;margin-bottom:2px">Départ</div>
+                <div style="font:400 15px Roboto;color:#211A17">ven. 28 août</div>
+              </div>
+            </div>
+            <!-- mini range picker -->
+            <div style="border:1px solid #F0E0D9;border-radius:16px;padding:14px 16px;margin-bottom:26px">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px"><span class="msym" style="font-size:18px;color:#6A554D">chevron_left</span><span style="font:500 14px Roboto;color:#211A17">Août 2026</span><span class="msym" style="font-size:18px;color:#6A554D">chevron_right</span></div>
+              <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;text-align:center">
+                <div style="font:500 10px Roboto;color:#8A756D;padding-bottom:4px">L</div><div style="font:500 10px Roboto;color:#8A756D">M</div><div style="font:500 10px Roboto;color:#8A756D">M</div><div style="font:500 10px Roboto;color:#8A756D">J</div><div style="font:500 10px Roboto;color:#8A756D">V</div><div style="font:500 10px Roboto;color:#8A756D">S</div><div style="font:500 10px Roboto;color:#8A756D">D</div>
+                <div></div><div></div><div></div><div></div><div></div><div style="font:400 12px Roboto;color:#211A17;padding:5px 0">1</div><div style="font:400 12px Roboto;color:#211A17;padding:5px 0">2</div>
+                <div style="font:400 12px Roboto;color:#211A17;padding:5px 0">3</div><div style="font:400 12px Roboto;color:#211A17;padding:5px 0">4</div><div style="font:400 12px Roboto;color:#211A17;padding:5px 0">5</div><div style="font:400 12px Roboto;color:#211A17;padding:5px 0">6</div><div style="font:400 12px Roboto;color:#211A17;padding:5px 0">7</div><div style="font:400 12px Roboto;color:#211A17;padding:5px 0">8</div><div style="font:400 12px Roboto;color:#211A17;padding:5px 0">9</div>
+                <div style="font:400 12px Roboto;color:#211A17;padding:5px 0">10</div><div style="font:400 12px Roboto;color:#211A17;padding:5px 0">11</div><div style="font:400 12px Roboto;color:#211A17;padding:5px 0">12</div><div style="font:400 12px Roboto;color:#211A17;padding:5px 0">13</div><div style="font:400 12px Roboto;color:#211A17;padding:5px 0">14</div><div style="font:400 12px Roboto;color:#211A17;padding:5px 0">15</div><div style="font:400 12px Roboto;color:#211A17;padding:5px 0">16</div>
+                <div style="font:400 12px Roboto;color:#211A17;padding:5px 0">17</div><div style="font:400 12px Roboto;color:#211A17;padding:5px 0">18</div><div style="font:400 12px Roboto;color:#211A17;padding:5px 0">19</div><div style="font:400 12px Roboto;color:#211A17;padding:5px 0">20</div><div style="font:400 12px Roboto;color:#211A17;padding:5px 0">21</div>
+                <div style="background:#CDEBD9;border-radius:14px 0 0 14px;padding:5px 0"><span style="display:inline-flex;width:24px;height:24px;border-radius:50%;background:#2F8F4E;color:#fff;font:500 12px Roboto;align-items:center;justify-content:center">22</span></div>
+                <div style="background:#CDEBD9;border-radius:0 14px 14px 0;font:400 12px Roboto;color:#0C2A18;padding:5px 0;display:flex;align-items:center;justify-content:center">23</div>
+                <div style="background:#CDEBD9;border-radius:14px 0 0 14px;font:400 12px Roboto;color:#0C2A18;padding:5px 0;display:flex;align-items:center;justify-content:center">24</div><div style="background:#CDEBD9;font:400 12px Roboto;color:#0C2A18;padding:5px 0;display:flex;align-items:center;justify-content:center">25</div><div style="background:#CDEBD9;font:400 12px Roboto;color:#0C2A18;padding:5px 0;display:flex;align-items:center;justify-content:center">26</div><div style="background:#CDEBD9;font:400 12px Roboto;color:#0C2A18;padding:5px 0;display:flex;align-items:center;justify-content:center">27</div>
+                <div style="background:#CDEBD9;border-radius:0 14px 14px 0;padding:5px 0"><span style="display:inline-flex;width:24px;height:24px;border-radius:50%;background:#2F8F4E;color:#fff;font:500 12px Roboto;align-items:center;justify-content:center">28</span></div><div style="font:400 12px Roboto;color:#211A17;padding:5px 0">29</div><div style="font:400 12px Roboto;color:#211A17;padding:5px 0">30</div>
+                <div style="font:400 12px Roboto;color:#211A17;padding:5px 0">31</div>
+              </div>
+            </div>
+
+            <!-- foyer -->
+            <div style="font:500 13px Roboto;color:#6A554D;margin-bottom:12px">Foyer</div>
+            <div style="display:flex;align-items:center;gap:12px;border:1px solid #B79A91;border-radius:12px;padding:10px 14px;margin-bottom:6px;cursor:pointer">
+              <span style="width:32px;height:32px;border-radius:50%;background:#6D4C7D;color:#fff;font:600 12px Roboto;display:flex;align-items:center;justify-content:center">CV</span>
+              <span style="flex:1;font:400 15px Roboto;color:#211A17">Claire &amp; Vincent</span>
+              <span class="msym" style="font-size:22px;color:#6A554D">arrow_drop_down</span>
+            </div>
+            <div style="font:400 12px Roboto;color:#8A756D;margin-bottom:26px;padding-left:2px">Votre foyer · modifiable</div>
+
+            <!-- personnes -->
+            <div style="font:500 13px Roboto;color:#6A554D;margin-bottom:12px">Nombre de personnes</div>
+            <div style="display:flex;align-items:center;gap:18px;margin-bottom:26px">
+              <div style="width:44px;height:44px;border-radius:50%;border:1px solid #B79A91;display:flex;align-items:center;justify-content:center;cursor:pointer"><span class="msym" style="font-size:22px;color:#A5492A">remove</span></div>
+              <div style="font:500 24px Roboto;color:#211A17;min-width:32px;text-align:center">4</div>
+              <div style="width:44px;height:44px;border-radius:50%;border:1px solid #B79A91;display:flex;align-items:center;justify-content:center;cursor:pointer"><span class="msym" style="font-size:22px;color:#A5492A">add</span></div>
+              <span style="font:400 13px Roboto;color:#8A756D;margin-left:4px">adultes &amp; enfants</span>
+            </div>
+
+            <!-- note -->
+            <div style="font:500 13px Roboto;color:#6A554D;margin-bottom:12px">Note (optionnel)</div>
+            <div style="border:1px solid #B79A91;border-radius:12px;padding:12px 14px;min-height:76px;font:400 15px/1.5 Roboto;color:#211A17">On préfère la 2ᵉ quinzaine d'août si possible.</div>
+          </div>
+          <div style="padding:16px 28px 24px;display:flex;align-items:center;justify-content:flex-end;gap:8px;border-top:1px solid #F0E0D9">
+            <div style="height:44px;padding:0 20px;border-radius:22px;display:flex;align-items:center;font:500 14px Roboto;color:#A5492A;cursor:pointer">Annuler</div>
+            <div style="height:48px;padding:0 26px;border-radius:24px;background:#A5492A;display:flex;align-items:center;gap:8px;font:500 15px Roboto;color:#fff;cursor:pointer"><span class="msym" style="font-size:20px">send</span>Exprimer le souhait</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FORM MOBILE -->
+    <div>
+      <div style="font:600 12px/1 Roboto;letter-spacing:.06em;text-transform:uppercase;color:#8A756D;margin:0 0 14px">Mobile · plein écran</div>
+      <div style="width:408px;padding:10px;border-radius:54px;background:#1C1512;box-shadow:0 24px 60px -20px rgba(59,10,0,.32)">
+        <div data-screen-label="Souhait · Mobile" style="width:388px;height:840px;border-radius:44px;overflow:hidden;background:#FFF8F6;position:relative">
+          <div style="height:44px;display:flex;align-items:center;justify-content:space-between;padding:0 26px 0 30px"><span style="font:600 14px Roboto;color:#211A17">9:41</span><div style="display:flex;align-items:center;gap:6px;color:#211A17"><span class="msym" style="font-size:16px">signal_cellular_alt</span><span class="msym" style="font-size:16px">wifi</span><span class="msym" style="font-size:18px">battery_full</span></div></div>
+          <div style="height:56px;display:flex;align-items:center;padding:0 8px 0 12px;gap:6px"><div style="width:44px;height:44px;display:flex;align-items:center;justify-content:center"><span class="msym" style="font-size:24px;color:#211A17">close</span></div><div style="flex:1;font:500 18px Roboto;color:#211A17">Exprimer un souhait</div></div>
+          <div style="height:640px;overflow-y:auto;padding:8px 20px 24px">
+            <div style="font:500 13px Roboto;color:#6A554D;margin-bottom:10px">Lieu</div>
+            <div style="display:flex;gap:10px;margin-bottom:24px">
+              <div style="flex:1;border:2px solid #2F8F4E;border-radius:14px;overflow:hidden;position:relative"><div style="height:52px;background:repeating-linear-gradient(135deg,#DCE7DE 0 10px,#D0E0D2 10px 20px)"></div><div style="position:absolute;top:6px;right:6px;width:20px;height:20px;border-radius:50%;background:#2F8F4E;display:flex;align-items:center;justify-content:center"><span class="msym" style="font-size:14px;color:#fff">check</span></div><div style="padding:6px 8px;font:500 12px Roboto;color:#211A17">Bolquère</div></div>
+              <div style="flex:1;border:1.5px solid #E6D2CA;border-radius:14px;overflow:hidden"><div style="height:52px;background:repeating-linear-gradient(135deg,#E4E2F0 0 10px,#D9D6EA 10px 20px)"></div><div style="padding:6px 8px;font:500 12px Roboto;color:#6A554D">Gèdre</div></div>
+              <div style="flex:1;border:1.5px solid #E6D2CA;border-radius:14px;overflow:hidden"><div style="height:52px;background:repeating-linear-gradient(135deg,#D5E6F2 0 10px,#C8DCEC 10px 20px)"></div><div style="padding:6px 8px;font:500 12px Roboto;color:#6A554D">St-Gilles</div></div>
+            </div>
+            <div style="font:500 13px Roboto;color:#6A554D;margin-bottom:10px">Dates du séjour</div>
+            <div style="display:flex;gap:10px;align-items:center;margin-bottom:24px">
+              <div style="flex:1;border:1px solid #B79A91;border-radius:12px;padding:9px 12px"><div style="font:400 11px Roboto;color:#6A554D">Arrivée</div><div style="font:400 14px Roboto;color:#211A17">sam. 22 août</div></div>
+              <span class="msym" style="font-size:18px;color:#8A756D">arrow_forward</span>
+              <div style="flex:1;border:1px solid #B79A91;border-radius:12px;padding:9px 12px"><div style="font:400 11px Roboto;color:#6A554D">Départ</div><div style="font:400 14px Roboto;color:#211A17">ven. 28 août</div></div>
+            </div>
+            <div style="font:500 13px Roboto;color:#6A554D;margin-bottom:10px">Foyer</div>
+            <div style="display:flex;align-items:center;gap:12px;border:1px solid #B79A91;border-radius:12px;padding:10px 12px;margin-bottom:24px"><span style="width:30px;height:30px;border-radius:50%;background:#6D4C7D;color:#fff;font:600 11px Roboto;display:flex;align-items:center;justify-content:center">CV</span><span style="flex:1;font:400 15px Roboto;color:#211A17">Claire &amp; Vincent</span><span class="msym" style="font-size:22px;color:#6A554D">arrow_drop_down</span></div>
+            <div style="font:500 13px Roboto;color:#6A554D;margin-bottom:10px">Nombre de personnes</div>
+            <div style="display:flex;align-items:center;gap:16px;margin-bottom:24px"><div style="width:44px;height:44px;border-radius:50%;border:1px solid #B79A91;display:flex;align-items:center;justify-content:center"><span class="msym" style="font-size:22px;color:#A5492A">remove</span></div><div style="font:500 22px Roboto;color:#211A17;min-width:28px;text-align:center">4</div><div style="width:44px;height:44px;border-radius:50%;border:1px solid #B79A91;display:flex;align-items:center;justify-content:center"><span class="msym" style="font-size:22px;color:#A5492A">add</span></div></div>
+            <div style="font:500 13px Roboto;color:#6A554D;margin-bottom:10px">Note (optionnel)</div>
+            <div style="border:1px solid #B79A91;border-radius:12px;padding:11px 13px;min-height:70px;font:400 14px/1.5 Roboto;color:#211A17">On préfère la 2ᵉ quinzaine d'août si possible.</div>
+          </div>
+          <div style="position:absolute;left:0;right:0;bottom:0;padding:14px 20px 26px;background:#FFF8F6;border-top:1px solid #F0E0D9"><div style="height:52px;border-radius:26px;background:#A5492A;display:flex;align-items:center;justify-content:center;gap:8px;font:500 15px Roboto;color:#fff"><span class="msym" style="font-size:20px">send</span>Exprimer le souhait</div></div>
+          <div style="position:absolute;left:50%;transform:translateX(-50%);bottom:8px;width:130px;height:5px;border-radius:3px;background:rgba(0,0,0,.28)"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FORM SUCCESS -->
+    <div>
+      <div style="font:600 12px/1 Roboto;letter-spacing:.06em;text-transform:uppercase;color:#8A756D;margin:0 0 14px">Mobile · confirmation</div>
+      <div style="width:408px;padding:10px;border-radius:54px;background:#1C1512;box-shadow:0 24px 60px -20px rgba(59,10,0,.32)">
+        <div data-screen-label="Souhait · Confirmation" style="width:388px;height:840px;border-radius:44px;overflow:hidden;background:#FBEAE3;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 36px;text-align:center">
+          <div style="position:absolute;top:0;left:0;right:0;height:44px;display:flex;align-items:center;justify-content:space-between;padding:0 26px 0 30px"><span style="font:600 14px Roboto;color:#3B0A00">9:41</span><div style="display:flex;align-items:center;gap:6px;color:#3B0A00"><span class="msym" style="font-size:16px">signal_cellular_alt</span><span class="msym" style="font-size:16px">wifi</span><span class="msym" style="font-size:18px">battery_full</span></div></div>
+          <div style="width:96px;height:96px;border-radius:50%;background:#2F8F4E;display:flex;align-items:center;justify-content:center;box-shadow:0 12px 30px -6px rgba(47,143,78,.5)"><span class="msym" style="font-size:56px;color:#fff">check</span></div>
+          <div style="font:700 26px/1.2 Roboto;color:#3B0A00;margin:28px 0 12px">Souhait envoyé&nbsp;!</div>
+          <div style="font:400 16px/1.55 Roboto;color:#7A5A4E;margin-bottom:28px">Toute la famille peut désormais voir votre souhait pour <b style="color:#0C2A18">Bolquère</b>, du <b style="color:#211A17">22 au 28 août</b>.</div>
+          <div style="width:100%;background:#fff;border-radius:18px;padding:16px;display:flex;align-items:center;gap:12px;margin-bottom:36px">
+            <div style="width:44px;height:44px;border-radius:12px;background:#CDEBD9;display:flex;align-items:center;justify-content:center"><span class="msym" style="font-size:24px;color:#2F8F4E">apartment</span></div>
+            <div style="flex:1;text-align:left"><div style="font:500 14px Roboto;color:#211A17">Bolquère · 22 – 28 août</div><div style="font:400 12px Roboto;color:#6A554D">Claire &amp; Vincent · 4 pers.</div></div>
+            <span style="padding:3px 9px;border-radius:20px;background:#F1E3DC;color:#6A554D;font:500 11px Roboto">Souhait</span>
+          </div>
+          <div style="width:100%;height:52px;border-radius:26px;background:#A5492A;display:flex;align-items:center;justify-content:center;gap:8px;font:500 15px Roboto;color:#fff;margin-bottom:12px"><span class="msym" style="font-size:20px">calendar_month</span>Voir le planning</div>
+          <div style="width:100%;height:48px;display:flex;align-items:center;justify-content:center;font:500 14px Roboto;color:#A5492A">Exprimer un autre souhait</div>
+          <div style="width:130px;height:5px;border-radius:3px;background:rgba(59,10,0,.18);position:absolute;bottom:12px"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div style="padding:0 48px 80px">
+  <!-- ####### SECTION HEADING : FICHE DÉTAIL ####### -->
+  <div style="max-width:1760px;margin:0 auto;display:flex;align-items:center;gap:12px;padding:8px 0 20px">
+    <span style="width:28px;height:28px;border-radius:9px;background:#3B0A00;color:#fff;font:600 14px Roboto;display:flex;align-items:center;justify-content:center">4</span>
+    <span style="font:600 20px Roboto;color:#3B0A00">Fiche détail d'un lieu</span>
+    <span style="font:400 14px Roboto;color:#8A756D">— galerie, capacité, équipements &amp; actions</span>
+  </div>
+
+  <div style="display:flex;flex-wrap:wrap;gap:56px;align-items:flex-start;max-width:1760px;margin:0 auto">
+
+    <!-- FICHE DESKTOP -->
+    <div>
+      <div style="font:600 12px/1 Roboto;letter-spacing:.06em;text-transform:uppercase;color:#8A756D;margin:0 0 14px">Desktop</div>
+      <div data-screen-label="Lieu · Desktop" style="width:1240px;background:#FFF8F6;border-radius:22px;overflow:hidden;box-shadow:0 24px 60px -20px rgba(59,10,0,.28),0 4px 12px rgba(0,0,0,.08)">
+        <div style="height:42px;background:#EFE0D9;display:flex;align-items:center;gap:8px;padding:0 16px;border-bottom:1px solid #E6D2CA">
+          <div style="width:11px;height:11px;border-radius:50%;background:#E4886F"></div><div style="width:11px;height:11px;border-radius:50%;background:#E6BE7A"></div><div style="width:11px;height:11px;border-radius:50%;background:#9FC79B"></div>
+          <div style="margin:0 auto;display:flex;align-items:center;gap:8px;height:26px;padding:0 16px;background:#FBF1ED;border-radius:20px;font:400 12px Roboto;color:#8A756D"><span class="msym" style="font-size:14px">lock</span>kikela.app/lieux/saint-gilles</div>
+          <div style="width:52px"></div>
+        </div>
+        <!-- top app bar -->
+        <div style="height:60px;display:flex;align-items:center;padding:0 24px;border-bottom:1px solid #F0E0D9;gap:14px">
+          <div style="width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer"><span class="msym" style="font-size:24px;color:#6A554D">arrow_back</span></div>
+          <div style="font:400 20px/1 Roboto;color:#211A17;flex:1">Saint-Gilles-Croix-de-Vie</div>
+          <div style="width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer"><span class="msym" style="font-size:22px;color:#6A554D">ios_share</span></div>
+        </div>
+        <div style="padding:24px">
+          <!-- gallery -->
+          <div style="display:grid;grid-template-columns:2fr 1fr 1fr;grid-template-rows:150px 150px;gap:10px;margin-bottom:28px">
+            <div style="grid-row:1 / span 2;border-radius:18px;overflow:hidden;position:relative;background:repeating-linear-gradient(135deg,#D5E6F2 0 16px,#C8DCEC 16px 32px)"><span style="position:absolute;top:12px;left:14px;font:500 11px ui-monospace,monospace;color:#41586A;background:rgba(255,255,255,.72);padding:3px 8px;border-radius:20px">photo · maison bord de mer</span></div>
+            <div style="border-radius:14px;overflow:hidden;background:repeating-linear-gradient(135deg,#D9E8F0 0 14px,#CCDDE8 14px 28px)"></div>
+            <div style="border-radius:14px;overflow:hidden;background:repeating-linear-gradient(135deg,#DEE9EF 0 14px,#D2E0E8 14px 28px)"></div>
+            <div style="border-radius:14px;overflow:hidden;background:repeating-linear-gradient(135deg,#D3E4EF 0 14px,#C6D9E6 14px 28px)"></div>
+            <div style="border-radius:14px;overflow:hidden;position:relative;background:repeating-linear-gradient(135deg,#D9E8F0 0 14px,#CCDDE8 14px 28px)"><div style="position:absolute;inset:0;background:rgba(6,40,58,.5);display:flex;align-items:center;justify-content:center;font:500 15px Roboto;color:#fff">+6 photos</div></div>
+          </div>
+
+          <div style="display:flex;gap:36px">
+            <!-- left column -->
+            <div style="flex:1;min-width:0">
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><span class="msym" style="font-size:22px;color:#1F6FB2">waves</span><span style="font:400 26px/1 Roboto;color:#211A17">Saint-Gilles-Croix-de-Vie</span></div>
+              <div style="display:flex;align-items:center;gap:6px;color:#6A554D;font:400 14px Roboto;margin-bottom:20px"><span class="msym" style="font-size:18px">location_on</span>Vendée · bord de mer</div>
+              <div style="display:flex;gap:10px;margin-bottom:28px">
+                <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;border-radius:14px;background:#C6E9F7"><span class="msym" style="font-size:20px;color:#1F6FB2">group</span><span style="font:500 14px Roboto;color:#06283A">8 personnes max.</span></div>
+                <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;border-radius:14px;background:#F1E3DC"><span class="msym" style="font-size:20px;color:#6A554D">bed</span><span style="font:500 14px Roboto;color:#4A3B34">4 chambres</span></div>
+              </div>
+              <div style="font:400 15px/1.65 Roboto;color:#4A3B34;margin-bottom:28px;max-width:560px">Maison familiale à deux pas de la plage, avec jardin clos et terrasse plein sud. Idéale pour les grandes tablées et les étés en tribu. Marché et port de pêche à 10 minutes à pied.</div>
+              <div style="font:500 16px Roboto;color:#211A17;margin-bottom:16px">Équipements</div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px 24px;max-width:520px">
+                <div style="display:flex;align-items:center;gap:12px"><span class="msym" style="font-size:22px;color:#6A554D">wifi</span><span style="font:400 14px Roboto;color:#4A3B34">Wifi fibre</span></div>
+                <div style="display:flex;align-items:center;gap:12px"><span class="msym" style="font-size:22px;color:#6A554D">local_parking</span><span style="font:400 14px Roboto;color:#4A3B34">Parking privé</span></div>
+                <div style="display:flex;align-items:center;gap:12px"><span class="msym" style="font-size:22px;color:#6A554D">yard</span><span style="font:400 14px Roboto;color:#4A3B34">Jardin clos</span></div>
+                <div style="display:flex;align-items:center;gap:12px"><span class="msym" style="font-size:22px;color:#6A554D">deck</span><span style="font:400 14px Roboto;color:#4A3B34">Terrasse</span></div>
+                <div style="display:flex;align-items:center;gap:12px"><span class="msym" style="font-size:22px;color:#6A554D">local_laundry_service</span><span style="font:400 14px Roboto;color:#4A3B34">Lave-linge</span></div>
+                <div style="display:flex;align-items:center;gap:12px"><span class="msym" style="font-size:22px;color:#6A554D">kitchen</span><span style="font:400 14px Roboto;color:#4A3B34">Cuisine équipée</span></div>
+                <div style="display:flex;align-items:center;gap:12px"><span class="msym" style="font-size:22px;color:#6A554D">tv</span><span style="font:400 14px Roboto;color:#4A3B34">TV / Netflix</span></div>
+                <div style="display:flex;align-items:center;gap:12px"><span class="msym" style="font-size:22px;color:#6A554D">beach_access</span><span style="font:400 14px Roboto;color:#4A3B34">Plage à 300 m</span></div>
+              </div>
+            </div>
+            <!-- right sticky card -->
+            <div style="width:300px;flex:none">
+              <div style="border:1px solid #F0E0D9;border-radius:20px;padding:20px;background:#FBF1ED">
+                <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><span style="width:12px;height:12px;border-radius:50%;background:#1F6FB2"></span><span style="font:500 14px Roboto;color:#06283A">Saint-Gilles</span></div>
+                <div style="font:400 13px/1.5 Roboto;color:#6A554D;margin-bottom:18px">3 séjours à venir sur ce lieu ce mois-ci.</div>
+                <div style="height:52px;border-radius:26px;background:#A5492A;display:flex;align-items:center;justify-content:center;gap:8px;font:500 15px Roboto;color:#fff;margin-bottom:10px;cursor:pointer"><span class="msym" style="font-size:20px">add</span>Exprimer un souhait</div>
+                <div style="height:52px;border-radius:26px;border:1px solid #B79A91;display:flex;align-items:center;justify-content:center;gap:8px;font:500 15px Roboto;color:#A5492A;cursor:pointer"><span class="msym" style="font-size:20px">calendar_month</span>Voir le planning</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FICHE MOBILE -->
+    <div>
+      <div style="font:600 12px/1 Roboto;letter-spacing:.06em;text-transform:uppercase;color:#8A756D;margin:0 0 14px">Mobile</div>
+      <div style="width:408px;padding:10px;border-radius:54px;background:#1C1512;box-shadow:0 24px 60px -20px rgba(59,10,0,.32)">
+        <div data-screen-label="Lieu · Mobile" style="width:388px;height:840px;border-radius:44px;overflow:hidden;background:#FFF8F6;position:relative">
+          <!-- hero carousel -->
+          <div style="position:absolute;top:0;left:0;right:0;height:320px;background:repeating-linear-gradient(135deg,#D5E6F2 0 16px,#C8DCEC 16px 32px)"></div>
+          <div style="position:absolute;top:20px;left:20px;font:500 11px ui-monospace,monospace;color:#41586A;background:rgba(255,255,255,.72);padding:4px 10px;border-radius:20px">photo · maison bord de mer</div>
+          <!-- status bar -->
+          <div style="position:absolute;top:0;left:0;right:0;height:44px;display:flex;align-items:center;justify-content:space-between;padding:0 26px 0 30px"><span style="font:600 14px Roboto;color:#0F2A3C">9:41</span><div style="display:flex;align-items:center;gap:6px;color:#0F2A3C"><span class="msym" style="font-size:16px">signal_cellular_alt</span><span class="msym" style="font-size:16px">wifi</span><span class="msym" style="font-size:18px">battery_full</span></div></div>
+          <!-- overlay controls -->
+          <div style="position:absolute;top:52px;left:16px;width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.9);display:flex;align-items:center;justify-content:center"><span class="msym" style="font-size:22px;color:#211A17">arrow_back</span></div>
+          <div style="position:absolute;top:52px;right:16px;width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.9);display:flex;align-items:center;justify-content:center"><span class="msym" style="font-size:20px;color:#211A17">ios_share</span></div>
+          <div style="position:absolute;top:296px;left:50%;transform:translateX(-50%);display:flex;gap:6px"><span style="width:7px;height:7px;border-radius:50%;background:#fff"></span><span style="width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.5)"></span><span style="width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.5)"></span><span style="width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.5)"></span></div>
+          <!-- sheet -->
+          <div style="position:absolute;top:304px;left:0;right:0;bottom:96px;background:#FFF8F6;border-radius:28px 28px 0 0;overflow-y:auto;padding:22px 20px">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px"><span class="msym" style="font-size:20px;color:#1F6FB2">waves</span><span style="font:400 22px/1.2 Roboto;color:#211A17">Saint-Gilles-Croix-de-Vie</span></div>
+            <div style="display:flex;align-items:center;gap:5px;color:#6A554D;font:400 13px Roboto;margin-bottom:16px"><span class="msym" style="font-size:16px">location_on</span>Vendée · bord de mer</div>
+            <div style="display:flex;gap:8px;margin-bottom:20px">
+              <div style="display:flex;align-items:center;gap:6px;padding:7px 12px;border-radius:12px;background:#C6E9F7"><span class="msym" style="font-size:18px;color:#1F6FB2">group</span><span style="font:500 13px Roboto;color:#06283A">8 pers. max.</span></div>
+              <div style="display:flex;align-items:center;gap:6px;padding:7px 12px;border-radius:12px;background:#F1E3DC"><span class="msym" style="font-size:18px;color:#6A554D">bed</span><span style="font:500 13px Roboto;color:#4A3B34">4 chambres</span></div>
+            </div>
+            <div style="font:400 14px/1.6 Roboto;color:#4A3B34;margin-bottom:22px">Maison familiale à deux pas de la plage, avec jardin clos et terrasse plein sud. Idéale pour les grandes tablées.</div>
+            <div style="font:500 15px Roboto;color:#211A17;margin-bottom:14px">Équipements</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px 16px">
+              <div style="display:flex;align-items:center;gap:10px"><span class="msym" style="font-size:20px;color:#6A554D">wifi</span><span style="font:400 13px Roboto;color:#4A3B34">Wifi fibre</span></div>
+              <div style="display:flex;align-items:center;gap:10px"><span class="msym" style="font-size:20px;color:#6A554D">local_parking</span><span style="font:400 13px Roboto;color:#4A3B34">Parking privé</span></div>
+              <div style="display:flex;align-items:center;gap:10px"><span class="msym" style="font-size:20px;color:#6A554D">yard</span><span style="font:400 13px Roboto;color:#4A3B34">Jardin clos</span></div>
+              <div style="display:flex;align-items:center;gap:10px"><span class="msym" style="font-size:20px;color:#6A554D">deck</span><span style="font:400 13px Roboto;color:#4A3B34">Terrasse</span></div>
+              <div style="display:flex;align-items:center;gap:10px"><span class="msym" style="font-size:20px;color:#6A554D">local_laundry_service</span><span style="font:400 13px Roboto;color:#4A3B34">Lave-linge</span></div>
+              <div style="display:flex;align-items:center;gap:10px"><span class="msym" style="font-size:20px;color:#6A554D">beach_access</span><span style="font:400 13px Roboto;color:#4A3B34">Plage à 300 m</span></div>
+            </div>
+          </div>
+          <!-- bottom action bar -->
+          <div style="position:absolute;left:0;right:0;bottom:0;padding:12px 16px 26px;background:#FFF8F6;border-top:1px solid #F0E0D9;display:flex;gap:10px">
+            <div style="width:52px;height:52px;border-radius:26px;border:1px solid #B79A91;display:flex;align-items:center;justify-content:center;flex:none"><span class="msym" style="font-size:22px;color:#A5492A">calendar_month</span></div>
+            <div style="flex:1;height:52px;border-radius:26px;background:#A5492A;display:flex;align-items:center;justify-content:center;gap:8px;font:500 15px Roboto;color:#fff"><span class="msym" style="font-size:20px">add</span>Exprimer un souhait</div>
+          </div>
+          <div style="position:absolute;left:50%;transform:translateX(-50%);bottom:8px;width:130px;height:5px;border-radius:3px;background:rgba(0,0,0,.28)"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div></x-dc>
+</body>
+</html>
