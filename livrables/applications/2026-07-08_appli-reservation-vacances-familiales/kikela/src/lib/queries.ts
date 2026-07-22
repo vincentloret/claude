@@ -69,10 +69,18 @@ export type LieuReglages = {
   videoUrl: string | null;
   lienUrl: string | null;
   lienLabel: string | null;
+  equipements: { id: number; icone: string; label: string }[];
+  photos: { id: number; url: string }[];
 };
 
 export async function getLieuxReglages(): Promise<LieuReglages[]> {
-  const rows = await prisma.lieu.findMany({ orderBy: { nom: "asc" } });
+  const rows = await prisma.lieu.findMany({
+    orderBy: { nom: "asc" },
+    include: {
+      equipements: { orderBy: { ordre: "asc" } },
+      photos: { orderBy: { ordre: "asc" } },
+    },
+  });
   return rows.map((l) => ({
     id: l.id,
     nom: l.nom,
@@ -80,6 +88,8 @@ export async function getLieuxReglages(): Promise<LieuReglages[]> {
     videoUrl: l.videoUrl,
     lienUrl: l.lienUrl,
     lienLabel: l.lienLabel,
+    equipements: l.equipements.map((e) => ({ id: e.id, icone: e.icone, label: e.label })),
+    photos: l.photos.map((p) => ({ id: p.id, url: p.url })),
   }));
 }
 

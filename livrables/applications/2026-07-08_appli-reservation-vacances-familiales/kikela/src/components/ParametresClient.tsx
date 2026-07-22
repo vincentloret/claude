@@ -3,6 +3,7 @@
 import { useEffect, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { Icon } from "./Icon";
+import { LieuEquipementsPhotos } from "./LieuEquipementsPhotos";
 import {
   definirCalendrierLieu,
   definirMediaLieu,
@@ -121,9 +122,16 @@ export function ParametresClient({ lieux, emailConnecte }: ParametresClientProps
       )}
 
       <div className="mb-3 text-sm font-medium text-on-surface-variant">Vidéo et lien de chaque fiche lieu</div>
-      <div className="flex flex-col gap-3">
+      <div className="mb-8 flex flex-col gap-3">
         {lieux.map((lieu) => (
           <LieuMediaForm key={lieu.id} lieu={lieu} onSaved={() => router.refresh()} />
+        ))}
+      </div>
+
+      <div className="mb-3 text-sm font-medium text-on-surface-variant">Équipements et photos de chaque lieu</div>
+      <div className="flex flex-col gap-3">
+        {lieux.map((lieu) => (
+          <LieuEquipementsPhotos key={lieu.id} lieu={lieu} onSaved={() => router.refresh()} />
         ))}
       </div>
     </div>

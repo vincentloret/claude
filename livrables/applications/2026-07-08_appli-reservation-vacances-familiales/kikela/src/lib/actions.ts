@@ -144,6 +144,43 @@ export async function definirMediaLieu(
   revalidatePath(`/lieux/${lieu.slug}`);
 }
 
+async function revaliderLieu(lieuId: string) {
+  const lieu = await prisma.lieu.findUniqueOrThrow({ where: { id: lieuId } });
+  revalidatePath("/parametres");
+  revalidatePath("/lieux");
+  revalidatePath(`/lieux/${lieu.slug}`);
+}
+
+export async function ajouterEquipement(lieuId: string, icone: string, label: string) {
+  const dernier = await prisma.equipement.findFirst({ where: { lieuId }, orderBy: { ordre: "desc" } });
+  await prisma.equipement.create({
+    data: { lieuId, icone, label, ordre: (dernier?.ordre ?? -1) + 1 },
+  });
+  await revaliderLieu(lieuId);
+}
+
+export async function supprimerEquipement(id: number) {
+  const equipement = await prisma.equipement.delete({ where: { id }, include: { lieu: true } });
+  revalidatePath("/parametres");
+  revalidatePath("/lieux");
+  revalidatePath(`/lieux/${equipement.lieu.slug}`);
+}
+
+export async function ajouterPhoto(lieuId: string, url: string) {
+  const derniere = await prisma.lieuPhoto.findFirst({ where: { lieuId }, orderBy: { ordre: "desc" } });
+  await prisma.lieuPhoto.create({
+    data: { lieuId, url, ordre: (derniere?.ordre ?? -1) + 1 },
+  });
+  await revaliderLieu(lieuId);
+}
+
+export async function supprimerPhoto(id: number) {
+  const photo = await prisma.lieuPhoto.delete({ where: { id }, include: { lieu: true } });
+  revalidatePath("/parametres");
+  revalidatePath("/lieux");
+  revalidatePath(`/lieux/${photo.lieu.slug}`);
+}
+
 export async function synchroniserCalendriers() {
   await syncAllCalendars();
 
