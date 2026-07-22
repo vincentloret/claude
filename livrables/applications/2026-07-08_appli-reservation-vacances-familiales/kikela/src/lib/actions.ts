@@ -2,7 +2,15 @@
 
 import { revalidatePath } from "next/cache";
 import { prisma } from "./prisma";
-import { syncAllCalendars, syncLieuCalendar, listGoogleCalendars } from "./google-calendar-sync";
+import { isoOf } from "./calendar";
+import {
+  syncAllCalendars,
+  syncLieuCalendar,
+  listGoogleCalendars,
+  creerEvenementGoogle,
+  mettreAJourEvenementGoogle,
+  supprimerEvenementGoogle,
+} from "./google-calendar-sync";
 
 type CreerSouhaitInput = {
   lieuId: string;
@@ -14,7 +22,7 @@ type CreerSouhaitInput = {
 };
 
 export async function creerSouhait(input: CreerSouhaitInput) {
-  const lieu = await prisma.sejour.create({
+  const sejour = await prisma.sejour.create({
     data: {
       lieuId: input.lieuId,
       foyerId: input.foyerId,
@@ -24,22 +32,50 @@ export async function creerSouhait(input: CreerSouhaitInput) {
       statut: "souhait",
       note: input.note,
     },
-    include: { lieu: true },
+    include: { lieu: true, foyer: true },
   });
+
+  const googleEventId = await creerEvenementGoogle({
+    lieuId: input.lieuId,
+    titre: `Souhait — ${sejour.foyer?.nom ?? ""}`,
+    debut: input.debut,
+    fin: input.fin,
+    description: input.note,
+  }).catch(() => null);
+
+  if (googleEventId) {
+    await prisma.sejour.update({ where: { id: sejour.id }, data: { googleEventId } });
+  }
 
   revalidatePath("/planning");
   revalidatePath("/lieux");
-  revalidatePath(`/lieux/${lieu.lieu.slug}`);
+  revalidatePath(`/lieux/${sejour.lieu.slug}`);
 
-  return { lieuId: lieu.lieuId, debut: input.debut, fin: input.fin };
+  return { lieuId: sejour.lieuId, debut: input.debut, fin: input.fin };
 }
 
 export async function confirmerSejour(id: string) {
   const sejour = await prisma.sejour.update({
     where: { id },
     data: { statut: "confirme" },
-    include: { lieu: true },
+    include: { lieu: true, foyer: true },
   });
+
+  const titre = sejour.foyer?.nom ?? "Réservation";
+  if (sejour.googleEventId) {
+    await mettreAJourEvenementGoogle(sejour.lieuId, sejour.googleEventId, titre).catch(() => {});
+  } else if (sejour.foyer) {
+    const googleEventId = await creerEvenementGoogle({
+      lieuId: sejour.lieuId,
+      titre,
+      debut: isoOf(sejour.debut),
+      fin: isoOf(sejour.fin),
+      description: sejour.note ?? undefined,
+    }).catch(() => null);
+    if (googleEventId) {
+      await prisma.sejour.update({ where: { id: sejour.id }, data: { googleEventId } });
+    }
+  }
 
   revalidatePath("/planning");
   revalidatePath("/lieux");
@@ -51,6 +87,12 @@ export async function annulerSejour(id: string) {
     where: { id },
     include: { lieu: true },
   });
+
+  // Un séjour créé dans Kikela (foyerId renseigné) qui a un événement Google associé est
+  // supprimé des deux côtés. Un séjour importé de Google (foyerId absent) reste local à Kikela.
+  if (sejour.foyerId && sejour.googleEventId) {
+    await supprimerEvenementGoogle(sejour.lieuId, sejour.googleEventId).catch(() => {});
+  }
 
   revalidatePath("/planning");
   revalidatePath("/lieux");

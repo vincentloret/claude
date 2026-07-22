@@ -1,10 +1,7 @@
 import { prisma } from "./prisma";
 import { CURRENT_FOYER_ID } from "./config";
+import { isoOf } from "./calendar";
 import type { Lieu, Foyer, Sejour } from "./data";
-
-function isoDate(d: Date): string {
-  return d.toISOString().slice(0, 10);
-}
 
 export async function getLieux(): Promise<Lieu[]> {
   const rows = await prisma.lieu.findMany({
@@ -102,8 +99,8 @@ export async function getSejours(): Promise<Sejour[]> {
     id: s.id,
     lieuId: s.lieuId,
     foyerId: s.foyerId ?? undefined,
-    debut: isoDate(s.debut),
-    fin: isoDate(s.fin),
+    debut: isoOf(s.debut),
+    fin: isoOf(s.fin),
     personnes: s.personnes ?? undefined,
     statut: s.statut,
     note: s.note ?? undefined,

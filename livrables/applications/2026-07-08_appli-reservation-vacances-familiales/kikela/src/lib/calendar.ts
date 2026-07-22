@@ -4,7 +4,8 @@ export function toDate(iso: string): Date {
   return new Date(iso + "T00:00:00");
 }
 
-function isoOf(d: Date): string {
+/** Date locale (année-mois-jour) au format ISO, sans conversion UTC — évite le décalage d'un jour de `toISOString()`. */
+export function isoOf(d: Date): string {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
 }
 

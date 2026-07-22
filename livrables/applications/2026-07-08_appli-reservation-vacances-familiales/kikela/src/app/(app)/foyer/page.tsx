@@ -1,5 +1,6 @@
 import { getFoyers, getSejours, getFoyerConnecte, getLieux } from "@/lib/queries";
 import { formatPlage } from "@/lib/data";
+import { isoOf } from "@/lib/calendar";
 import { Avatar } from "@/components/Avatar";
 import { SejourCard } from "@/components/SejourCard";
 import { Icon } from "@/components/Icon";
@@ -12,7 +13,7 @@ export default async function FoyerPage() {
     getLieux(),
   ]);
 
-  const aujourdhui = new Date().toISOString().slice(0, 10);
+  const aujourdhui = isoOf(new Date());
   const sejoursFoyer = sejours.filter((s) => s.foyerId === foyerConnecte.id);
   const aVenir = [...sejoursFoyer]
     .filter((s) => s.fin >= aujourdhui)

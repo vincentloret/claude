@@ -19,6 +19,66 @@ export async function listGoogleCalendars(): Promise<GoogleCalendarOption[]> {
     .map((c) => ({ id: c.id!, nom: c.summary ?? c.id! }));
 }
 
+/** Crée un événement Google Calendar pour un séjour Kikela. Retourne son id, ou null si le lieu n'a pas de calendrier associé. */
+export async function creerEvenementGoogle(params: {
+  lieuId: string;
+  titre: string;
+  debut: string; // yyyy-mm-dd
+  fin: string; // yyyy-mm-dd (exclusif)
+  description?: string;
+}): Promise<string | null> {
+  const lieu = await prisma.lieu.findUnique({ where: { id: params.lieuId } });
+  if (!lieu?.googleCalendarId) return null;
+
+  const client = await getAuthorizedGoogleClient();
+  if (!client) return null;
+
+  const { data } = await google.calendar({ version: "v3", auth: client }).events.insert({
+    calendarId: lieu.googleCalendarId,
+    requestBody: {
+      summary: params.titre,
+      description: params.description,
+      start: { date: params.debut },
+      end: { date: params.fin },
+    },
+  });
+  return data.id ?? null;
+}
+
+/** Met à jour le titre de l'événement Google associé à un séjour Kikela (ex : passage souhait -> confirmé). */
+export async function mettreAJourEvenementGoogle(lieuId: string, googleEventId: string, titre: string): Promise<void> {
+  const lieu = await prisma.lieu.findUnique({ where: { id: lieuId } });
+  if (!lieu?.googleCalendarId) return;
+
+  const client = await getAuthorizedGoogleClient();
+  if (!client) return;
+
+  try {
+    await google
+      .calendar({ version: "v3", auth: client })
+      .events.patch({ calendarId: lieu.googleCalendarId, eventId: googleEventId, requestBody: { summary: titre } });
+  } catch {
+    // L'événement a pu être supprimé côté Google entre-temps — sans conséquence ici.
+  }
+}
+
+/** Supprime l'événement Google associé à un séjour Kikela annulé. */
+export async function supprimerEvenementGoogle(lieuId: string, googleEventId: string): Promise<void> {
+  const lieu = await prisma.lieu.findUnique({ where: { id: lieuId } });
+  if (!lieu?.googleCalendarId) return;
+
+  const client = await getAuthorizedGoogleClient();
+  if (!client) return;
+
+  try {
+    await google
+      .calendar({ version: "v3", auth: client })
+      .events.delete({ calendarId: lieu.googleCalendarId, eventId: googleEventId });
+  } catch {
+    // Déjà supprimé côté Google — idempotent.
+  }
+}
+
 function dateEvenement(point?: { date?: string | null; dateTime?: string | null } | null): string | null {
   if (!point) return null;
   if (point.date) return point.date;
