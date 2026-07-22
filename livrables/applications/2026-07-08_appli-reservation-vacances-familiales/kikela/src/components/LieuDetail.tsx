@@ -8,6 +8,27 @@ import { Icon } from "./Icon";
 import { LieuVisual } from "./LieuVisual";
 import { WishForm } from "./WishForm";
 
+/** Convertit une URL YouTube/Vimeo en URL embarquable, ou undefined si le format n'est pas reconnu. */
+function urlEmbedVideo(url: string): string | undefined {
+  try {
+    const u = new URL(url);
+    if (u.hostname.includes("youtu.be")) {
+      return `https://www.youtube.com/embed/${u.pathname.slice(1)}`;
+    }
+    if (u.hostname.includes("youtube.com")) {
+      const id = u.searchParams.get("v");
+      return id ? `https://www.youtube.com/embed/${id}` : undefined;
+    }
+    if (u.hostname.includes("vimeo.com")) {
+      const id = u.pathname.split("/").filter(Boolean)[0];
+      return id ? `https://player.vimeo.com/video/${id}` : undefined;
+    }
+  } catch {
+    return undefined;
+  }
+  return undefined;
+}
+
 type LieuDetailProps = {
   lieu: Lieu;
   lieux: Lieu[];
@@ -71,7 +92,7 @@ export function LieuDetail({ lieu, lieux, foyers, sejours, foyerConnecteId }: Li
           <p className="mb-6 max-w-xl text-[15px] leading-relaxed text-[#4A3B34]">{lieu.description}</p>
 
           <div className="mb-4 font-medium">Équipements</div>
-          <div className="grid max-w-lg grid-cols-2 gap-x-6 gap-y-3.5">
+          <div className="mb-6 grid max-w-lg grid-cols-2 gap-x-6 gap-y-3.5">
             {lieu.equipements.map((eq) => (
               <div key={eq.label} className="flex items-center gap-3">
                 <Icon name={eq.icone} size={22} className="text-on-surface-variant" />
@@ -79,6 +100,46 @@ export function LieuDetail({ lieu, lieux, foyers, sejours, foyerConnecteId }: Li
               </div>
             ))}
           </div>
+
+          {lieu.videoUrl && (
+            <div className="mb-6 max-w-xl">
+              <div className="mb-3 font-medium">Vidéo</div>
+              {urlEmbedVideo(lieu.videoUrl) ? (
+                <div className="aspect-video overflow-hidden rounded-2xl bg-black">
+                  <iframe
+                    src={urlEmbedVideo(lieu.videoUrl)}
+                    className="h-full w-full"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  />
+                </div>
+              ) : (
+                <a
+                  href={lieu.videoUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="flex items-center gap-2 text-sm font-medium"
+                  style={{ color: "var(--md-primary)" }}
+                >
+                  <Icon name="videocam" size={18} />
+                  Voir la vidéo
+                </a>
+              )}
+            </div>
+          )}
+
+          {lieu.lienUrl && (
+            <a
+              href={lieu.lienUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="mb-6 flex items-center gap-2 text-sm font-medium"
+              style={{ color: "var(--md-primary)" }}
+            >
+              <Icon name="link" size={18} />
+              {lieu.lienLabel ?? lieu.lienUrl.replace(/^https?:\/\//, "")}
+            </a>
+          )}
         </div>
 
         {/* Actions — desktop sticky card */}

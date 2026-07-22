@@ -1,13 +1,18 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { nomMois, type Lieu, type Foyer, type Sejour, type LieuId } from "@/lib/data";
+import { nomMois, formatPlageSemaine, type Lieu, type Foyer, type Sejour, type LieuId } from "@/lib/data";
+import { getWeekDays, ajouterJours } from "@/lib/calendar";
 import { Icon } from "@/components/Icon";
 import { LieuChip } from "@/components/LieuChip";
 import { SejourCard } from "@/components/SejourCard";
 import { MonthCalendarDesktop } from "@/components/MonthCalendarDesktop";
 import { MonthCalendarMobile } from "@/components/MonthCalendarMobile";
+import { WeekCalendarDesktop } from "@/components/WeekCalendarDesktop";
+import { WeekCalendarMobile } from "@/components/WeekCalendarMobile";
 import { WishForm } from "@/components/WishForm";
+
+const AUJOURDHUI = new Date(2026, 7, 22);
 
 type Vue = "mois" | "semaine" | "liste";
 
@@ -22,6 +27,7 @@ export function PlanningClient({ lieux, foyers, sejours, foyerConnecteId }: Plan
   const [visibles, setVisibles] = useState<Set<LieuId>>(new Set(lieux.map((l) => l.id)));
   const [year, setYear] = useState(2026);
   const [month, setMonth] = useState(7); // août (0-indexé)
+  const [semaineAncre, setSemaineAncre] = useState(AUJOURDHUI);
   const [vue, setVue] = useState<Vue>("mois");
   const [wishOpen, setWishOpen] = useState(false);
 
@@ -41,6 +47,16 @@ export function PlanningClient({ lieux, foyers, sejours, foyerConnecteId }: Plan
     if (m > 11) { m = 0; y += 1; }
     setMonth(m);
     setYear(y);
+  }
+
+  function changeSemaine(delta: number) {
+    setSemaineAncre((prev) => ajouterJours(prev, delta * 7));
+  }
+
+  function allerAujourdhui() {
+    setYear(AUJOURDHUI.getFullYear());
+    setMonth(AUJOURDHUI.getMonth());
+    setSemaineAncre(AUJOURDHUI);
   }
 
   const sejoursFiltres = useMemo(
@@ -128,16 +144,18 @@ export function PlanningClient({ lieux, foyers, sejours, foyerConnecteId }: Plan
         {/* Toolbar desktop */}
         <div className="hidden items-center gap-4 px-5.5 pt-5 md:flex">
           <div className="flex items-center gap-1">
-            <button onClick={() => changeMonth(-1)} className="flex h-9 w-9 items-center justify-center rounded-full hover:bg-surface-container-high">
+            <button onClick={() => (vue === "semaine" ? changeSemaine(-1) : changeMonth(-1))} className="flex h-9 w-9 items-center justify-center rounded-full hover:bg-surface-container-high">
               <Icon name="chevron_left" className="text-on-surface-variant" />
             </button>
-            <div className="min-w-38 text-center text-xl font-medium">{nomMois(`${year}-${String(month + 1).padStart(2, "0")}`)}</div>
-            <button onClick={() => changeMonth(1)} className="flex h-9 w-9 items-center justify-center rounded-full hover:bg-surface-container-high">
+            <div className="min-w-38 text-center text-xl font-medium">
+              {vue === "semaine" ? formatPlageSemaine(getWeekDays(semaineAncre)) : nomMois(`${year}-${String(month + 1).padStart(2, "0")}`)}
+            </div>
+            <button onClick={() => (vue === "semaine" ? changeSemaine(1) : changeMonth(1))} className="flex h-9 w-9 items-center justify-center rounded-full hover:bg-surface-container-high">
               <Icon name="chevron_right" className="text-on-surface-variant" />
             </button>
           </div>
           <button
-            onClick={() => { setYear(2026); setMonth(7); }}
+            onClick={allerAujourdhui}
             className="text-sm font-medium"
             style={{ color: "var(--md-primary)" }}
           >
@@ -161,13 +179,15 @@ export function PlanningClient({ lieux, foyers, sejours, foyerConnecteId }: Plan
           </div>
         </div>
 
-        {/* Month header — mobile */}
+        {/* Period header — mobile */}
         <div className="flex items-center justify-center gap-2.5 px-4 pt-2.5 pb-1 md:hidden">
-          <button onClick={() => changeMonth(-1)}>
+          <button onClick={() => (vue === "semaine" ? changeSemaine(-1) : changeMonth(-1))}>
             <Icon name="chevron_left" size={22} className="text-on-surface-variant" />
           </button>
-          <div className="min-w-32 text-center text-lg font-medium">{nomMois(`${year}-${String(month + 1).padStart(2, "0")}`)}</div>
-          <button onClick={() => changeMonth(1)}>
+          <div className="min-w-32 text-center text-lg font-medium">
+            {vue === "semaine" ? formatPlageSemaine(getWeekDays(semaineAncre)) : nomMois(`${year}-${String(month + 1).padStart(2, "0")}`)}
+          </div>
+          <button onClick={() => (vue === "semaine" ? changeSemaine(1) : changeMonth(1))}>
             <Icon name="chevron_right" size={22} className="text-on-surface-variant" />
           </button>
         </div>
@@ -213,9 +233,14 @@ export function PlanningClient({ lieux, foyers, sejours, foyerConnecteId }: Plan
             )}
 
             {vue === "semaine" && (
-              <div className="flex h-40 items-center justify-center text-sm text-on-surface-muted">
-                Vue semaine — bientôt disponible
-              </div>
+              <>
+                <div className="hidden md:block">
+                  <WeekCalendarDesktop ancre={semaineAncre} sejours={sejoursFiltres} lieux={lieux} foyers={foyers} />
+                </div>
+                <div className="md:hidden">
+                  <WeekCalendarMobile ancre={semaineAncre} sejours={sejoursFiltres} lieux={lieux} foyers={foyers} />
+                </div>
+              </>
             )}
           </div>
 

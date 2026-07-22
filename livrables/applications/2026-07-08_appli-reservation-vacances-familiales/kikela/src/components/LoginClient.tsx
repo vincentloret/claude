@@ -1,20 +1,33 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Icon } from "@/components/Icon";
 import { GoogleSignInButton } from "@/components/GoogleSignInButton";
 import { LieuVisual } from "@/components/LieuVisual";
 import type { Lieu } from "@/lib/data";
 
-export function LoginClient({ lieux }: { lieux: Lieu[] }) {
+const MESSAGES_ERREUR: Record<string, string> = {
+  access_denied: "Tu as annulé la connexion avec Google.",
+  code_manquant: "La connexion Google a été interrompue.",
+  echec_connexion: "La connexion à Google a échoué. Réessaie.",
+};
+
+export function LoginClient({
+  lieux,
+  connecte = false,
+  erreur,
+}: {
+  lieux: Lieu[];
+  connecte?: boolean;
+  erreur?: string;
+}) {
   const [principal, ...autres] = lieux;
   const router = useRouter();
-  const [syncing, setSyncing] = useState(false);
   const [synced, setSynced] = useState<string[]>([]);
 
-  function handleSignIn() {
-    setSyncing(true);
+  useEffect(() => {
+    if (!connecte) return;
     lieux.forEach((lieu, i) => {
       setTimeout(() => {
         setSynced((prev) => [...prev, lieu.id]);
@@ -23,9 +36,16 @@ export function LoginClient({ lieux }: { lieux: Lieu[] }) {
         }
       }, (i + 1) * 550);
     });
+    // Le compte Google est déjà connecté à ce stade (callback OAuth) ;
+    // cette animation ne rejoue qu'une transition visuelle avant le planning.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [connecte]);
+
+  function handleSignIn() {
+    window.location.href = "/api/auth/google";
   }
 
-  if (syncing) {
+  if (connecte) {
     return (
       <div className="flex min-h-screen flex-col items-center justify-center bg-primary-container px-10">
         <div
@@ -107,6 +127,12 @@ export function LoginClient({ lieux }: { lieux: Lieu[] }) {
           <div className="mb-9 mt-2 hidden text-[15px] leading-relaxed text-on-surface-variant md:block">
             Connectez-vous avec le compte Google de la famille pour accéder au calendrier partagé.
           </div>
+
+          {erreur && (
+            <div className="mb-4 rounded-xl bg-red-50 px-3.5 py-2.5 text-sm text-red-700">
+              {MESSAGES_ERREUR[erreur] ?? "Une erreur est survenue pendant la connexion Google."}
+            </div>
+          )}
 
           <GoogleSignInButton onClick={handleSignIn} />
 

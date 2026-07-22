@@ -19,6 +19,16 @@ function mondayIndex(d: Date): number {
   return (d.getDay() + 6) % 7;
 }
 
+/** Les 7 jours (lundi à dimanche) de la semaine contenant `date`. */
+export function getWeekDays(date: Date): Date[] {
+  const start = addDays(date, -mondayIndex(date));
+  return Array.from({ length: 7 }, (_, i) => addDays(start, i));
+}
+
+export function ajouterJours(date: Date, n: number): Date {
+  return addDays(date, n);
+}
+
 export function getMonthWeeks(year: number, month: number): Date[][] {
   const firstOfMonth = new Date(year, month, 1);
   const start = addDays(firstOfMonth, -mondayIndex(firstOfMonth));

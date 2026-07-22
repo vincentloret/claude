@@ -15,6 +15,9 @@ export type Lieu = {
   description: string;
   equipements: { icone: string; label: string }[];
   photos: string[];
+  videoUrl?: string;
+  lienUrl?: string;
+  lienLabel?: string;
 };
 
 export type Foyer = {
@@ -27,12 +30,14 @@ export type Foyer = {
 export type Sejour = {
   id: string;
   lieuId: LieuId;
-  foyerId: string;
+  foyerId?: string;
   debut: string; // ISO date (yyyy-mm-dd)
   fin: string; // ISO date (yyyy-mm-dd)
-  personnes: number;
+  personnes?: number;
   statut: "confirme" | "souhait";
   note?: string;
+  // Titre brut de l'événement Google Calendar, utilisé en absence de foyer connu.
+  titreGoogle?: string;
 };
 
 export function findLieu(lieux: Lieu[], id: string): Lieu | undefined {
@@ -67,4 +72,16 @@ export function formatPlage(debut: string, fin: string): string {
 export function nomMois(anneeMois: string): string {
   const [annee, mois] = anneeMois.split("-").map(Number);
   return `${moisFr[mois - 1].replace(/^./, (c) => c.toUpperCase())} ${annee}`;
+}
+
+export function formatPlageSemaine(jours: Date[]): string {
+  const debut = jours[0];
+  const fin = jours[jours.length - 1];
+  if (debut.getFullYear() !== fin.getFullYear()) {
+    return `${debut.getDate()} ${moisFr[debut.getMonth()]} ${debut.getFullYear()} – ${fin.getDate()} ${moisFr[fin.getMonth()]} ${fin.getFullYear()}`;
+  }
+  if (debut.getMonth() !== fin.getMonth()) {
+    return `${debut.getDate()} ${moisFr[debut.getMonth()]} – ${fin.getDate()} ${moisFr[fin.getMonth()]} ${fin.getFullYear()}`;
+  }
+  return `${debut.getDate()} – ${fin.getDate()} ${moisFr[fin.getMonth()]} ${fin.getFullYear()}`;
 }

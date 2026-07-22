@@ -32,6 +32,10 @@ model Lieu {
   capacite           Int
   chambres           Int
   description        String
+  googleCalendarId   String?
+  videoUrl           String?
+  lienUrl            String?
+  lienLabel          String?
   equipements        Equipement[]
   photos             LieuPhoto[]
   sejours            Sejour[]
@@ -63,15 +67,27 @@ model Foyer {
 }
 
 model Sejour {
-  id        String       @id @default(cuid())
-  lieu      Lieu         @relation(fields: [lieuId], references: [id], onDelete: Cascade)
-  lieuId    String
-  foyer     Foyer        @relation(fields: [foyerId], references: [id], onDelete: Cascade)
-  foyerId   String
-  debut     DateTime
-  fin       DateTime
-  personnes Int
-  statut    StatutSejour
-  note      String?
-  creeLe    DateTime     @default(now())
+  id            String       @id @default(cuid())
+  lieu          Lieu         @relation(fields: [lieuId], references: [id], onDelete: Cascade)
+  lieuId        String
+  foyer         Foyer?       @relation(fields: [foyerId], references: [id], onDelete: Cascade)
+  foyerId       String?
+  debut         DateTime
+  fin           DateTime
+  personnes     Int?
+  statut        StatutSejour
+  note          String?
+  googleEventId String?      @unique
+  titreBrut     String?
+  creeLe        DateTime     @default(now())
+}
+
+// Connexion unique au compte Google familial (partagée par toute l'appli).
+model GoogleConnection {
+  id            String   @id @default("singleton")
+  email         String
+  accessToken   String
+  refreshToken  String
+  expiryDate    DateTime
+  connecteLe    DateTime @default(now())
 }

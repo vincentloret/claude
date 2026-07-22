@@ -1,15 +1,18 @@
 "use client";
 
+import { useTransition } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Icon } from "./Icon";
 import { Avatar } from "./Avatar";
+import { deconnecterGoogle } from "@/lib/actions";
 import type { Foyer } from "@/lib/data";
 
 const navItems = [
   { href: "/planning", label: "Planning", icon: "calendar_month" },
   { href: "/lieux", label: "Lieux", icon: "cottage" },
   { href: "/foyer", label: "Mon foyer", icon: "groups" },
+  { href: "/parametres", label: "Réglages", icon: "settings" },
 ];
 
 function BrandMark() {
@@ -25,6 +28,18 @@ function BrandMark() {
 
 export function AppShell({ children, foyerConnecte }: { children: React.ReactNode; foyerConnecte: Foyer }) {
   const pathname = usePathname();
+  const router = useRouter();
+  const [isPending, startTransition] = useTransition();
+
+  function handleDeconnexion() {
+    if (!window.confirm("Déconnecter le compte Google familial ? La synchronisation des calendriers sera interrompue.")) {
+      return;
+    }
+    startTransition(async () => {
+      await deconnecterGoogle();
+      router.push("/login");
+    });
+  }
 
   return (
     <div className="flex min-h-screen flex-col md:flex-row">
@@ -72,15 +87,14 @@ export function AppShell({ children, foyerConnecte }: { children: React.ReactNod
             <BrandMark />
           </div>
           <div className="flex-1 text-lg font-normal md:text-[22px]">Kikela</div>
-          <div className="hidden md:flex h-10 items-center gap-2 rounded-full border border-outline-variant px-4 text-sm font-medium text-on-surface-variant">
-            <Icon name="search" size={18} />
-            Rechercher un foyer
-          </div>
           <button
-            className="hidden h-10 w-10 items-center justify-center rounded-full bg-surface-container-high md:flex"
-            aria-label="Notifications"
+            onClick={handleDeconnexion}
+            disabled={isPending}
+            className="flex h-10 w-10 items-center justify-center rounded-full bg-surface-container-high disabled:opacity-60"
+            aria-label="Se déconnecter"
+            title="Se déconnecter"
           >
-            <Icon name="notifications" size={22} className="text-on-surface-variant" />
+            <Icon name="logout" size={20} className="text-on-surface-variant" />
           </button>
           <div className="md:hidden">
             <Avatar foyer={foyerConnecte} size={36} />

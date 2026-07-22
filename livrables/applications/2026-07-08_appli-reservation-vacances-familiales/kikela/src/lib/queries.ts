@@ -29,6 +29,9 @@ export async function getLieux(): Promise<Lieu[]> {
     description: l.description,
     equipements: l.equipements.map((e) => ({ icone: e.icone, label: e.label })),
     photos: l.photos.map((p) => p.url),
+    videoUrl: l.videoUrl ?? undefined,
+    lienUrl: l.lienUrl ?? undefined,
+    lienLabel: l.lienLabel ?? undefined,
   }));
 }
 
@@ -56,7 +59,31 @@ export async function getLieuBySlug(slug: string): Promise<Lieu | null> {
     description: l.description,
     equipements: l.equipements.map((e) => ({ icone: e.icone, label: e.label })),
     photos: l.photos.map((p) => p.url),
+    videoUrl: l.videoUrl ?? undefined,
+    lienUrl: l.lienUrl ?? undefined,
+    lienLabel: l.lienLabel ?? undefined,
   };
+}
+
+export type LieuReglages = {
+  id: string;
+  nom: string;
+  googleCalendarId: string | null;
+  videoUrl: string | null;
+  lienUrl: string | null;
+  lienLabel: string | null;
+};
+
+export async function getLieuxReglages(): Promise<LieuReglages[]> {
+  const rows = await prisma.lieu.findMany({ orderBy: { nom: "asc" } });
+  return rows.map((l) => ({
+    id: l.id,
+    nom: l.nom,
+    googleCalendarId: l.googleCalendarId,
+    videoUrl: l.videoUrl,
+    lienUrl: l.lienUrl,
+    lienLabel: l.lienLabel,
+  }));
 }
 
 export async function getFoyers(): Promise<Foyer[]> {
@@ -74,11 +101,12 @@ export async function getSejours(): Promise<Sejour[]> {
   return rows.map((s) => ({
     id: s.id,
     lieuId: s.lieuId,
-    foyerId: s.foyerId,
+    foyerId: s.foyerId ?? undefined,
     debut: isoDate(s.debut),
     fin: isoDate(s.fin),
-    personnes: s.personnes,
+    personnes: s.personnes ?? undefined,
     statut: s.statut,
     note: s.note ?? undefined,
+    titreGoogle: s.titreBrut ?? undefined,
   }));
 }

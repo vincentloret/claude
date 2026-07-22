@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { prisma } from "./prisma";
+import { syncAllCalendars, syncLieuCalendar, listGoogleCalendars } from "./google-calendar-sync";
 
 type CreerSouhaitInput = {
   lieuId: string;
@@ -43,4 +44,68 @@ export async function confirmerSejour(id: string) {
   revalidatePath("/planning");
   revalidatePath("/lieux");
   revalidatePath(`/lieux/${sejour.lieu.slug}`);
+}
+
+export async function annulerSejour(id: string) {
+  const sejour = await prisma.sejour.delete({
+    where: { id },
+    include: { lieu: true },
+  });
+
+  revalidatePath("/planning");
+  revalidatePath("/lieux");
+  revalidatePath(`/lieux/${sejour.lieu.slug}`);
+}
+
+export async function definirCalendrierLieu(lieuId: string, googleCalendarId: string) {
+  await prisma.lieu.update({
+    where: { id: lieuId },
+    data: { googleCalendarId: googleCalendarId || null },
+  });
+
+  if (googleCalendarId) {
+    await syncLieuCalendar(lieuId);
+  }
+
+  revalidatePath("/parametres");
+  revalidatePath("/planning");
+  revalidatePath("/lieux");
+}
+
+export async function listerCalendriersGoogle() {
+  return listGoogleCalendars();
+}
+
+export async function deconnecterGoogle() {
+  await prisma.googleConnection.deleteMany({ where: { id: "singleton" } });
+
+  revalidatePath("/parametres");
+  revalidatePath("/planning");
+  revalidatePath("/lieux");
+}
+
+export async function definirMediaLieu(
+  lieuId: string,
+  videoUrl: string,
+  lienUrl: string,
+  lienLabel: string
+) {
+  await prisma.lieu.update({
+    where: { id: lieuId },
+    data: { videoUrl: videoUrl || null, lienUrl: lienUrl || null, lienLabel: lienLabel || null },
+  });
+
+  const lieu = await prisma.lieu.findUniqueOrThrow({ where: { id: lieuId } });
+
+  revalidatePath("/parametres");
+  revalidatePath("/lieux");
+  revalidatePath(`/lieux/${lieu.slug}`);
+}
+
+export async function synchroniserCalendriers() {
+  await syncAllCalendars();
+
+  revalidatePath("/planning");
+  revalidatePath("/lieux");
+  revalidatePath("/parametres");
 }

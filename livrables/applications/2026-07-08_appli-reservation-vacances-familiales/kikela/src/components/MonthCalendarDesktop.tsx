@@ -46,7 +46,8 @@ export function MonthCalendarDesktop({ year, month, sejours, lieux, foyers }: Pr
             <div className="relative" style={{ height: bodyHeight }}>
               {bars.map(({ sejour, colStart, colSpan, row }) => {
                 const lieu = findLieu(lieux, sejour.lieuId)!;
-                const foyer = findFoyer(foyers, sejour.foyerId)!;
+                const foyer = sejour.foyerId ? findFoyer(foyers, sejour.foyerId) : undefined;
+                const nomAffiche = foyer?.nom ?? sejour.titreGoogle ?? "Événement";
                 const confirme = sejour.statut === "confirme";
                 return (
                   <div
@@ -60,10 +61,10 @@ export function MonthCalendarDesktop({ year, month, sejours, lieux, foyers }: Pr
                       color: confirme ? "#fff" : lieu.couleurOnContainer,
                       border: confirme ? undefined : `1.5px dashed ${lieu.couleur}`,
                     }}
-                    title={`${lieu.nom} · ${foyer.nom}`}
+                    title={`${lieu.nom} · ${nomAffiche}`}
                   >
                     {colSpan > 1 && <Icon name={lieu.icone} size={14} />}
-                    {colSpan > 2 ? foyer.nom : ""}
+                    {colSpan > 2 ? nomAffiche : ""}
                   </div>
                 );
               })}
