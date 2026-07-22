@@ -1,4 +1,6 @@
-import { PrismaLibSql } from "@prisma/adapter-libsql";
+// Variante "web" (fetch, sans dépendances natives) : nécessaire pour fonctionner
+// dans les fonctions serverless contraintes (Netlify Functions, edge…).
+import { PrismaLibSql } from "@prisma/adapter-libsql/web";
 import { PrismaClient } from "@/generated/prisma/client";
 
 const globalForPrisma = globalThis as unknown as { prisma?: PrismaClient };
