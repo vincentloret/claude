@@ -1,8 +1,11 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
+import { cookies } from "next/headers";
 import { prisma } from "./prisma";
 import { isoOf } from "./calendar";
+import { FOYER_COOKIE } from "./session";
 import {
   syncAllCalendars,
   syncLieuCalendar,
@@ -11,6 +14,29 @@ import {
   mettreAJourEvenementGoogle,
   supprimerEvenementGoogle,
 } from "./google-calendar-sync";
+
+export async function choisirFoyer(formData: FormData) {
+  const foyerId = formData.get("foyerId");
+  if (typeof foyerId !== "string") return;
+
+  await prisma.foyer.findUniqueOrThrow({ where: { id: foyerId } });
+
+  const store = await cookies();
+  store.set(FOYER_COOKIE, foyerId, {
+    path: "/",
+    maxAge: 60 * 60 * 24 * 365,
+    sameSite: "lax",
+    httpOnly: true,
+  });
+
+  redirect("/planning");
+}
+
+export async function changerFoyer() {
+  const store = await cookies();
+  store.delete(FOYER_COOKIE);
+  redirect("/qui-es-tu");
+}
 
 type CreerSouhaitInput = {
   lieuId: string;

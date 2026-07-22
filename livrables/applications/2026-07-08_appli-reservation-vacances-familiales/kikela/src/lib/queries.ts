@@ -1,5 +1,6 @@
+import { redirect } from "next/navigation";
 import { prisma } from "./prisma";
-import { CURRENT_FOYER_ID } from "./config";
+import { getFoyerIdConnecte } from "./session";
 import { isoOf } from "./calendar";
 import type { Lieu, Foyer, Sejour } from "./data";
 
@@ -99,7 +100,12 @@ export async function getFoyers(): Promise<Foyer[]> {
 }
 
 export async function getFoyerConnecte(): Promise<Foyer> {
-  const f = await prisma.foyer.findUniqueOrThrow({ where: { id: CURRENT_FOYER_ID } });
+  const foyerId = await getFoyerIdConnecte();
+  if (!foyerId) redirect("/qui-es-tu");
+
+  const f = await prisma.foyer.findUnique({ where: { id: foyerId } });
+  if (!f) redirect("/qui-es-tu");
+
   return { id: f.id, nom: f.nom, initiales: f.initiales, couleur: f.couleur };
 }
 

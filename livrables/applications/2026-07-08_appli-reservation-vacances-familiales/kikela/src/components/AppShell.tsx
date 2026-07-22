@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { Icon } from "./Icon";
 import { Avatar } from "./Avatar";
-import { deconnecterGoogle } from "@/lib/actions";
+import { deconnecterGoogle, changerFoyer } from "@/lib/actions";
 import type { Foyer } from "@/lib/data";
 
 const navItems = [
@@ -38,6 +38,12 @@ export function AppShell({ children, foyerConnecte }: { children: React.ReactNod
     startTransition(async () => {
       await deconnecterGoogle();
       router.push("/login");
+    });
+  }
+
+  function handleChangerFoyer() {
+    startTransition(async () => {
+      await changerFoyer();
     });
   }
 
@@ -75,9 +81,15 @@ export function AppShell({ children, foyerConnecte }: { children: React.ReactNod
             </Link>
           );
         })}
-        <div className="mt-auto">
+        <button
+          onClick={handleChangerFoyer}
+          disabled={isPending}
+          className="mt-auto disabled:opacity-60"
+          title="Changer de foyer"
+          aria-label="Changer de foyer"
+        >
           <Avatar foyer={foyerConnecte} size={40} />
-        </div>
+        </button>
       </nav>
 
       <div className="flex min-w-0 flex-1 flex-col">
@@ -96,9 +108,15 @@ export function AppShell({ children, foyerConnecte }: { children: React.ReactNod
           >
             <Icon name="logout" size={20} className="text-on-surface-variant" />
           </button>
-          <div className="md:hidden">
+          <button
+            onClick={handleChangerFoyer}
+            disabled={isPending}
+            className="md:hidden disabled:opacity-60"
+            title="Changer de foyer"
+            aria-label="Changer de foyer"
+          >
             <Avatar foyer={foyerConnecte} size={36} />
-          </div>
+          </button>
         </header>
 
         <main className="flex-1 pb-20 md:pb-0">{children}</main>
