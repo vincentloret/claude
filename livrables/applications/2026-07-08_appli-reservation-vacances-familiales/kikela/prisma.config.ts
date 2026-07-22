@@ -3,6 +3,13 @@
 import "dotenv/config";
 import { defineConfig } from "prisma/config";
 
+// La CLI Prisma (migrate, studio…) se connecte via une URL unique : le jeton
+// d'authentification Turso doit donc être intégré à l'URL pour ces commandes,
+// alors que le client applicatif (src/lib/prisma.ts) les passe séparément.
+const url = process.env["DATABASE_AUTH_TOKEN"]
+  ? `${process.env["DATABASE_URL"]}?authToken=${process.env["DATABASE_AUTH_TOKEN"]}`
+  : process.env["DATABASE_URL"];
+
 export default defineConfig({
   schema: "prisma/schema.prisma",
   migrations: {
@@ -10,6 +17,6 @@ export default defineConfig({
     seed: "tsx prisma/seed.ts",
   },
   datasource: {
-    url: process.env["DATABASE_URL"],
+    url,
   },
 });
