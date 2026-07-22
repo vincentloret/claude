@@ -12,7 +12,7 @@ import { WeekCalendarDesktop } from "@/components/WeekCalendarDesktop";
 import { WeekCalendarMobile } from "@/components/WeekCalendarMobile";
 import { WishForm } from "@/components/WishForm";
 
-const AUJOURDHUI = new Date(2026, 7, 22);
+const AUJOURDHUI = new Date();
 
 type Vue = "mois" | "semaine" | "liste";
 
