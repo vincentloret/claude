@@ -6,10 +6,23 @@ import { Avatar } from "@/components/Avatar";
 import { Icon } from "@/components/Icon";
 
 export default async function QuiEsTuPage() {
-  const foyerId = await getFoyerIdConnecte();
-  if (foyerId) redirect("/planning");
-
-  const foyers = await getFoyers();
+  let foyerId: string | null;
+  let foyers: Awaited<ReturnType<typeof getFoyers>>;
+  try {
+    foyerId = await getFoyerIdConnecte();
+    if (foyerId) redirect("/planning");
+    foyers = await getFoyers();
+  } catch (e) {
+    const err = e as Error & { digest?: string };
+    if (err?.digest?.startsWith("NEXT_REDIRECT")) throw e;
+    return (
+      <pre style={{ whiteSpace: "pre-wrap", padding: 20, fontSize: 12 }}>
+        DEBUG {err?.name}: {err?.message}
+        {"\n"}
+        {err?.stack}
+      </pre>
+    );
+  }
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-primary-container px-6 py-12">
