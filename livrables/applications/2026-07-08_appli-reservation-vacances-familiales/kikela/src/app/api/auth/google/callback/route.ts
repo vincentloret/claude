@@ -17,9 +17,7 @@ export async function GET(request: NextRequest) {
     await connectGoogleAccount(code);
   } catch (err) {
     console.error("Échec de la connexion Google :", err);
-    // DEBUG temporaire : détail de l'erreur dans l'URL pour diagnostiquer.
-    const detail = err instanceof Error ? err.message : String(err);
-    return NextResponse.redirect(`${origin}/login?erreur=echec_connexion&debug=${encodeURIComponent(detail)}`);
+    return NextResponse.redirect(`${origin}/login?erreur=echec_connexion`);
   }
 
   return NextResponse.redirect(`${origin}/login?connecte=1`);
