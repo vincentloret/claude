@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { redirect } from "next/navigation";
 import { prisma } from "./prisma";
 import { getFoyerIdConnecte } from "./session";
@@ -99,7 +100,9 @@ export async function getFoyers(): Promise<Foyer[]> {
   return rows.map((f) => ({ id: f.id, nom: f.nom, initiales: f.initiales, couleur: f.couleur }));
 }
 
-export async function getFoyerConnecte(): Promise<Foyer> {
+// Le layout (app) et la page rendue appellent chacun getFoyerConnecte() dans la même
+// requête : cache() déduplique pour n'exécuter la requête Turso qu'une seule fois.
+export const getFoyerConnecte = cache(async (): Promise<Foyer> => {
   const foyerId = await getFoyerIdConnecte();
   if (!foyerId) redirect("/qui-es-tu");
 
@@ -107,7 +110,7 @@ export async function getFoyerConnecte(): Promise<Foyer> {
   if (!f) redirect("/qui-es-tu");
 
   return { id: f.id, nom: f.nom, initiales: f.initiales, couleur: f.couleur };
-}
+});
 
 export async function getSejours(): Promise<Sejour[]> {
   const rows = await prisma.sejour.findMany({ orderBy: { debut: "asc" } });
