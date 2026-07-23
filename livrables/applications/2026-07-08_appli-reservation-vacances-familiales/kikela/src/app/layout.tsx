@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Roboto } from "next/font/google";
 import "./globals.css";
 
@@ -10,7 +10,16 @@ const roboto = Roboto({
 
 export const metadata: Metadata = {
   title: "Kikela",
-  description: "Planning partagé des lieux de vacances familiaux",
+  description: "Les vacances en famille, sans prise de tête.",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "Kikela",
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#a5492a",
 };
 
 export default function RootLayout({

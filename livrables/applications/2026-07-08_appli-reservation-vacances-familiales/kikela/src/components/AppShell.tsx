@@ -63,7 +63,7 @@ export function AppShell({ children, foyerConnecte }: { children: React.ReactNod
               className="flex w-full flex-col items-center gap-1 py-1.5"
             >
               <span
-                className="flex h-8 w-14 items-center justify-center rounded-2xl"
+                className="flex h-8 w-14 items-center justify-center rounded-2xl transition-transform duration-150 hover:scale-110"
                 style={{ backgroundColor: active ? "var(--md-primary-container)" : "transparent" }}
               >
                 <Icon
@@ -84,7 +84,7 @@ export function AppShell({ children, foyerConnecte }: { children: React.ReactNod
         <button
           onClick={handleChangerFoyer}
           disabled={isPending}
-          className="mt-auto disabled:opacity-60"
+          className="mt-auto rounded-full transition-transform duration-150 hover:scale-110 active:scale-95 disabled:opacity-60"
           title="Changer de foyer"
           aria-label="Changer de foyer"
         >
@@ -102,7 +102,7 @@ export function AppShell({ children, foyerConnecte }: { children: React.ReactNod
           <button
             onClick={handleDeconnexion}
             disabled={isPending}
-            className="flex h-10 w-10 items-center justify-center rounded-full bg-surface-container-high disabled:opacity-60"
+            className="flex h-10 w-10 items-center justify-center rounded-full bg-surface-container-high transition-transform duration-150 hover:scale-110 active:scale-95 disabled:opacity-60"
             aria-label="Se déconnecter"
             title="Se déconnecter"
           >
@@ -111,7 +111,7 @@ export function AppShell({ children, foyerConnecte }: { children: React.ReactNod
           <button
             onClick={handleChangerFoyer}
             disabled={isPending}
-            className="md:hidden disabled:opacity-60"
+            className="rounded-full transition-transform duration-150 active:scale-95 md:hidden disabled:opacity-60"
             title="Changer de foyer"
             aria-label="Changer de foyer"
           >

@@ -61,7 +61,7 @@ export function LieuEquipementsPhotos({ lieu, onSaved }: { lieu: LieuReglages; o
               onClick={() => handleSupprimerEquipement(eq.id)}
               disabled={isPending}
               aria-label={`Retirer ${eq.label}`}
-              className="disabled:opacity-60"
+              className="rounded-full transition-transform duration-150 hover:scale-125 disabled:opacity-60"
             >
               <Icon name="close" size={16} className="text-on-surface-muted" />
             </button>
@@ -90,7 +90,7 @@ export function LieuEquipementsPhotos({ lieu, onSaved }: { lieu: LieuReglages; o
           onClick={handleAjouterEquipement}
           disabled={isPending || !icone.trim() || !label.trim()}
           aria-label="Ajouter l'équipement"
-          className="flex h-8 w-8 flex-none items-center justify-center rounded-full disabled:opacity-40"
+          className="flex h-8 w-8 flex-none items-center justify-center rounded-full transition-transform duration-150 hover:scale-110 active:scale-90 disabled:opacity-40 disabled:hover:scale-100"
           style={{ backgroundColor: "var(--md-primary-container)" }}
         >
           <Icon name="add" size={18} style={{ color: "var(--md-on-primary-container)" }} />
@@ -108,7 +108,7 @@ export function LieuEquipementsPhotos({ lieu, onSaved }: { lieu: LieuReglages; o
               onClick={() => handleSupprimerPhoto(photo.id)}
               disabled={isPending}
               aria-label="Retirer la photo"
-              className="disabled:opacity-60"
+              className="rounded-full transition-transform duration-150 hover:scale-125 disabled:opacity-60"
             >
               <Icon name="close" size={16} className="text-on-surface-muted" />
             </button>
@@ -128,7 +128,7 @@ export function LieuEquipementsPhotos({ lieu, onSaved }: { lieu: LieuReglages; o
           onClick={handleAjouterPhoto}
           disabled={isPending || !urlPhoto.trim()}
           aria-label="Ajouter la photo"
-          className="flex h-8 w-8 flex-none items-center justify-center rounded-full disabled:opacity-40"
+          className="flex h-8 w-8 flex-none items-center justify-center rounded-full transition-transform duration-150 hover:scale-110 active:scale-90 disabled:opacity-40 disabled:hover:scale-100"
           style={{ backgroundColor: "var(--md-primary-container)" }}
         >
           <Icon name="add" size={18} style={{ color: "var(--md-on-primary-container)" }} />

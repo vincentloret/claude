@@ -7,13 +7,13 @@ export default async function LieuxPage() {
   const lieux = await getLieux();
   return (
     <div className="mx-auto max-w-4xl p-5 md:p-8">
-      <h1 className="mb-5 text-xl font-medium md:text-2xl">Les 3 lieux familiaux</h1>
+      <h1 className="mb-5 text-xl font-medium md:text-2xl">Nos 3 coins de vacances</h1>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
         {lieux.map((lieu) => (
           <Link
             key={lieu.id}
             href={`/lieux/${lieu.slug}`}
-            className="overflow-hidden rounded-3xl border border-outline-variant bg-surface"
+            className="overflow-hidden rounded-3xl border border-outline-variant bg-surface transition-all duration-200 hover:-translate-y-1 hover:shadow-lg"
           >
             <LieuVisual lieu={lieu} className="h-32 w-full" />
             <div className="p-4">

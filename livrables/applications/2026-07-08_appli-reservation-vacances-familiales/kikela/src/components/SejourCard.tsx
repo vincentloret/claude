@@ -97,7 +97,7 @@ export function SejourCard({ sejour, lieux, foyers }: SejourCardProps) {
             <button
               onClick={handleConfirmer}
               disabled={isPending}
-              className="flex items-center gap-1.5 text-xs font-medium disabled:opacity-60"
+              className="flex items-center gap-1.5 rounded-full text-xs font-medium transition-opacity duration-150 hover:opacity-70 disabled:opacity-60"
               style={{ color: lieu.couleur }}
             >
               <Icon name="check_circle" size={16} />
@@ -107,7 +107,7 @@ export function SejourCard({ sejour, lieux, foyers }: SejourCardProps) {
           <button
             onClick={handleAnnuler}
             disabled={isPending}
-            className="flex items-center gap-1.5 text-xs font-medium text-on-surface-muted disabled:opacity-60"
+            className="flex items-center gap-1.5 rounded-full text-xs font-medium text-on-surface-muted transition-opacity duration-150 hover:opacity-70 disabled:opacity-60"
           >
             <Icon name="cancel" size={16} />
             {isPending ? "Annulation…" : confirme ? "Annuler la réservation" : "Retirer le souhait"}

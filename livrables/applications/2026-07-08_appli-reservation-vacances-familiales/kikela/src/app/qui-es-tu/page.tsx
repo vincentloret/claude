@@ -17,7 +17,8 @@ export default async function QuiEsTuPage() {
         <Icon name="holiday_village" size={30} className="text-white" />
       </div>
       <div className="mt-3 text-2xl font-bold tracking-tight text-on-primary-container">Kikela</div>
-      <div className="mt-1 mb-8 text-center text-base text-[#7A5A4E]">Qui es-tu ?</div>
+      <div className="mt-1 mb-1 text-center text-lg font-medium text-on-primary-container">Salut, c&apos;est qui ?</div>
+      <div className="mb-8 text-center text-sm text-[#7A5A4E]">Clique sur ton foyer pour retrouver tout le monde</div>
 
       <div className="grid w-full max-w-md grid-cols-2 gap-3">
         {foyers.map((foyer) => (
@@ -25,7 +26,7 @@ export default async function QuiEsTuPage() {
             <input type="hidden" name="foyerId" value={foyer.id} />
             <button
               type="submit"
-              className="flex w-full flex-col items-center gap-2 rounded-2xl bg-white px-4 py-5 shadow-sm transition-shadow hover:shadow-md"
+              className="flex w-full flex-col items-center gap-2 rounded-2xl bg-white px-4 py-5 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg active:translate-y-0 active:scale-95"
             >
               <Avatar foyer={foyer} size={44} />
               <span className="text-center text-sm font-medium">{foyer.nom}</span>

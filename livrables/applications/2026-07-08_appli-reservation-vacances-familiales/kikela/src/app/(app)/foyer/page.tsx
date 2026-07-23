@@ -32,7 +32,7 @@ export default async function FoyerPage() {
     <div className="mx-auto max-w-2xl p-5 md:p-8">
       <h1 className="mb-1 text-xl font-medium md:text-2xl">Mon foyer</h1>
       <p className="mb-6 text-sm text-on-surface-variant">
-        Votre foyer et vos séjours, et un aperçu du reste de la famille.
+        Tes séjours, et un petit coup d&apos;œil sur le reste de la tribu.
       </p>
 
       <div className="mb-8 rounded-2xl border border-outline-variant bg-surface p-4">
@@ -45,7 +45,9 @@ export default async function FoyerPage() {
           Séjours à venir
         </div>
         {aVenir.length === 0 ? (
-          <div className="mb-5 text-sm text-on-surface-muted">Aucun séjour à venir.</div>
+          <div className="mb-5 text-sm text-on-surface-muted">
+            Rien de prévu pour l&apos;instant. Tu sais ce qu&apos;il te reste à faire !
+          </div>
         ) : (
           <div className="mb-5">
             {aVenir.map((s) => (

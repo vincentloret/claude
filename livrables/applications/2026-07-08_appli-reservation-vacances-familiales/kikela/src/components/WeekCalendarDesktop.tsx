@@ -77,7 +77,7 @@ export function WeekCalendarDesktop({ ancre, sejours, lieux, foyers }: Props) {
 
       {bars.length === 0 && (
         <div className="flex h-24 items-center justify-center text-sm text-on-surface-muted">
-          Aucun séjour cette semaine pour les lieux sélectionnés.
+          Semaine tranquille : rien de prévu pour ces lieux.
         </div>
       )}
     </div>

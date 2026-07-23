@@ -3,6 +3,7 @@
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { Icon } from "./Icon";
+import { Confetti } from "./Confetti";
 import { formatPlage, type Lieu, type Foyer, type LieuId } from "@/lib/data";
 import { creerSouhait } from "@/lib/actions";
 
@@ -40,34 +41,37 @@ export function WishForm({ lieux, foyers, foyerConnecteId, lieuInitial, onClose 
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
         <div className="flex w-full max-w-sm flex-col items-center rounded-3xl bg-primary-container px-9 py-12 text-center">
-          <div
-            className="flex h-24 w-24 items-center justify-center rounded-full"
-            style={{ backgroundColor: "var(--lieu-bolquere)" }}
-          >
-            <Icon name="check" size={56} className="text-white" />
+          <div className="relative flex h-24 w-24 items-center justify-center">
+            <Confetti />
+            <div
+              className="animate-pop-in flex h-24 w-24 items-center justify-center rounded-full"
+              style={{ backgroundColor: "var(--lieu-bolquere)" }}
+            >
+              <Icon name="check" size={56} className="text-white" />
+            </div>
           </div>
-          <div className="mt-7 text-2xl font-bold text-on-primary-container">Souhait envoyé !</div>
+          <div className="mt-7 text-2xl font-bold text-on-primary-container">C&apos;est envoyé !</div>
           <div className="mt-3 mb-7 text-base leading-relaxed text-[#7A5A4E]">
-            Toute la famille peut désormais voir votre souhait pour{" "}
+            Toute la famille peut voir ton envie pour{" "}
             <b style={{ color: lieu.couleurOnContainer }}>{lieu.nom}</b>, du{" "}
-            <b>{formatPlage(envoye.debut, envoye.fin)}</b>.
+            <b>{formatPlage(envoye.debut, envoye.fin)}</b>. Reste plus qu&apos;à croiser les doigts !
           </div>
           <button
             onClick={() => {
               onClose();
               router.push("/planning");
             }}
-            className="mb-2.5 h-13 w-full rounded-full font-medium text-white"
+            className="mb-2.5 h-13 w-full rounded-full font-medium text-white transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md active:translate-y-0 active:scale-95"
             style={{ backgroundColor: "var(--md-primary)" }}
           >
             Voir le planning
           </button>
           <button
             onClick={() => setEnvoye(null)}
-            className="h-12 w-full text-sm font-medium"
+            className="h-12 w-full rounded-full text-sm font-medium transition-colors duration-150 hover:bg-white/50"
             style={{ color: "var(--md-primary)" }}
           >
-            Exprimer un autre souhait
+            Poser un autre souhait
           </button>
         </div>
       </div>
@@ -81,8 +85,13 @@ export function WishForm({ lieux, foyers, foyerConnecteId, lieuInitial, onClose 
         className="flex max-h-[92vh] w-full flex-col overflow-hidden rounded-t-3xl bg-surface md:max-w-lg md:rounded-3xl"
       >
         <div className="flex items-center gap-3 border-b border-outline-variant px-6 py-5">
-          <div className="flex-1 text-xl font-normal">Exprimer un souhait</div>
-          <button type="button" onClick={onClose} aria-label="Fermer">
+          <div className="flex-1 text-xl font-normal">Poser un souhait</div>
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label="Fermer"
+            className="rounded-full p-1 transition-transform duration-150 hover:rotate-90 active:scale-90"
+          >
             <Icon name="close" size={24} className="text-on-surface-variant" />
           </button>
         </div>
@@ -97,7 +106,7 @@ export function WishForm({ lieux, foyers, foyerConnecteId, lieuInitial, onClose 
                   type="button"
                   key={lieu.id}
                   onClick={() => setLieuId(lieu.id)}
-                  className="relative flex-1 overflow-hidden rounded-2xl text-left"
+                  className="relative flex-1 overflow-hidden rounded-2xl text-left transition-transform duration-150 hover:scale-[1.02] active:scale-95"
                   style={{ border: selected ? `2px solid ${lieu.couleur}` : "1.5px solid var(--md-outline-variant)" }}
                 >
                   <div
@@ -161,14 +170,14 @@ export function WishForm({ lieux, foyers, foyerConnecteId, lieuInitial, onClose 
               ))}
             </select>
           </label>
-          <div className="mb-6 pl-0.5 text-xs text-on-surface-muted">Votre foyer · modifiable</div>
+          <div className="mb-6 pl-0.5 text-xs text-on-surface-muted">Ton foyer · modifiable</div>
 
           <div className="mb-3 text-sm font-medium text-on-surface-variant">Nombre de personnes</div>
           <div className="mb-6 flex items-center gap-4">
             <button
               type="button"
               onClick={() => setPersonnes((p) => Math.max(1, p - 1))}
-              className="flex h-11 w-11 items-center justify-center rounded-full border border-outline"
+              className="flex h-11 w-11 items-center justify-center rounded-full border border-outline transition-all duration-150 hover:border-[var(--md-primary)] hover:bg-primary-container active:scale-90"
             >
               <Icon name="remove" size={22} style={{ color: "var(--md-primary)" }} />
             </button>
@@ -176,7 +185,7 @@ export function WishForm({ lieux, foyers, foyerConnecteId, lieuInitial, onClose 
             <button
               type="button"
               onClick={() => setPersonnes((p) => Math.min(20, p + 1))}
-              className="flex h-11 w-11 items-center justify-center rounded-full border border-outline"
+              className="flex h-11 w-11 items-center justify-center rounded-full border border-outline transition-all duration-150 hover:border-[var(--md-primary)] hover:bg-primary-container active:scale-90"
             >
               <Icon name="add" size={22} style={{ color: "var(--md-primary)" }} />
             </button>
@@ -196,7 +205,7 @@ export function WishForm({ lieux, foyers, foyerConnecteId, lieuInitial, onClose 
           <button
             type="button"
             onClick={onClose}
-            className="h-11 rounded-full px-5 text-sm font-medium"
+            className="h-11 rounded-full px-5 text-sm font-medium transition-colors duration-150 hover:bg-primary-container"
             style={{ color: "var(--md-primary)" }}
           >
             Annuler
@@ -204,11 +213,11 @@ export function WishForm({ lieux, foyers, foyerConnecteId, lieuInitial, onClose 
           <button
             type="submit"
             disabled={isPending}
-            className="flex h-12 items-center gap-2 rounded-full px-6.5 text-[15px] font-medium text-white disabled:opacity-60"
+            className="flex h-12 items-center gap-2 rounded-full px-6.5 text-[15px] font-medium text-white transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md active:translate-y-0 active:scale-95 disabled:opacity-60 disabled:hover:translate-y-0 disabled:hover:shadow-none"
             style={{ backgroundColor: "var(--md-primary)" }}
           >
             <Icon name="send" size={20} />
-            {isPending ? "Envoi…" : "Exprimer le souhait"}
+            {isPending ? "Envoi…" : "Envoyer le souhait"}
           </button>
         </div>
       </form>

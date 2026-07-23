@@ -1,8 +1,9 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { nomMois, formatPlageSemaine, type Lieu, type Foyer, type Sejour, type LieuId } from "@/lib/data";
 import { getWeekDays, ajouterJours } from "@/lib/calendar";
+import { marquerVisite } from "@/lib/actions";
 import { Icon } from "@/components/Icon";
 import { LieuChip } from "@/components/LieuChip";
 import { SejourCard } from "@/components/SejourCard";
@@ -21,15 +22,21 @@ type PlanningClientProps = {
   foyers: Foyer[];
   sejours: Sejour[];
   foyerConnecteId: string;
+  nouveaute: boolean;
 };
 
-export function PlanningClient({ lieux, foyers, sejours, foyerConnecteId }: PlanningClientProps) {
+export function PlanningClient({ lieux, foyers, sejours, foyerConnecteId, nouveaute }: PlanningClientProps) {
   const [visibles, setVisibles] = useState<Set<LieuId>>(new Set(lieux.map((l) => l.id)));
   const [year, setYear] = useState(2026);
   const [month, setMonth] = useState(7); // août (0-indexé)
   const [semaineAncre, setSemaineAncre] = useState(AUJOURDHUI);
   const [vue, setVue] = useState<Vue>("mois");
   const [wishOpen, setWishOpen] = useState(false);
+  const [banniereVisible, setBanniereVisible] = useState(nouveaute);
+
+  useEffect(() => {
+    marquerVisite();
+  }, []);
 
   function toggleLieu(id: LieuId) {
     setVisibles((prev) => {
@@ -76,7 +83,11 @@ export function PlanningClient({ lieux, foyers, sejours, foyerConnecteId }: Plan
         <div className="mb-3 text-xs font-medium tracking-wide text-on-surface-muted uppercase">Lieux</div>
         <div className="flex flex-col gap-2">
           {lieux.map((lieu) => (
-            <button key={lieu.id} onClick={() => toggleLieu(lieu.id)} className="flex items-center">
+            <button
+              key={lieu.id}
+              onClick={() => toggleLieu(lieu.id)}
+              className="flex items-center transition-transform duration-150 hover:scale-[1.02] active:scale-95"
+            >
               <LieuChip lieu={lieu} selected={visibles.has(lieu.id)} />
               <span className="sr-only">{lieu.nom}</span>
               {visibles.has(lieu.id) && (
@@ -98,7 +109,7 @@ export function PlanningClient({ lieux, foyers, sejours, foyerConnecteId }: Plan
             className="h-4 w-8.5 rounded"
             style={{ border: "1.5px dashed var(--md-on-surface-variant)" }}
           />
-          <span className="text-[13px] text-[#4A3B34]">Souhait exprimé</span>
+          <span className="text-[13px] text-[#4A3B34]">Souhait posé</span>
         </div>
 
         <div className="flex flex-col gap-2.5">
@@ -114,6 +125,16 @@ export function PlanningClient({ lieux, foyers, sejours, foyerConnecteId }: Plan
       </aside>
 
       <div className="flex min-w-0 flex-1 flex-col">
+        {banniereVisible && (
+          <div className="animate-pop-in mx-4 mt-3 flex items-center gap-2 rounded-2xl px-3.5 py-2.5 text-[13px] font-medium md:mx-5.5 md:mt-5" style={{ backgroundColor: "var(--md-primary-container)", color: "var(--md-on-primary-container)" }}>
+            <Icon name="auto_awesome" size={18} />
+            <span className="flex-1">Du nouveau depuis ta dernière visite !</span>
+            <button onClick={() => setBanniereVisible(false)} aria-label="Fermer" className="rounded-full p-0.5 transition-transform duration-150 hover:rotate-90">
+              <Icon name="close" size={16} />
+            </button>
+          </div>
+        )}
+
         {/* Toolbar mobile */}
         <div className="flex flex-col gap-3 px-4 pt-3 md:hidden">
           <div className="flex h-9.5 rounded-full border border-outline-variant overflow-hidden">
@@ -121,7 +142,7 @@ export function PlanningClient({ lieux, foyers, sejours, foyerConnecteId }: Plan
               <button
                 key={v}
                 onClick={() => setVue(v)}
-                className="flex flex-1 items-center justify-center gap-1.5 text-[13px] font-medium capitalize border-l border-outline-variant first:border-l-0"
+                className="flex flex-1 items-center justify-center gap-1.5 text-[13px] font-medium capitalize border-l border-outline-variant first:border-l-0 transition-colors duration-150"
                 style={{
                   backgroundColor: vue === v ? "var(--md-primary-container)" : "transparent",
                   color: vue === v ? "var(--md-on-primary-container)" : "var(--md-on-surface-variant)",
@@ -134,7 +155,11 @@ export function PlanningClient({ lieux, foyers, sejours, foyerConnecteId }: Plan
           </div>
           <div className="flex gap-2 overflow-x-auto pb-1">
             {lieux.map((lieu) => (
-              <button key={lieu.id} onClick={() => toggleLieu(lieu.id)}>
+              <button
+                key={lieu.id}
+                onClick={() => toggleLieu(lieu.id)}
+                className="transition-transform duration-150 active:scale-95"
+              >
                 <LieuChip lieu={lieu} selected={visibles.has(lieu.id)} size="sm" />
               </button>
             ))}
@@ -144,19 +169,19 @@ export function PlanningClient({ lieux, foyers, sejours, foyerConnecteId }: Plan
         {/* Toolbar desktop */}
         <div className="hidden items-center gap-4 px-5.5 pt-5 md:flex">
           <div className="flex items-center gap-1">
-            <button onClick={() => (vue === "semaine" ? changeSemaine(-1) : changeMonth(-1))} className="flex h-9 w-9 items-center justify-center rounded-full hover:bg-surface-container-high">
+            <button onClick={() => (vue === "semaine" ? changeSemaine(-1) : changeMonth(-1))} className="flex h-9 w-9 items-center justify-center rounded-full transition-colors duration-150 hover:bg-surface-container-high active:scale-90">
               <Icon name="chevron_left" className="text-on-surface-variant" />
             </button>
             <div className="min-w-38 text-center text-xl font-medium">
               {vue === "semaine" ? formatPlageSemaine(getWeekDays(semaineAncre)) : nomMois(`${year}-${String(month + 1).padStart(2, "0")}`)}
             </div>
-            <button onClick={() => (vue === "semaine" ? changeSemaine(1) : changeMonth(1))} className="flex h-9 w-9 items-center justify-center rounded-full hover:bg-surface-container-high">
+            <button onClick={() => (vue === "semaine" ? changeSemaine(1) : changeMonth(1))} className="flex h-9 w-9 items-center justify-center rounded-full transition-colors duration-150 hover:bg-surface-container-high active:scale-90">
               <Icon name="chevron_right" className="text-on-surface-variant" />
             </button>
           </div>
           <button
             onClick={allerAujourdhui}
-            className="text-sm font-medium"
+            className="rounded-full px-2 py-1 text-sm font-medium transition-colors duration-150 hover:bg-primary-container"
             style={{ color: "var(--md-primary)" }}
           >
             Aujourd&apos;hui
@@ -166,7 +191,7 @@ export function PlanningClient({ lieux, foyers, sejours, foyerConnecteId }: Plan
               <button
                 key={v}
                 onClick={() => setVue(v)}
-                className="flex items-center gap-1.5 px-4 text-[13px] font-medium capitalize border-l border-outline-variant first:border-l-0"
+                className="flex items-center gap-1.5 px-4 text-[13px] font-medium capitalize border-l border-outline-variant first:border-l-0 transition-colors duration-150"
                 style={{
                   backgroundColor: vue === v ? "var(--md-primary-container)" : "transparent",
                   color: vue === v ? "var(--md-on-primary-container)" : "var(--md-on-surface-variant)",
@@ -181,13 +206,19 @@ export function PlanningClient({ lieux, foyers, sejours, foyerConnecteId }: Plan
 
         {/* Period header — mobile */}
         <div className="flex items-center justify-center gap-2.5 px-4 pt-2.5 pb-1 md:hidden">
-          <button onClick={() => (vue === "semaine" ? changeSemaine(-1) : changeMonth(-1))}>
+          <button
+            onClick={() => (vue === "semaine" ? changeSemaine(-1) : changeMonth(-1))}
+            className="rounded-full p-1 transition-transform duration-150 active:scale-90"
+          >
             <Icon name="chevron_left" size={22} className="text-on-surface-variant" />
           </button>
           <div className="min-w-32 text-center text-lg font-medium">
             {vue === "semaine" ? formatPlageSemaine(getWeekDays(semaineAncre)) : nomMois(`${year}-${String(month + 1).padStart(2, "0")}`)}
           </div>
-          <button onClick={() => (vue === "semaine" ? changeSemaine(1) : changeMonth(1))}>
+          <button
+            onClick={() => (vue === "semaine" ? changeSemaine(1) : changeMonth(1))}
+            className="rounded-full p-1 transition-transform duration-150 active:scale-90"
+          >
             <Icon name="chevron_right" size={22} className="text-on-surface-variant" />
           </button>
         </div>
@@ -224,7 +255,9 @@ export function PlanningClient({ lieux, foyers, sejours, foyerConnecteId }: Plan
             {vue === "liste" && (
               <div className="pt-1">
                 {prochains.length === 0 && (
-                  <div className="text-sm text-on-surface-muted">Aucun séjour pour les lieux sélectionnés.</div>
+                  <div className="text-sm text-on-surface-muted">
+                Rien à l&apos;horizon pour ces lieux. Coche-en d&apos;autres, ou pose un souhait !
+              </div>
                 )}
                 {prochains.map((s) => (
                   <SejourCard key={s.id} sejour={s} lieux={lieux} foyers={foyers} />
@@ -251,7 +284,9 @@ export function PlanningClient({ lieux, foyers, sejours, foyerConnecteId }: Plan
               <Icon name="unfold_more" size={20} className="text-on-surface-muted" />
             </div>
             {prochains.length === 0 && (
-              <div className="text-sm text-on-surface-muted">Aucun séjour pour les lieux sélectionnés.</div>
+              <div className="text-sm text-on-surface-muted">
+                Rien à l&apos;horizon pour ces lieux. Coche-en d&apos;autres, ou pose un souhait !
+              </div>
             )}
             {prochains.map((s) => (
               <SejourCard key={s.id} sejour={s} lieux={lieux} foyers={foyers} />
@@ -263,11 +298,11 @@ export function PlanningClient({ lieux, foyers, sejours, foyerConnecteId }: Plan
       {/* FAB */}
       <button
         onClick={() => setWishOpen(true)}
-        className="fixed right-4 bottom-24 z-10 flex h-14 items-center gap-2.5 rounded-2xl px-5.5 font-medium text-white shadow-lg md:right-[352px] md:bottom-8"
+        className="fixed right-4 bottom-24 z-10 flex h-14 items-center gap-2.5 rounded-2xl px-5.5 font-medium text-white shadow-lg transition-all duration-200 hover:-translate-y-1 hover:shadow-xl active:translate-y-0 active:scale-95 md:right-[352px] md:bottom-8"
         style={{ backgroundColor: "var(--md-primary)" }}
       >
         <Icon name="add" size={22} />
-        Exprimer un souhait
+        Poser un souhait
       </button>
 
       {wishOpen && (

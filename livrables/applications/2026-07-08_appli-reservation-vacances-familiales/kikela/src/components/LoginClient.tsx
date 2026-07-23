@@ -8,9 +8,9 @@ import { LieuVisual } from "@/components/LieuVisual";
 import type { Lieu } from "@/lib/data";
 
 const MESSAGES_ERREUR: Record<string, string> = {
-  access_denied: "Tu as annulé la connexion avec Google.",
-  code_manquant: "La connexion Google a été interrompue.",
-  echec_connexion: "La connexion à Google a échoué. Réessaie.",
+  access_denied: "Pas de souci, tu as annulé la connexion. Tu peux réessayer quand tu veux.",
+  code_manquant: "La connexion Google s'est interrompue en route. On retente ?",
+  echec_connexion: "Aïe, la connexion à Google a échoué. Encore un petit essai ?",
 };
 
 export function LoginClient({
@@ -53,10 +53,10 @@ export function LoginClient({
           style={{ borderTopColor: "var(--md-primary)" }}
         />
         <div className="mt-7 text-xl font-medium text-on-primary-container">
-          Synchronisation en cours…
+          On installe tes affaires…
         </div>
         <div className="mt-2 mb-9 max-w-xs text-center text-sm text-[#7A5A4E]">
-          Récupération des calendriers Google des 3 lieux
+          Récupération des calendriers des 3 lieux, une seconde
         </div>
         <div className="flex w-full max-w-xs flex-col gap-2.5">
           {lieux.map((lieu) => {
@@ -92,11 +92,11 @@ export function LoginClient({
           <div className="text-2xl font-bold tracking-tight text-on-primary-container">Kikela</div>
         </div>
         <div className="mt-10 max-w-md text-[40px] leading-[1.1] font-bold tracking-tight text-on-primary-container">
-          Réservez vos vacances en famille.
+          Les vacances en famille, sans prise de tête.
         </div>
         <div className="mt-3.5 mb-8 max-w-sm text-base leading-relaxed text-[#7A5A4E]">
-          Un planning partagé pour les 3 lieux familiaux. Voyez qui vient, quand, et posez vos
-          souhaits de séjour en quelques secondes.
+          Un planning partagé pour ne plus se marcher sur les pieds : qui vient, quand, où,
+          et on pose ses envies de séjour en deux clics.
         </div>
         <div className="mt-auto grid grid-cols-2 gap-3.5">
           {principal && (
@@ -116,16 +116,16 @@ export function LoginClient({
           </div>
           <div className="mt-2 text-3xl font-bold tracking-tight text-on-primary-container">Kikela</div>
           <div className="mb-6 text-center text-base text-[#7A5A4E]">
-            Réservez vos vacances
+            Les vacances en famille
             <br />
-            en famille
+            sans prise de tête
           </div>
         </div>
 
         <div className="w-full max-w-90">
           <div className="hidden text-[28px] leading-tight md:block">Bon retour !</div>
           <div className="mb-9 mt-2 hidden text-[15px] leading-relaxed text-on-surface-variant md:block">
-            Connectez-vous avec le compte Google de la famille pour accéder au calendrier partagé.
+            Connecte-toi avec le compte Google de la famille pour retrouver le calendrier de tout le monde.
           </div>
 
           {erreur && (
@@ -144,7 +144,7 @@ export function LoginClient({
 
           <div className="flex items-start gap-2 text-[12.5px] leading-relaxed text-on-surface-muted">
             <Icon name="shield" size={18} style={{ color: "var(--md-primary)" }} className="mt-px" />
-            Kikela consulte et ajoute des événements dans votre Google Agenda familial. Vos autres
+            Kikela consulte et ajoute des événements dans ton Google Agenda familial. Tes autres
             calendriers restent privés.
           </div>
         </div>

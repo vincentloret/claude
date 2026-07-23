@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 import { prisma } from "./prisma";
 import { isoOf } from "./calendar";
-import { FOYER_COOKIE } from "./session";
+import { FOYER_COOKIE, DERNIERE_VISITE_COOKIE } from "./session";
 import {
   syncAllCalendars,
   syncLieuCalendar,
@@ -30,6 +30,16 @@ export async function choisirFoyer(formData: FormData) {
   });
 
   redirect("/planning");
+}
+
+export async function marquerVisite() {
+  const store = await cookies();
+  store.set(DERNIERE_VISITE_COOKIE, new Date().toISOString(), {
+    path: "/",
+    maxAge: 60 * 60 * 24 * 365,
+    sameSite: "lax",
+    httpOnly: true,
+  });
 }
 
 export async function changerFoyer() {

@@ -112,6 +112,12 @@ export const getFoyerConnecte = cache(async (): Promise<Foyer> => {
   return { id: f.id, nom: f.nom, initiales: f.initiales, couleur: f.couleur };
 });
 
+/** Date de création du séjour le plus récent, pour détecter une activité depuis la dernière visite. */
+export async function getDerniereActivite(): Promise<Date | null> {
+  const { _max } = await prisma.sejour.aggregate({ _max: { creeLe: true } });
+  return _max.creeLe;
+}
+
 export async function getSejours(): Promise<Sejour[]> {
   const rows = await prisma.sejour.findMany({ orderBy: { debut: "asc" } });
   return rows.map((s) => ({

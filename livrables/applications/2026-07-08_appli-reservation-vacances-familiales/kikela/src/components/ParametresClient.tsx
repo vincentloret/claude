@@ -46,7 +46,7 @@ export function ParametresClient({ lieux, emailConnecte }: ParametresClientProps
     <div className="mx-auto max-w-2xl p-5 md:p-8">
       <h1 className="mb-1 text-xl font-medium md:text-2xl">Réglages</h1>
       <p className="mb-6 text-sm text-on-surface-variant">
-        Connexion au compte Google familial, association des calendriers et contenu des fiches lieu.
+        Les coulisses de Kikela : le compte Google familial, les calendriers de chaque lieu, et le contenu des fiches.
       </p>
 
       <div className="mb-6 flex items-center gap-3 rounded-2xl border border-outline-variant bg-surface p-3.5">
@@ -71,7 +71,7 @@ export function ParametresClient({ lieux, emailConnecte }: ParametresClientProps
         {!emailConnecte && (
           <a
             href="/login"
-            className="flex h-9 items-center rounded-full px-4 text-sm font-medium text-white"
+            className="flex h-9 items-center rounded-full px-4 text-sm font-medium text-white transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md active:translate-y-0"
             style={{ backgroundColor: "var(--md-primary)" }}
           >
             Connecter
@@ -112,7 +112,7 @@ export function ParametresClient({ lieux, emailConnecte }: ParametresClientProps
           <button
             onClick={handleSynchroniser}
             disabled={isPending}
-            className="mb-8 flex h-12 items-center gap-2 rounded-full px-6.5 text-[15px] font-medium text-white disabled:opacity-60"
+            className="mb-8 flex h-12 items-center gap-2 rounded-full px-6.5 text-[15px] font-medium text-white transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md active:translate-y-0 active:scale-95 disabled:opacity-60 disabled:hover:translate-y-0 disabled:hover:shadow-none"
             style={{ backgroundColor: "var(--md-primary)" }}
           >
             <Icon name="sync" size={20} />
@@ -194,7 +194,7 @@ function LieuMediaForm({ lieu, onSaved }: { lieu: LieuReglages; onSaved: () => v
         <button
           onClick={handleEnregistrer}
           disabled={isPending}
-          className="mt-2.5 flex items-center gap-1.5 text-xs font-medium disabled:opacity-60"
+          className="mt-2.5 flex items-center gap-1.5 rounded-full text-xs font-medium transition-opacity duration-150 hover:opacity-70 disabled:opacity-60"
           style={{ color: "var(--md-primary)" }}
         >
           <Icon name="save" size={16} />
