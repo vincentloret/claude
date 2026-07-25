@@ -4,6 +4,7 @@ import { useEffect, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { Icon } from "./Icon";
 import { LieuEquipementsPhotos } from "./LieuEquipementsPhotos";
+import { FoyersManager } from "./FoyersManager";
 import {
   definirCalendrierLieu,
   definirMediaLieu,
@@ -12,13 +13,15 @@ import {
 } from "@/lib/actions";
 import type { LieuReglages } from "@/lib/queries";
 import type { GoogleCalendarOption } from "@/lib/google-calendar-sync";
+import type { Foyer } from "@/lib/data";
 
 type ParametresClientProps = {
   lieux: LieuReglages[];
+  foyers: Foyer[];
   emailConnecte: string | null;
 };
 
-export function ParametresClient({ lieux, emailConnecte }: ParametresClientProps) {
+export function ParametresClient({ lieux, foyers, emailConnecte }: ParametresClientProps) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [calendriers, setCalendriers] = useState<GoogleCalendarOption[] | null>(null);
@@ -77,6 +80,11 @@ export function ParametresClient({ lieux, emailConnecte }: ParametresClientProps
             Connecter
           </a>
         )}
+      </div>
+
+      <div className="mb-3 text-sm font-medium text-on-surface-variant">Les foyers de la famille</div>
+      <div className="mb-8">
+        <FoyersManager foyers={foyers} />
       </div>
 
       {emailConnecte && (

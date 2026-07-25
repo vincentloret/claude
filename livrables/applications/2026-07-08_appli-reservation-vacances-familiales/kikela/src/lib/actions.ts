@@ -217,6 +217,34 @@ export async function supprimerPhoto(id: number) {
   revalidatePath(`/lieux/${photo.lieu.slug}`);
 }
 
+export async function ajouterFoyer(nom: string, initiales: string, couleur: string) {
+  await prisma.foyer.create({
+    data: { id: crypto.randomUUID(), nom, initiales, couleur },
+  });
+
+  revalidatePath("/parametres");
+  revalidatePath("/foyer");
+  revalidatePath("/planning");
+}
+
+export async function supprimerFoyer(id: string): Promise<{ succes: boolean; erreur?: string }> {
+  const nbSejours = await prisma.sejour.count({ where: { foyerId: id } });
+  if (nbSejours > 0) {
+    return {
+      succes: false,
+      erreur: `Ce foyer a encore ${nbSejours} séjour${nbSejours > 1 ? "s" : ""} (souhait ou réservation). Annule-les d'abord depuis le planning.`,
+    };
+  }
+
+  await prisma.foyer.delete({ where: { id } });
+
+  revalidatePath("/parametres");
+  revalidatePath("/foyer");
+  revalidatePath("/planning");
+
+  return { succes: true };
+}
+
 export async function synchroniserCalendriers() {
   await syncAllCalendars();
 
