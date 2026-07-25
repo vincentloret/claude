@@ -231,7 +231,7 @@ export function PlanningClient({ lieux, foyers, sejours, foyerConnecteId, nouvea
                   <MonthCalendarDesktop year={year} month={month} sejours={sejoursFiltres} lieux={lieux} foyers={foyers} />
                 </div>
                 <div className="md:hidden">
-                  <MonthCalendarMobile year={year} month={month} sejours={sejoursFiltres} lieux={lieux} />
+                  <MonthCalendarMobile year={year} month={month} sejours={sejoursFiltres} lieux={lieux} foyers={foyers} />
                   <div className="mt-3.5 flex items-center gap-4 px-1">
                     <div className="flex items-center gap-1.5">
                       <span className="h-2.5 w-5.5 rounded" style={{ backgroundColor: "var(--md-on-surface-variant)" }} />

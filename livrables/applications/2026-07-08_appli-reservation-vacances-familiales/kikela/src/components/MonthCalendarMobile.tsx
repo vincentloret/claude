@@ -1,5 +1,10 @@
-import { getMonthWeeks, sejoursForDay } from "@/lib/calendar";
-import { findLieu, type Sejour, type Lieu } from "@/lib/data";
+"use client";
+
+import { useState } from "react";
+import { getMonthWeeks, sejoursForDay, isoOf } from "@/lib/calendar";
+import { findLieu, formatDateCourte, type Sejour, type Lieu, type Foyer } from "@/lib/data";
+import { Icon } from "./Icon";
+import { SejourCard } from "./SejourCard";
 
 const joursSemaine = ["L", "M", "M", "J", "V", "S", "D"];
 
@@ -8,10 +13,14 @@ type Props = {
   month: number;
   sejours: Sejour[];
   lieux: Lieu[];
+  foyers: Foyer[];
 };
 
-export function MonthCalendarMobile({ year, month, sejours, lieux }: Props) {
+export function MonthCalendarMobile({ year, month, sejours, lieux, foyers }: Props) {
   const weeks = getMonthWeeks(year, month);
+  const [jourSelectionne, setJourSelectionne] = useState<Date | null>(null);
+
+  const sejoursDuJour = jourSelectionne ? sejoursForDay(sejours, jourSelectionne) : [];
 
   return (
     <div>
@@ -31,9 +40,10 @@ export function MonthCalendarMobile({ year, month, sejours, lieux }: Props) {
               ).values()
             );
             return (
-              <div
+              <button
                 key={d.toISOString()}
-                className="flex h-11.5 flex-col items-center pt-1.5"
+                onClick={() => dayLieux.length > 0 && setJourSelectionne(d)}
+                className="flex h-11.5 flex-col items-center pt-1.5 transition-transform duration-150 active:scale-95"
               >
                 <span
                   className="text-[13px] font-medium"
@@ -58,11 +68,36 @@ export function MonthCalendarMobile({ year, month, sejours, lieux }: Props) {
                     );
                   })}
                 </div>
-              </div>
+              </button>
             );
           })
         )}
       </div>
+
+      {jourSelectionne && (
+        <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40" onClick={() => setJourSelectionne(null)}>
+          <div
+            className="flex max-h-[80vh] w-full flex-col overflow-hidden rounded-t-3xl bg-surface"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center gap-3 border-b border-outline-variant px-5 py-4">
+              <div className="flex-1 text-base font-medium capitalize">{formatDateCourte(isoOf(jourSelectionne))}</div>
+              <button
+                onClick={() => setJourSelectionne(null)}
+                aria-label="Fermer"
+                className="rounded-full p-1 transition-transform duration-150 hover:rotate-90 active:scale-90"
+              >
+                <Icon name="close" size={22} className="text-on-surface-variant" />
+              </button>
+            </div>
+            <div className="flex-1 overflow-y-auto px-4 py-4">
+              {sejoursDuJour.map((s) => (
+                <SejourCard key={s.id} sejour={s} lieux={lieux} foyers={foyers} />
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -66,7 +66,7 @@ export function LieuDetail({ lieu, lieux, foyers, sejours, foyerConnecteId }: Li
 
       <LieuVisual lieu={lieu} className="mx-4 h-56 w-[calc(100%-2rem)] rounded-3xl md:mx-0 md:mt-6 md:h-64 md:w-full" />
 
-      <div className="flex flex-col gap-8 px-4 py-5 md:flex-row md:px-0 md:py-7">
+      <div className="flex flex-col gap-8 px-4 pt-5 pb-45 md:flex-row md:px-0 md:py-7">
         <div className="min-w-0 flex-1">
           <div className="mb-1 flex items-center gap-2">
             <Icon name={lieu.icone} size={22} style={{ color: lieu.couleur }} />
