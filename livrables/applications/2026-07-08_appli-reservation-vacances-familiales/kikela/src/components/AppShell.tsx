@@ -99,6 +99,14 @@ export function AppShell({ children, foyerConnecte }: { children: React.ReactNod
             <BrandMark />
           </div>
           <div className="flex-1 text-lg font-normal md:text-[22px]">Kikela</div>
+          <Link
+            href="/mode-emploi"
+            className="flex h-10 w-10 items-center justify-center rounded-full bg-surface-container-high transition-transform duration-150 hover:scale-110 active:scale-95"
+            aria-label="Mode d'emploi"
+            title="Mode d'emploi"
+          >
+            <Icon name="info" size={20} className="text-on-surface-variant" />
+          </Link>
           <button
             onClick={handleDeconnexion}
             disabled={isPending}

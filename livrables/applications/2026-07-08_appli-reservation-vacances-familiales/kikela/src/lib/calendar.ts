@@ -50,9 +50,19 @@ export function getMonthWeeks(year: number, month: number): Date[][] {
   return weeks;
 }
 
+/**
+ * `sejour.fin` est stocké comme date de départ (dernier jour du séjour, affiché tel quel
+ * dans les cartes) mais traité en interne comme une borne exclusive façon Google Calendar
+ * ("jour d'après le dernier jour"), pour rester compatible avec la synchro Google. On calcule
+ * donc cette borne exclusive ici plutôt que de comparer directement à `sejour.fin`.
+ */
+function finExclusive(sejour: Sejour): string {
+  return isoOf(addDays(toDate(sejour.fin), 1));
+}
+
 export function sejourTouchesDate(sejour: Sejour, d: Date): boolean {
   const iso = isoOf(d);
-  return iso >= sejour.debut && iso < sejour.fin;
+  return iso >= sejour.debut && iso < finExclusive(sejour);
 }
 
 export type SejourBar = {
@@ -68,11 +78,12 @@ export function layoutWeek(week: Date[], sejours: Sejour[]): SejourBar[] {
   const weekEndIso = isoOf(addDays(week[6], 1));
 
   const overlapping = sejours
-    .filter((s) => s.fin > weekStartIso && s.debut < weekEndIso)
-    .map((s) => {
+    .map((s) => ({ s, finExclusiveIso: finExclusive(s) }))
+    .filter(({ s, finExclusiveIso }) => finExclusiveIso > weekStartIso && s.debut < weekEndIso)
+    .map(({ s, finExclusiveIso }) => {
       const colStart = Math.max(0, week.findIndex((d) => isoOf(d) === s.debut));
       const startInWeek = s.debut <= weekStartIso ? 0 : colStart;
-      const endExclusiveIso = s.fin < weekEndIso ? s.fin : weekEndIso;
+      const endExclusiveIso = finExclusiveIso < weekEndIso ? finExclusiveIso : weekEndIso;
       let colEnd = week.findIndex((d) => isoOf(d) === endExclusiveIso);
       if (colEnd === -1) colEnd = 7;
       return { sejour: s, colStart: startInWeek, colSpan: Math.max(1, colEnd - startInWeek) };
