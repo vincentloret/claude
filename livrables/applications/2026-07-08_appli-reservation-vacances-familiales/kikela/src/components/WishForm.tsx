@@ -4,8 +4,10 @@ import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { Icon } from "./Icon";
 import { Confetti } from "./Confetti";
+import { DatePicker } from "./DatePicker";
 import { formatPlage, type Lieu, type Foyer, type LieuId } from "@/lib/data";
 import { creerSouhait } from "@/lib/actions";
+import { isoOf, ajouterJours } from "@/lib/calendar";
 
 type WishFormProps = {
   lieux: Lieu[];
@@ -20,8 +22,8 @@ export function WishForm({ lieux, foyers, foyerConnecteId, lieuInitial, onClose 
   const [isPending, startTransition] = useTransition();
 
   const [lieuId, setLieuId] = useState<LieuId>(lieuInitial ?? lieux[0].id);
-  const [debut, setDebut] = useState("2026-08-22");
-  const [fin, setFin] = useState("2026-08-28");
+  const [debut, setDebut] = useState(() => isoOf(new Date()));
+  const [fin, setFin] = useState(() => isoOf(ajouterJours(new Date(), 7)));
   const [foyerId, setFoyerId] = useState(foyerConnecteId);
   const [personnes, setPersonnes] = useState(2);
   const [note, setNote] = useState("");
@@ -132,28 +134,9 @@ export function WishForm({ lieux, foyers, foyerConnecteId, lieuInitial, onClose 
 
           <div className="mb-3 text-sm font-medium text-on-surface-variant">Dates du séjour</div>
           <div className="mb-6 flex items-center gap-2.5">
-            <label className="flex-1 rounded-xl border border-outline px-3.5 py-2.5">
-              <span className="block text-[11px] text-on-surface-variant">Arrivée</span>
-              <input
-                type="date"
-                value={debut}
-                onChange={(e) => setDebut(e.target.value)}
-                className="w-full bg-transparent text-[15px] outline-none"
-                required
-              />
-            </label>
+            <DatePicker label="Arrivée" value={debut} onChange={setDebut} />
             <Icon name="arrow_forward" size={20} className="text-on-surface-muted" />
-            <label className="flex-1 rounded-xl border border-outline px-3.5 py-2.5">
-              <span className="block text-[11px] text-on-surface-variant">Départ</span>
-              <input
-                type="date"
-                value={fin}
-                min={debut}
-                onChange={(e) => setFin(e.target.value)}
-                className="w-full bg-transparent text-[15px] outline-none"
-                required
-              />
-            </label>
+            <DatePicker label="Départ" value={fin} onChange={setFin} min={debut} />
           </div>
 
           <div className="mb-3 text-sm font-medium text-on-surface-variant">Foyer</div>

@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { nomMois, formatPlageSemaine, type Lieu, type Foyer, type Sejour, type LieuId } from "@/lib/data";
-import { getWeekDays, ajouterJours } from "@/lib/calendar";
+import { getWeekDays, ajouterJours, isoOf } from "@/lib/calendar";
 import { marquerVisite } from "@/lib/actions";
 import { Icon } from "@/components/Icon";
 import { LieuChip } from "@/components/LieuChip";
@@ -27,8 +27,8 @@ type PlanningClientProps = {
 
 export function PlanningClient({ lieux, foyers, sejours, foyerConnecteId, nouveaute }: PlanningClientProps) {
   const [visibles, setVisibles] = useState<Set<LieuId>>(new Set(lieux.map((l) => l.id)));
-  const [year, setYear] = useState(2026);
-  const [month, setMonth] = useState(7); // août (0-indexé)
+  const [year, setYear] = useState(AUJOURDHUI.getFullYear());
+  const [month, setMonth] = useState(AUJOURDHUI.getMonth());
   const [semaineAncre, setSemaineAncre] = useState(AUJOURDHUI);
   const [vue, setVue] = useState<Vue>("mois");
   const [wishOpen, setWishOpen] = useState(false);
@@ -75,6 +75,12 @@ export function PlanningClient({ lieux, foyers, sejours, foyerConnecteId, nouvea
     () => [...sejoursFiltres].sort((a, b) => a.debut.localeCompare(b.debut)),
     [sejoursFiltres]
   );
+
+  // Séjours à venir (ou en cours) uniquement, pour valoriser les cards "Prochains séjours".
+  const prochainsAVenir = useMemo(() => {
+    const aujourdhuiIso = isoOf(AUJOURDHUI);
+    return prochains.filter((s) => s.fin >= aujourdhuiIso);
+  }, [prochains]);
 
   return (
     <div className="flex flex-1 flex-col md:flex-row">
@@ -244,7 +250,7 @@ export function PlanningClient({ lieux, foyers, sejours, foyerConnecteId, nouvea
                   </div>
                   <div className="mt-4.5">
                     <div className="mb-2.5 text-[13px] font-medium text-on-surface-muted">Prochains séjours</div>
-                    {prochains.slice(0, 4).map((s) => (
+                    {prochainsAVenir.slice(0, 4).map((s) => (
                       <SejourCard key={s.id} sejour={s} lieux={lieux} foyers={foyers} />
                     ))}
                   </div>
@@ -283,12 +289,12 @@ export function PlanningClient({ lieux, foyers, sejours, foyerConnecteId, nouvea
               <div className="text-[15px] font-medium">Prochains séjours</div>
               <Icon name="unfold_more" size={20} className="text-on-surface-muted" />
             </div>
-            {prochains.length === 0 && (
+            {prochainsAVenir.length === 0 && (
               <div className="text-sm text-on-surface-muted">
                 Rien à l&apos;horizon pour ces lieux. Coche-en d&apos;autres, ou pose un souhait !
               </div>
             )}
-            {prochains.map((s) => (
+            {prochainsAVenir.map((s) => (
               <SejourCard key={s.id} sejour={s} lieux={lieux} foyers={foyers} />
             ))}
           </aside>

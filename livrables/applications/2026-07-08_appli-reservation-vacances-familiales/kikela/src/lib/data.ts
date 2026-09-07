@@ -55,6 +55,12 @@ const moisFr = [
 
 const joursFr = ["dim.", "lun.", "mar.", "mer.", "jeu.", "ven.", "sam."];
 
+/** Format jj/mm/aaaa, pour les champs de saisie de date. */
+export function formatDateFR(iso: string): string {
+  const [annee, mois, jour] = iso.split("-");
+  return `${jour}/${mois}/${annee}`;
+}
+
 export function formatDateCourte(iso: string): string {
   const d = new Date(iso + "T00:00:00");
   return `${joursFr[d.getDay()]} ${d.getDate()} ${moisFr[d.getMonth()]}`;
