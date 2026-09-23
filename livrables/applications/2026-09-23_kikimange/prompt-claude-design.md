@@ -1,7 +1,7 @@
 # Kikimange · Prompt Claude Design
 
 > Prompt prêt à coller dans Claude Design pour générer les maquettes (étape 4).
-> Statut : v1.0 du 2026-09-23. Sources : `cadrage.md` v1.1, `architecture.md` v1.0, `palette.md` v1.0.
+> Statut : v1.1 du 2026-09-23 (découpage en deux lots). Sources : `cadrage.md` v1.1, `architecture.md` v1.0, `palette.md` v1.0.
 > Conseil : joindre au prompt une ou deux captures de Kikela (planning mobile et « Qui es-tu ? ») pour que Claude Design reprenne la même famille visuelle.
 
 ---
@@ -125,7 +125,29 @@ Top app bar, navigation bar / navigation rail, cards, bottom sheets, filter chip
 
 ### Livrable attendu
 
-Pour chaque écran, une maquette haute fidélité **mobile ET desktop**, dans l'ordre du parcours : Qui es-tu ? → installation → semaine enfant → feuille de participation → variante période → confirmation → semaine parent → détail d'un repas → mois → récap courses → administration → mes accompagnants. Utilise des données réalistes : une semaine avec 2 enfants inscrits sur plusieurs repas, un repas ouvert le dimanche midi (raclette), une absence des parents le samedi soir, une période de stage en cours pour Jules.
+Le travail se fait en **deux lots**. Pour cette première demande, produis **uniquement le lot 1** : le parcours du lundi, qui fixe la direction visuelle.
+
+**Lot 1 (maintenant)** : écrans 1 (Qui es-tu ?), 3 (Semaine enfant), 5 (Feuille de participation), 7 (Confirmation) et 4 (Semaine parent), dans cet ordre.
+
+**Lot 2 (demande suivante, après validation du lot 1)** : écrans 2, 6, 8, 9, 10, 11 et 12.
+
+Pour chaque écran, une maquette haute fidélité **mobile ET desktop**. Utilise des données réalistes : une semaine avec 2 enfants inscrits sur plusieurs repas, un repas ouvert le dimanche midi (raclette), une absence des parents le samedi soir, une période de stage en cours pour Jules.
+
+---
+
+## Prompt lot 2 (à envoyer ensuite, dans la même conversation)
+
+La direction visuelle du lot 1 est validée [ajouter ici les retours éventuels]. Produis maintenant le **lot 2**, en mobile ET desktop, en reprenant exactement les mêmes composants, couleurs et données d'exemple :
+
+- **2. Installer l'appli et activer les notifications** (variantes iPhone et Android)
+- **6. Variante période** de la feuille de participation
+- **8. Mois**
+- **9. Détail d'un repas** (vue enfant et bouton « Ajouter un invité » côté parent)
+- **10. Récap courses de la semaine** (parent)
+- **11. Administration** (parent)
+- **12. Mes accompagnants** (enfant)
+
+Reste fidèle aux spécifications de ces écrans décrites dans le premier message.
 
 ---
 
