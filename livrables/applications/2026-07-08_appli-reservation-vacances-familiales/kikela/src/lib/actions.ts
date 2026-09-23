@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 import { prisma } from "./prisma";
 import { isoOf } from "./calendar";
-import { FOYER_COOKIE, DERNIERE_VISITE_COOKIE } from "./session";
+import { FOYER_COOKIE, DERNIERE_VISITE_COOKIE, exigerFoyerConnecte, verifierCodeFamille } from "./session";
 import {
   syncAllCalendars,
   syncLieuCalendar,
@@ -18,6 +18,10 @@ import {
 export async function choisirFoyer(formData: FormData) {
   const foyerId = formData.get("foyerId");
   if (typeof foyerId !== "string") return;
+
+  if (!verifierCodeFamille(formData.get("code"))) {
+    redirect("/qui-es-tu?erreur=code");
+  }
 
   await prisma.foyer.findUniqueOrThrow({ where: { id: foyerId } });
 
@@ -58,6 +62,8 @@ type CreerSouhaitInput = {
 };
 
 export async function creerSouhait(input: CreerSouhaitInput) {
+  await exigerFoyerConnecte();
+
   const sejour = await prisma.sejour.create({
     data: {
       lieuId: input.lieuId,
@@ -91,6 +97,8 @@ export async function creerSouhait(input: CreerSouhaitInput) {
 }
 
 export async function confirmerSejour(id: string) {
+  await exigerFoyerConnecte();
+
   const sejour = await prisma.sejour.update({
     where: { id },
     data: { statut: "confirme" },
@@ -119,6 +127,8 @@ export async function confirmerSejour(id: string) {
 }
 
 export async function annulerSejour(id: string) {
+  await exigerFoyerConnecte();
+
   const sejour = await prisma.sejour.delete({
     where: { id },
     include: { lieu: true },
@@ -136,6 +146,8 @@ export async function annulerSejour(id: string) {
 }
 
 export async function definirCalendrierLieu(lieuId: string, googleCalendarId: string) {
+  await exigerFoyerConnecte();
+
   await prisma.lieu.update({
     where: { id: lieuId },
     data: { googleCalendarId: googleCalendarId || null },
@@ -151,15 +163,28 @@ export async function definirCalendrierLieu(lieuId: string, googleCalendarId: st
 }
 
 export async function listerCalendriersGoogle() {
+  await exigerFoyerConnecte();
   return listGoogleCalendars();
 }
 
 export async function deconnecterGoogle() {
+  await exigerFoyerConnecte();
+
   await prisma.googleConnection.deleteMany({ where: { id: "singleton" } });
 
   revalidatePath("/parametres");
   revalidatePath("/planning");
   revalidatePath("/lieux");
+}
+
+/** N'autorise que des liens web classiques (http/https), pour éviter qu'une URL "javascript:" ou autre ne finisse dans un lien cliquable. */
+function estUrlWebValide(url: string): boolean {
+  try {
+    const u = new URL(url);
+    return u.protocol === "http:" || u.protocol === "https:";
+  } catch {
+    return false;
+  }
 }
 
 export async function definirMediaLieu(
@@ -168,9 +193,14 @@ export async function definirMediaLieu(
   lienUrl: string,
   lienLabel: string
 ) {
+  await exigerFoyerConnecte();
+
+  const videoUrlSure = videoUrl && estUrlWebValide(videoUrl) ? videoUrl : null;
+  const lienUrlSure = lienUrl && estUrlWebValide(lienUrl) ? lienUrl : null;
+
   await prisma.lieu.update({
     where: { id: lieuId },
-    data: { videoUrl: videoUrl || null, lienUrl: lienUrl || null, lienLabel: lienLabel || null },
+    data: { videoUrl: videoUrlSure, lienUrl: lienUrlSure, lienLabel: lienLabel || null },
   });
 
   const lieu = await prisma.lieu.findUniqueOrThrow({ where: { id: lieuId } });
@@ -188,6 +218,8 @@ async function revaliderLieu(lieuId: string) {
 }
 
 export async function ajouterEquipement(lieuId: string, icone: string, label: string) {
+  await exigerFoyerConnecte();
+
   const dernier = await prisma.equipement.findFirst({ where: { lieuId }, orderBy: { ordre: "desc" } });
   await prisma.equipement.create({
     data: { lieuId, icone, label, ordre: (dernier?.ordre ?? -1) + 1 },
@@ -196,6 +228,8 @@ export async function ajouterEquipement(lieuId: string, icone: string, label: st
 }
 
 export async function supprimerEquipement(id: number) {
+  await exigerFoyerConnecte();
+
   const equipement = await prisma.equipement.delete({ where: { id }, include: { lieu: true } });
   revalidatePath("/parametres");
   revalidatePath("/lieux");
@@ -203,6 +237,8 @@ export async function supprimerEquipement(id: number) {
 }
 
 export async function ajouterPhoto(lieuId: string, url: string) {
+  await exigerFoyerConnecte();
+
   const derniere = await prisma.lieuPhoto.findFirst({ where: { lieuId }, orderBy: { ordre: "desc" } });
   await prisma.lieuPhoto.create({
     data: { lieuId, url, ordre: (derniere?.ordre ?? -1) + 1 },
@@ -211,6 +247,8 @@ export async function ajouterPhoto(lieuId: string, url: string) {
 }
 
 export async function supprimerPhoto(id: number) {
+  await exigerFoyerConnecte();
+
   const photo = await prisma.lieuPhoto.delete({ where: { id }, include: { lieu: true } });
   revalidatePath("/parametres");
   revalidatePath("/lieux");
@@ -218,6 +256,8 @@ export async function supprimerPhoto(id: number) {
 }
 
 export async function ajouterFoyer(nom: string, initiales: string, couleur: string) {
+  await exigerFoyerConnecte();
+
   await prisma.foyer.create({
     data: { id: crypto.randomUUID(), nom, initiales, couleur },
   });
@@ -228,6 +268,8 @@ export async function ajouterFoyer(nom: string, initiales: string, couleur: stri
 }
 
 export async function supprimerFoyer(id: string): Promise<{ succes: boolean; erreur?: string }> {
+  await exigerFoyerConnecte();
+
   const nbSejours = await prisma.sejour.count({ where: { foyerId: id } });
   if (nbSejours > 0) {
     return {
@@ -246,6 +288,8 @@ export async function supprimerFoyer(id: string): Promise<{ succes: boolean; err
 }
 
 export async function synchroniserCalendriers() {
+  await exigerFoyerConnecte();
+
   await syncAllCalendars();
 
   revalidatePath("/planning");
