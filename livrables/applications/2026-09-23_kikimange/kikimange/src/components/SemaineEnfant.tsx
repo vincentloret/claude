@@ -1,12 +1,14 @@
 "use client";
 
 import { useMemo, useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
 import { Icon } from "./Icon";
 import { Slot, type SlotAffichage } from "./Slot";
 import { ParticipationSheet } from "./ParticipationSheet";
 import { Confirmation } from "./Confirmation";
+import { PeriodeSheet } from "./PeriodeSheet";
 import { EnTeteSemaine } from "./EnTeteSemaine";
-import { enregistrerSemaine, neVientPasCetteSemaine } from "@/lib/actions";
+import { enregistrerSemaine, neVientPasCetteSemaine, supprimerPeriode } from "@/lib/actions";
 import { aujourdhui, cleCreneau, CRENEAUX, jourCourt, momentFamilier, numeroJour, type Creneau } from "@/lib/jours";
 import { couvertsParticipation } from "@/lib/couverts";
 import type { AccompagnantVue, CreneauVue, MembreVue, SaisieParticipation, SemaineVue } from "@/lib/types";
@@ -16,6 +18,7 @@ type Props = {
   moi: MembreVue;
   accompagnants: (AccompagnantVue & { archive: boolean })[];
   plats: { id: string; nom: string }[];
+  infoInitiale?: string | null;
 };
 
 function saisieDepuis(c: CreneauVue, moiId: string): SaisieParticipation | null {
@@ -39,7 +42,7 @@ function listeNoms(noms: string[]): string {
   return `${noms.slice(0, -1).join(", ")} et ${noms[noms.length - 1]}`;
 }
 
-export function SemaineEnfant({ semaine, moi, accompagnants: accompagnantsInitiaux, plats }: Props) {
+export function SemaineEnfant({ semaine, moi, accompagnants: accompagnantsInitiaux, plats, infoInitiale = null }: Props) {
   const initial = useMemo(() => {
     const r: Record<string, SaisieParticipation> = {};
     for (const [cle, c] of Object.entries(semaine.creneaux)) {
@@ -55,7 +58,10 @@ export function SemaineEnfant({ semaine, moi, accompagnants: accompagnantsInitia
   const [confirmation, setConfirmation] = useState<SaisieParticipation[] | null>(null);
   const [confirmerAbsence, setConfirmerAbsence] = useState(false);
   const [erreur, setErreur] = useState<string | null>(null);
+  const [info] = useState<string | null>(infoInitiale);
+  const [periodeOuverte, setPeriodeOuverte] = useState(false);
   const [isPending, startTransition] = useTransition();
+  const router = useRouter();
 
   const auj = aujourdhui();
   const maReponse = semaine.reponses.find((r) => r.membreId === moi.id);
@@ -104,6 +110,27 @@ export function SemaineEnfant({ semaine, moi, accompagnants: accompagnantsInitia
   function ouvrir(date: string, creneau: Creneau) {
     setErreur(null);
     setOuvert(cleCreneau(date, creneau));
+  }
+
+  function ouvrirPeriode() {
+    setErreur(null);
+    if (modifie) {
+      setErreur("Valide d'abord ta semaine, puis ajoute ta période.");
+      return;
+    }
+    setPeriodeOuverte(true);
+  }
+
+  function retirerPeriode(id: string) {
+    setOuvert(null);
+    startTransition(async () => {
+      try {
+        await supprimerPeriode(id);
+        router.refresh();
+      } catch {
+        setErreur("La période n'a pas pu être supprimée. Réessaie.");
+      }
+    });
   }
 
   function valider() {
@@ -161,6 +188,13 @@ export function SemaineEnfant({ semaine, moi, accompagnants: accompagnantsInitia
   return (
     <div className="mx-auto flex max-w-[1180px] flex-col gap-4 px-4 pt-3 md:px-8 md:pt-6">
       <EnTeteSemaine lundi={semaine.lundi} sousTitre={sousTitreSemaine} />
+
+      {info && (
+        <p className="flex items-center gap-2 rounded-xl bg-secondary-container px-4 py-3 text-sm text-on-secondary-container" role="status">
+          <Icon name="check_circle" size={20} />
+          {info}
+        </p>
+      )}
 
       {(repasOuverts.length > 0 || retrouvailles.length > 0) && (
         <div className="grid gap-3 md:grid-cols-2">
@@ -271,7 +305,12 @@ export function SemaineEnfant({ semaine, moi, accompagnants: accompagnantsInitia
       )}
 
       {/* Barre d'action collée en bas, au-dessus de la navigation sur mobile */}
-      <div className="sticky bottom-24 z-10 -mx-4 mt-2 flex items-center justify-end gap-3 bg-surface/95 px-4 py-3 backdrop-blur md:bottom-0 md:mx-0 md:border-t md:border-outline-variant md:px-0">
+      <div className="sticky bottom-24 z-10 -mx-4 mt-2 flex items-center justify-between gap-3 bg-surface/95 px-4 py-3 backdrop-blur md:bottom-0 md:mx-0 md:border-t md:border-outline-variant md:px-0">
+        <button onClick={ouvrirPeriode} disabled={isPending} className="flex h-12 flex-none items-center gap-2 rounded-full px-3 font-medium text-primary md:px-4">
+          <Icon name="date_range" size={20} />
+          <span className="hidden sm:inline">Venir sur une période</span>
+          <span className="sm:hidden">Période</span>
+        </button>
         <button
           onClick={valider}
           // Semaine vide jamais remplie : on passe par « Je ne viens pas cette semaine », pas par ce bouton.
@@ -279,7 +318,12 @@ export function SemaineEnfant({ semaine, moi, accompagnants: accompagnantsInitia
           className="flex h-12 flex-1 items-center justify-center gap-2 rounded-full bg-primary px-6 font-medium text-on-primary shadow-sm disabled:opacity-50 md:flex-none"
         >
           <Icon name="check" size={20} />
-          {isPending ? "Enregistrement…" : `Valider ma semaine${mesRepas.length ? ` · ${mesRepas.length} repas` : ""}`}
+          {isPending ? "Enregistrement…" : (
+            <>
+              Valider<span className="hidden sm:inline">&nbsp;ma semaine</span>
+              {mesRepas.length ? ` · ${mesRepas.length} repas` : ""}
+            </>
+          )}
         </button>
       </div>
 
@@ -308,6 +352,23 @@ export function SemaineEnfant({ semaine, moi, accompagnants: accompagnantsInitia
             setOuvert(null);
           }}
           onFermer={() => setOuvert(null)}
+          periode={cleOuverte.participations.find((p) => p.membre.id === moi.id)?.periode ?? null}
+          onSupprimerPeriode={() => {
+            const p = cleOuverte.participations.find((x) => x.membre.id === moi.id)?.periode;
+            if (p) retirerPeriode(p.id);
+          }}
+        />
+      )}
+
+      {periodeOuverte && (
+        <PeriodeSheet
+          debutPropose={semaine.lundi}
+          accompagnants={accompagnants.filter((a) => !a.archive)}
+          onFermer={() => setPeriodeOuverte(false)}
+          onCree={(n) => {
+            setPeriodeOuverte(false);
+            router.replace(`/semaine/${semaine.lundi}?periode=${n}`);
+          }}
         />
       )}
     </div>

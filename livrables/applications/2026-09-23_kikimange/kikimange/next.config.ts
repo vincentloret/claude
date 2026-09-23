@@ -1,7 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  // Permet de lancer un second serveur (tests automatiques) sans gêner celui du développement.
+  distDir: process.env.NEXT_DIST_DIR || ".next",
 };
 
 export default nextConfig;

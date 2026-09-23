@@ -23,6 +23,8 @@ type Props = {
   onValider: (s: SaisieParticipation) => void;
   onRetirer: () => void;
   onFermer: () => void;
+  periode?: { id: string; nom: string | null } | null;
+  onSupprimerPeriode?: () => void;
 };
 
 export function Stepper({ label, aide, valeur, onChange, id }: { label: string; aide: string; valeur: number; onChange: (n: number) => void; id: string }) {
@@ -161,6 +163,18 @@ export function ParticipationSheet(props: Props) {
               <span>
                 <strong className="font-medium">{PARENTS_LIBELLE} seront absents</strong>, tu pourras te servir. Le frigo est à toi !
               </span>
+            </div>
+          )}
+
+          {props.periode && (
+            <div className="flex items-center gap-3 rounded-2xl bg-secondary-container px-4 py-3 text-on-secondary-container">
+              <Icon name="date_range" />
+              <span className="flex-1 text-sm">Ce repas fait partie de ta période{props.periode.nom ? ` « ${props.periode.nom} »` : ""}.</span>
+              {props.onSupprimerPeriode && (
+                <button type="button" onClick={props.onSupprimerPeriode} className="h-10 flex-none rounded-full px-3 text-sm font-medium text-error">
+                  Supprimer la période
+                </button>
+              )}
             </div>
           )}
 

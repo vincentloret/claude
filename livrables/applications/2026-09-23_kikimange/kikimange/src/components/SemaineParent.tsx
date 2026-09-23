@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import { Icon } from "./Icon";
 import { Avatar } from "./Avatar";
 import { Slot, type SlotAffichage } from "./Slot";
@@ -98,6 +99,18 @@ export function SemaineParent({ semaine }: { semaine: SemaineVue }) {
       <EnTeteSemaine
         lundi={semaine.lundi}
         sousTitre={`${nbReponses} enfant${nbReponses > 1 ? "s" : ""} sur ${semaine.enfants.length} ${nbReponses > 1 ? "ont" : "a"} répondu · ${totalCouverts} couverts, dont vous ${totalParents}`}
+        actions={
+          <div className="flex flex-wrap gap-2">
+            <Link href="/reglages?onglet=absences" className="flex h-10 items-center gap-1.5 rounded-full border border-outline px-4 text-sm font-medium text-primary">
+              <Icon name="flight_takeoff" size={18} />
+              Signaler une absence
+            </Link>
+            <Link href="/reglages?onglet=repas" className="flex h-10 items-center gap-1.5 rounded-full bg-tertiary px-4 text-sm font-medium text-white">
+              <Icon name="restaurant" size={18} />
+              Créer un repas ouvert
+            </Link>
+          </div>
+        }
       />
 
       <section className="grid gap-2 md:grid-cols-3" aria-label="Qui a répondu">

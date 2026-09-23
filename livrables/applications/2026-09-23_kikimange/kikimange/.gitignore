@@ -50,3 +50,6 @@ next-env.d.ts
 /dev.db
 /dev.db-journal
 /test.db
+/test2.db
+/.next-test/
+/.next-build/

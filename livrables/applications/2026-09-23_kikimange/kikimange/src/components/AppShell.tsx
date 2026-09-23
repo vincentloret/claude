@@ -74,6 +74,10 @@ function MenuCompte({ membre }: { membre: MembreVue }) {
               Réglages
             </Link>
           )}
+          <Link href="/installer" onClick={() => setOuvert(false)} className="flex h-12 items-center gap-3 px-4 hover:bg-surface-container-high">
+            <Icon name="notifications" size={20} className="text-on-surface-variant" />
+            Notifications et installation
+          </Link>
           <button
             onClick={() => startTransition(() => changerMembre())}
             disabled={isPending}

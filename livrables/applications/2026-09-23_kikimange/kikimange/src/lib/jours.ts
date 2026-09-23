@@ -86,3 +86,16 @@ export function rangCreneau(iso: string, c: Creneau): string {
 export function cleCreneau(iso: string, c: Creneau): string {
   return `${iso}_${c}`;
 }
+
+export const DUREE_MAX_PERIODE = 120;
+
+/** Créneaux couverts par une période (bornes incluses), dans l'ordre. jours : 1 = lundi … 7 = dimanche. */
+export function creneauxDePeriode(debut: string, fin: string, dejeuner: boolean, diner: boolean, jours: number[]) {
+  const liste: { date: string; creneau: Creneau }[] = [];
+  for (let d = debut, n = 0; d <= fin && n <= DUREE_MAX_PERIODE; d = ajouterJours(d, 1), n++) {
+    if (!jours.includes(indexJour(d) + 1)) continue;
+    if (dejeuner) liste.push({ date: d, creneau: "dejeuner" });
+    if (diner) liste.push({ date: d, creneau: "diner" });
+  }
+  return liste;
+}
