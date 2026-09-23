@@ -121,7 +121,7 @@ Lead UX / UX Strategist / Senior Product Designer orienté stratégie / Principa
 ### Projets personnels (applications familiales)
 
 - **Kikela** (livré, utilisé par la famille) : planning partagé des 3 lieux de vacances familiaux. Next.js + Prisma/Turso + Material 3 (terracotta), Netlify. Dossier `livrables/applications/2026-07-08_appli-reservation-vacances-familiales/`.
-- **Kikimange** (démarré le 2026-09-23) : application pour savoir quels enfants (3, vivant hors de la maison) viennent manger à quel repas et avec qui, pour prévoir menus et courses et favoriser les moments en famille. Reprend au maximum Kikela (stack, ergonomie, identification « Qui es-tu ? ») avec une palette propre. Dossier `livrables/applications/2026-09-23_kikimange/`.
+- **Kikimange** (démarré le 2026-09-23) : application pour savoir quels enfants (3, vivant hors de la maison) viennent manger à quel repas et avec qui, pour prévoir menus et courses et favoriser les moments en famille. Reprend au maximum Kikela (stack, ergonomie, identification « Qui es-tu ? » avec code famille) avec une palette vert basilic. Cadrage, architecture et maquettes faits, développement à venir. Dossier `livrables/applications/2026-09-23_kikimange/`.
 
 ---
 

@@ -17,6 +17,19 @@
 - Cadrage v1.0 validé : rappel le lundi à 11 h, modification sans date limite, relance WhatsApp/SMS semi-automatique, aucune protection du rôle parent, inscription possible sur une période (ex. stage), absences des parents indicatives et non bloquantes
 - Nettoyage : suppression du dossier doublon `F:\luna\context\` (obsolète). La référence est `F:\luna\claude\context\`
 
+### Kikimange : architecture, palette et maquettes
+- Architecture v1.1 validée : copie de Kikela (Next.js, Prisma/Turso, Netlify), Google Calendar retiré, dates stockées sans fuseau, notifications Web Push avec rappel du lundi 11 h via une fonction planifiée Netlify, relance WhatsApp/SMS par lien prérempli
+- Décisions : les 2 parents comptent dans le total de couverts (sauf absence), pas de rappel à qui a déjà répondu, accompagnant ajouté à la volée enregistré, les parents ne s'inscrivent pas aux repas
+- Décision : une période ne vaut pas réponse, le rappel du lundi reste envoyé pendant un stage
+- Palette : vert basilic `#4F7F3A`, schéma Material 3 Tonal Spot (préféré à Fidelity, jugé trop lourd)
+- Maquettes des 12 écrans produites dans Claude Design en deux lots, design system Kikimange créé. Ajouts retenus : jours et nom d'une période, heure d'un repas ouvert, remarques prédéfinies des accompagnants. Prompt de corrections en attente d'envoi
+- Point de vigilance : sur iPhone, les notifications exigent d'installer l'appli sur l'écran d'accueil
+
+### Code famille sur Kikela et Kikimange
+- Code famille demandé une fois par appareil, fixe (variable d'environnement Netlify, non modifiable depuis l'appli)
+- Kikela : code déployé (variable `FOYER_CODE` configurée sur Netlify), actions d'écriture réservées aux appareils identifiés, liens des lieux limités à http/https
+- Motif : Kikimange montrera quand la maison est vide et les numéros des enfants
+
 ---
 
 ## 2026-07-06
