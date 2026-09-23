@@ -7,6 +7,18 @@
 
 ---
 
+## 2026-09-23
+
+### Lancement du projet Kikimange
+- Nouveau projet personnel : application « Kikimange » (qui vient manger à la maison, à quel repas, avec qui)
+- Parti pris : reprendre stack, ergonomie et design de Kikela, avec une palette distincte
+- Cadrage fonctionnel démarré : déjeuner et dîner uniquement, notification le lundi pour la semaine en cours (activable par enfant), accompagnants nommés et réutilisables, repas à emporter, plats favoris + envies + commentaire libre, relance par SMS/WhatsApp, rôle parent (repas ouverts et créneaux bloqués)
+- Projet Kikela ajouté à CONTEXT.md (il n'y figurait pas)
+- Cadrage v1.0 validé : rappel le lundi à 11 h, modification sans date limite, relance WhatsApp/SMS semi-automatique, aucune protection du rôle parent, inscription possible sur une période (ex. stage), absences des parents indicatives et non bloquantes
+- Nettoyage : suppression du dossier doublon `F:\luna\context\` (obsolète). La référence est `F:\luna\claude\context\`
+
+---
+
 ## 2026-07-06
 
 ### Structuration du workspace : commandes, skill, arborescence livrables

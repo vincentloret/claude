@@ -118,6 +118,11 @@ Lead UX / UX Strategist / Senior Product Designer orienté stratégie / Principa
 - **Montée en compétence** à financer via l'employeur : IA appliquée au design (Claude, génération de maquettes, automatisation discovery/delivery), UI avancé / design system mature.
 - **Entretien annuel d'évaluation Conserto** : rester discret sur le projet de départ, cadrer les demandes de formation en "rester au niveau face à l'IA et à l'évolution du marché".
 
+### Projets personnels (applications familiales)
+
+- **Kikela** (livré, utilisé par la famille) : planning partagé des 3 lieux de vacances familiaux. Next.js + Prisma/Turso + Material 3 (terracotta), Netlify. Dossier `livrables/applications/2026-07-08_appli-reservation-vacances-familiales/`.
+- **Kikimange** (démarré le 2026-09-23) : application pour savoir quels enfants (3, vivant hors de la maison) viennent manger à quel repas et avec qui, pour prévoir menus et courses et favoriser les moments en famille. Reprend au maximum Kikela (stack, ergonomie, identification « Qui es-tu ? ») avec une palette propre. Dossier `livrables/applications/2026-09-23_kikimange/`.
+
 ---
 
 ## Mes outils et préférences
