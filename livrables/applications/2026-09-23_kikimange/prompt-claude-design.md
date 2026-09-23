@@ -1,7 +1,7 @@
 # Kikimange · Prompt Claude Design
 
 > Prompt prêt à coller dans Claude Design pour générer les maquettes (étape 4).
-> Statut : v1.1 du 2026-09-23 (découpage en deux lots). Sources : `cadrage.md` v1.1, `architecture.md` v1.0, `palette.md` v1.0.
+> Statut : v1.2 du 2026-09-23 (deux lots, puis prompt de corrections). Sources : `cadrage.md` v1.2, `architecture.md` v1.1, `palette.md` v1.0.
 > Conseil : joindre au prompt une ou deux captures de Kikela (planning mobile et « Qui es-tu ? ») pour que Claude Design reprenne la même famille visuelle.
 
 ---
@@ -148,6 +148,22 @@ La direction visuelle du lot 1 est validée [ajouter ici les retours éventuels]
 - **12. Mes accompagnants** (enfant)
 
 Reste fidèle aux spécifications de ces écrans décrites dans le premier message.
+
+---
+
+## Prompt corrections (après relecture des lots 1 et 2)
+
+Merci, les deux lots sont très réussis. Quelques corrections, à appliquer aux écrans concernés en mobile ET desktop, et à reporter dans le design system :
+
+1. **Heure du rappel** : le rappel part le **lundi à 11 h**, pas à 9 h (écran 11, note sous le tableau des membres).
+2. **Idée de menu** : retire l’option « Je cuisine : pâtes carbo ». La liste ne contient que les plats favoris gérés par les parents (écran 5, desktop). Si les parents sont absents, le bandeau suffit ; l’enfant peut préciser dans « Envies » ou « Commentaire ».
+3. **Code famille** : il est fixe. Dans Réglages (écran 11), garde l’affichage du code et « Partager », **retire « Changer »**.
+4. **Avatars dans les créneaux** (écrans 3, 4, 5, 6, 9 desktop et mobile, confirmation) : les piles d’avatars de 22 px se chevauchent trop et les initiales sont coupées. Affiche au plus 2 avatars entiers, avec un chevauchement léger, puis une pastille « +N ».
+5. **Accès aux Réglages sur mobile** (vue parent) : montre où on les trouve, par exemple via l’avatar en haut à droite (menu : Réglages, Changer de personne).
+6. **Mois sur mobile** (écran 8) : le calendrier sert à consulter. Précise qu’un appui sur un jour ouvre la semaine correspondante, et garde des zones tactiles d’au moins 48 px par jour (la pastille peut rester petite, la zone cliquable couvre toute la case).
+7. **Jules « en attente » malgré son stage** : c’est voulu. Une période ne vaut pas réponse, il valide sa semaine en un tap. Tu peux ajouter dans sa ligne : « Stage en cours, à confirmer ».
+
+Ne change rien d’autre.
 
 ---
 

@@ -1,6 +1,6 @@
 # Kikimange · Cadrage fonctionnel
 
-> Statut : v1.1 du 2026-09-23, validé par Vincent (décisions complétées à l'étape 2).
+> Statut : v1.2 du 2026-09-23, validé par Vincent (décisions complétées aux étapes 2 et 4).
 > Projet frère : Kikela (`../2026-07-08_appli-reservation-vacances-familiales/`).
 
 ---
@@ -40,8 +40,8 @@ Identification : même logique que Kikela (code famille saisi une fois, écran �
   - **idée de menu** : choix dans la liste des plats favoris (menu déroulant)
   - **envies de** : texte libre
   - **commentaire** : texte libre (heure d'arrivée ou de départ, invité végétarien…)
-- **Repas ouvert** (créé par un parent) : invitation sur un créneau (« dimanche midi, raclette, qui vient ? »), avec le menu annoncé.
-- **Participation sur une période** : un enfant s'inscrit en une fois à tous les repas d'une période (ex. stage d'un mois). Il choisit la date de début, la date de fin et les créneaux (déjeuner, dîner ou les deux). Les options (accompagnants, envies, commentaire…) s'appliquent à toute la période. Cela génère des participations individuelles, que l'on peut ensuite modifier ou supprimer une à une (ex. « pas là le mercredi soir »), ou toutes à la fois.
+- **Repas ouvert** (créé par un parent) : invitation sur un créneau (« dimanche midi, raclette, qui vient ? »), avec le menu annoncé et, en option, l'heure (« 12 h 30 »).
+- **Participation sur une période** : un enfant s'inscrit en une fois à tous les repas d'une période (ex. stage d'un mois). Il choisit la date de début, la date de fin, les créneaux (déjeuner, dîner ou les deux) et les jours de la semaine concernés (ex. du lundi au vendredi pour un stage). Il peut nommer la période (« Mon stage en octobre »). Les options (accompagnants, envies, commentaire…) s'appliquent à toute la période. Cela génère des participations individuelles, que l'on peut ensuite modifier ou supprimer une à une (ex. « pas là le mercredi soir »), ou toutes à la fois.
 - **Absence des parents** (créée par un parent) : information indicative (« absents ce week-end »). Les enfants **peuvent quand même s'inscrire** : les parents prévoient les courses, mais les enfants se préparent à manger. L'absence est bien visible au moment de l'inscription.
 - **Invité des parents** : personne extérieure ajoutée par un parent à un repas (grands-parents, amis). Elle compte dans le total mais n'est pas utilisatrice de l'application.
 - **Plat favori** : liste gérée par les parents, qui alimente le menu déroulant « Idée de menu ».
@@ -75,7 +75,7 @@ Identification : même logique que Kikela (code famille saisi une fois, écran �
 2. Il choisit les dates (date range picker, comme dans Kikela) et les créneaux (déjeuner, dîner, les deux).
 3. Il renseigne les options communes, puis valide. Les repas de la période s'affichent dans le calendrier, regroupés visuellement.
 4. Il peut retirer un repas ponctuel sans casser la période.
-5. Les rappels du lundi restent envoyés pendant la période : ils servent à ajuster la semaine.
+5. Les rappels du lundi restent envoyés pendant la période : une période ne vaut pas réponse pour la semaine. L'enfant valide en un tap, ce qui confirme aux parents que la période tient toujours.
 
 ### P6 · Gérer (parent)
 - Créer un repas ouvert ou signaler une absence des parents.
@@ -133,6 +133,12 @@ Parité mobile et desktop, comme Kikela. Le mobile est prioritaire pour les enfa
 8. **Rappel** : pas envoyé à un enfant qui a déjà répondu pour la semaine.
 9. **Accompagnants** : un accompagnant ajouté à la volée est enregistré dans la liste de l'enfant.
 10. **Parents** : ils ne s'inscrivent pas aux repas, ils sont présents par défaut.
+
+### Arrêtées à la relecture des maquettes (2026-09-23)
+11. **Période et rappel** : une période ne vaut pas réponse. Le rappel du lundi reste envoyé.
+12. **Code famille fixe** : affiché et partageable dans les Réglages, non modifiable depuis l'appli.
+13. **Ajouts retenus** : jours de la semaine et nom facultatif pour une période, heure facultative d'un repas ouvert, remarques prédéfinies pour les accompagnants (végétarien·ne, sans gluten, sans lactose, allergie).
+14. **Idée de menu** : uniquement les plats favoris gérés par les parents (pas d'option « Je cuisine »).
 
 ### Restant à trancher
 - **Palette** : couleur source à choisir, distincte du terracotta de Kikela (pistes : vert basilic, aubergine, jaune moutarde). À trancher à l'étape 3.

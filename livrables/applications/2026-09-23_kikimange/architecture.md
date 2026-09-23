@@ -1,6 +1,6 @@
 # Kikimange · Modèle de données et architecture
 
-> Statut : v1.0 du 2026-09-23, validé par Vincent.
+> Statut : v1.1 du 2026-09-23, validé par Vincent (ajustements après relecture des maquettes).
 > S'appuie sur `cadrage.md` v1.1 et sur le code de Kikela.
 
 ---
@@ -100,8 +100,10 @@ model Periode {
   membreId       String
   debut          String          // "AAAA-MM-JJ"
   fin            String
+  nom            String?         // "Mon stage en octobre"
   dejeuner       Boolean
   diner          Boolean
+  jours          String          @default("1234567") // jours de la semaine concernés, 1 = lundi … 7 = dimanche
   participations Participation[]
   creeLe         DateTime        @default(now())
 }
@@ -111,6 +113,7 @@ model Repas {
   creneau      Creneau
   ouvert       Boolean       @default(false) // "dimanche midi, raclette, qui vient ?"
   menuAnnonce  String?
+  heure        String?       // "12 h 30", facultatif
   invites      InviteRepas[]
 
   @@id([date, creneau])
@@ -172,8 +175,8 @@ model AbonnementPush {
 - **Couverts d'une participation** = 1 + nombre d'accompagnants + supplémentaires.
 - **Total d'un repas** = somme des couverts des participations + somme des `nombre` des invités + 2 parents, sauf pendant une absence des parents. Affichage « 7 couverts dont vous 2 ».
 - **Parents absents sur un créneau** : le créneau est compris entre `(debutDate, debutCreneau)` et `(finDate, finCreneau)`. Ordre : déjeuner avant dîner.
-- **A répondu cette semaine** : existence d'une `ReponseSemaine` pour le lundi courant. Une participation ajoutée hors du parcours « semaine » (depuis le mois, par exemple) crée aussi la réponse.
-- **Période** : à la création, génère une `Participation` par créneau coché entre `debut` et `fin`, avec les mêmes options. Si une participation existe déjà sur un créneau, elle est conservée telle quelle (pas d'écrasement). Retirer un repas = supprimer sa participation. « Modifier toute la période » = mise à jour de toutes les participations qui portent le `periodeId`. Supprimer la période supprime ses participations futures, les passées restent.
+- **A répondu cette semaine** : existence d'une `ReponseSemaine` pour le lundi courant. Elle est posée par « Valider ma semaine », « Je ne viens pas cette semaine », ou une participation unitaire ajoutée depuis le mois ou le détail d'un repas. **Une période ne vaut pas réponse** : l'enfant reçoit quand même le rappel du lundi et valide sa semaine en un tap, ce qui confirme aux parents que la période tient toujours.
+- **Période** : à la création, génère une `Participation` par créneau coché, sur les jours de la semaine retenus (`jours`), entre `debut` et `fin` inclus, avec les mêmes options. Si une participation existe déjà sur un créneau, elle est conservée telle quelle (pas d'écrasement). Retirer un repas = supprimer sa participation. « Modifier toute la période » = mise à jour de toutes les participations qui portent le `periodeId`. Supprimer la période supprime ses participations futures, les passées restent.
 
 ---
 
@@ -263,7 +266,7 @@ Le parent choisit le canal, son téléphone ouvre l'appli avec le message prére
 
 ## 5. Sécurité et accès
 
-- **Code famille** demandé une fois par appareil sur « Qui es-tu ? », comparé à la variable `FAMILLE_CODE`. Si la variable n'est pas définie, l'accès est refusé. Même mécanique que Kikela (`verifierCodeFamille`). Raison : l'appli affiche quand la maison est vide et les numéros des enfants.
+- **Code famille** demandé une fois par appareil sur « Qui es-tu ? », comparé à la variable `FAMILLE_CODE`. Si la variable n'est pas définie, l'accès est refusé. Même mécanique que Kikela (`verifierCodeFamille`). Raison : l'appli affiche quand la maison est vide et les numéros des enfants. **Code fixe** : il n'est pas modifiable depuis l'appli. Les Réglages l'affichent et proposent « Partager » ; pour le changer, on modifie la variable sur Netlify.
 - Cookie `kikimange_membre` (httpOnly, 1 an), comme Kikela.
 - Le layout `(app)` redirige vers « Qui es-tu ? » si aucun membre n'est identifié : aucune page n'est lisible sans code.
 - Chaque Server Action vérifie qu'un membre est identifié. Les actions parent vérifient le rôle en base. Le choix du rôle reste libre (pas de code parent), conformément au cadrage.
