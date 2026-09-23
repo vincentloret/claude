@@ -70,7 +70,7 @@
 .av-papa { background: var(--member-papa); } .av-maman { background: var(--member-maman); } .av-guest { background: var(--member-guest); }
 .k-avstack { display: inline-flex; align-items: center; }
 .k-avstack > * { box-shadow: 0 0 0 2px var(--k-ring, var(--surface-container)); }
-.k-avstack > * + * { margin-left: -6px; }
+.k-avstack > * + * { margin-left: -4px; } /* chevauchement léger : initiales entières */
 .k-plus { display: inline-grid; place-items: center; min-width: 24px; height: 24px; padding: 0 5px; border-radius: var(--shape-full); background: var(--surface-container-highest); color: var(--on-surface-variant); font: 500 10px/1 var(--font-sans); }
 .k-avbadge { position: absolute; right: -3px; bottom: -3px; width: 18px; height: 18px; border-radius: 50%; display: grid; place-items: center; box-shadow: 0 0 0 2px var(--k-ring, var(--surface)); }
 .k-avbadge .k-ic { font-size: 13px; }
@@ -374,6 +374,12 @@
 .k-perk > .k-ic { width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; font-size: 20px; flex: none; }
 .k-month--desk .k-month__d { overflow: hidden; }
 .k-month__tag { overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+
+/* Mois mobile : chaque case du jour est une zone tactile pleine (≥ 48 px), sans écart entre colonnes */
+.k-month:not(.k-month--desk) .k-month__wd, .k-month:not(.k-month--desk) .k-month__wk { column-gap: 0; }
+.k-month:not(.k-month--desk) .k-pill { margin: 0 3px; }
+.k-month:not(.k-month--desk) .k-month__band { margin: -3px 0; }
+.k-month__press { position: relative; z-index: 2; margin: -5px 0 -7px; border-radius: var(--shape-md); background: color-mix(in srgb, var(--on-surface) 10%, transparent); box-shadow: inset 0 0 0 2px var(--primary); pointer-events: none; }
 </style>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,400,0..1,0&display=block">
@@ -475,7 +481,7 @@
       <div class="d-body">
         <nav class="k-rail"><div class="k-logo"><span class="k-ic">soup_kitchen</span></div><button class="k-navitem"><span class="k-navitem__ind"><span class="k-ic">calendar_view_week</span></span>Semaine</button><button class="k-navitem"><span class="k-navitem__ind"><span class="k-ic">calendar_month</span></span>Mois</button><button class="k-navitem"><span class="k-navitem__ind"><span class="k-ic">shopping_basket</span></span>Courses</button><button class="k-navitem" style="margin-top:auto" aria-current="page"><span class="k-navitem__ind"><span class="k-ic">settings</span></span>Réglages</button></nav>
         <div class="d-main">
-          <div class="d-head"><div class="k-col"><h1>Réglages de la famille</h1><p>Seuls Papa et Maman voient cette page</p></div><span class="k-grow"></span><div class="k-row" style="background:var(--surface-container-low);border-radius:16px;padding:8px 8px 8px 16px"><span class="k-col"><span class="k-muted" style="font:400 12px/16px var(--font-sans)">Code famille</span><strong style="font:400 22px/28px var(--font-sans);letter-spacing:4px">4718</strong></span><button class="k-btn k-btn--text k-btn--sm">Partager</button><button class="k-btn k-btn--text k-btn--sm">Changer</button></div></div>
+          <div class="d-head"><div class="k-col"><h1>Réglages de la famille</h1><p>Seuls Papa et Maman voient cette page</p></div><span class="k-grow"></span><div class="k-row" style="background:var(--surface-container-low);border-radius:16px;padding:8px 8px 8px 16px"><span class="k-col"><span class="k-muted" style="font:400 12px/16px var(--font-sans)">Code famille</span><strong style="font:400 22px/28px var(--font-sans);letter-spacing:4px">4718</strong></span><button class="k-btn k-btn--text k-btn--sm"><span class="k-ic">share</span>Partager</button></div></div>
           <div class="k-tabs" style="margin:18px 0 8px;max-width:720px"><button class="k-tab" aria-selected="true"><span class="k-ic">group</span>Membres</button><button class="k-tab"><span class="k-ic">restaurant_menu</span>Plats favoris</button><button class="k-tab"><span class="k-ic">flight_takeoff</span>Absences</button><button class="k-tab"><span class="k-ic">restaurant</span>Repas ouverts</button></div>
           <table class="k-table">
             <tr><th>Membre</th><th>Téléphone</th><th>Rappel du lundi</th><th>Notifications</th><th>Accompagnants</th><th></th></tr>
@@ -485,7 +491,7 @@
             <tr><td><span class="k-row" style="gap:12px"><span class="k-av k-av--40 av-papa">PA</span><b style="font-weight:500">Papa</b><span class="k-badge k-badge--wait">parent</span></span></td><td>06 39 98 77 30</td><td class="k-muted">—</td><td><span class="k-notif k-notif--on"><span class="k-ic">notifications_active</span>Actives · Android</span></td><td class="k-muted">—</td><td><span class="k-ic k-muted">more_vert</span></td></tr>
             <tr><td><span class="k-row" style="gap:12px"><span class="k-av k-av--40 av-maman">MA</span><b style="font-weight:500">Maman</b><span class="k-badge k-badge--wait">parent · toi</span></span></td><td>06 39 98 51 88</td><td class="k-muted">—</td><td><span class="k-notif k-notif--on"><span class="k-ic">notifications_active</span>Actives · iPhone</span></td><td class="k-muted">—</td><td><span class="k-ic k-muted">more_vert</span></td></tr>
           </table>
-          <div class="k-banner k-banner--info" style="margin-top:18px;max-width:720px"><span class="k-ic">event_repeat</span><span>Le rappel part le <b>lundi à 9 h</b> à ceux qui n'ont pas encore validé leur semaine.</span></div>
+          <div class="k-banner k-banner--info" style="margin-top:18px;max-width:720px"><span class="k-ic">event_repeat</span><span>Le rappel part le <b>lundi à 11 h</b> à ceux qui n'ont pas encore validé leur semaine.</span></div>
         </div>
       </div>
     </div>
