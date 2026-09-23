@@ -1,0 +1,145 @@
+// Schéma Prisma de Kikimange : qui vient manger à la maison, à quel repas, avec qui.
+// Les jours de repas sont stockés en texte "AAAA-MM-JJ" (pas de DateTime) pour éviter tout décalage de fuseau.
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+enum Role {
+  enfant
+  parent
+}
+
+enum Creneau {
+  dejeuner
+  diner
+}
+
+model Membre {
+  id             String           @id @default(cuid())
+  nom            String
+  initiales      String
+  couleur        String
+  role           Role
+  telephone      String?
+  rappelActif    Boolean          @default(true)
+  ordre          Int              @default(0)
+  accompagnants  Accompagnant[]
+  participations Participation[]
+  periodes       Periode[]
+  reponses       ReponseSemaine[]
+  abonnements    AbonnementPush[]
+}
+
+model Accompagnant {
+  id             String          @id @default(cuid())
+  nom            String
+  remarque       String?
+  archive        Boolean         @default(false)
+  membre         Membre          @relation(fields: [membreId], references: [id], onDelete: Cascade)
+  membreId       String
+  participations Participation[]
+  creeLe         DateTime        @default(now())
+}
+
+model Participation {
+  id              String         @id @default(cuid())
+  membre          Membre         @relation(fields: [membreId], references: [id], onDelete: Cascade)
+  membreId        String
+  date            String
+  creneau         Creneau
+  accompagnants   Accompagnant[]
+  supplementaires Int            @default(0)
+  partsAEmporter  Int            @default(0)
+  platFavori      PlatFavori?    @relation(fields: [platFavoriId], references: [id], onDelete: SetNull)
+  platFavoriId    String?
+  envies          String?
+  commentaire     String?
+  periode         Periode?       @relation(fields: [periodeId], references: [id], onDelete: SetNull)
+  periodeId       String?
+  creeLe          DateTime       @default(now())
+  modifieLe       DateTime       @updatedAt
+
+  @@unique([membreId, date, creneau])
+  @@index([date])
+}
+
+model Periode {
+  id             String          @id @default(cuid())
+  membre         Membre          @relation(fields: [membreId], references: [id], onDelete: Cascade)
+  membreId       String
+  nom            String?
+  debut          String
+  fin            String
+  dejeuner       Boolean
+  diner          Boolean
+  jours          String          @default("1234567") // 1 = lundi … 7 = dimanche
+  participations Participation[]
+  creeLe         DateTime        @default(now())
+}
+
+model Repas {
+  date        String
+  creneau     Creneau
+  ouvert      Boolean       @default(false)
+  menuAnnonce String?
+  heure       String?
+  invites     InviteRepas[]
+
+  @@id([date, creneau])
+}
+
+model InviteRepas {
+  id           String  @id @default(cuid())
+  repas        Repas   @relation(fields: [repasDate, repasCreneau], references: [date, creneau], onDelete: Cascade)
+  repasDate    String
+  repasCreneau Creneau
+  nom          String
+  nombre       Int     @default(1)
+  remarque     String?
+}
+
+model AbsenceParents {
+  id           String   @id @default(cuid())
+  debutDate    String
+  debutCreneau Creneau
+  finDate      String
+  finCreneau   Creneau
+  note         String?
+  creeLe       DateTime @default(now())
+}
+
+model PlatFavori {
+  id             String          @id @default(cuid())
+  nom            String
+  ordre          Int             @default(0)
+  actif          Boolean         @default(true)
+  participations Participation[]
+}
+
+// Trace « a répondu pour la semaine », y compris « je ne viens pas ». Une période ne vaut pas réponse.
+model ReponseSemaine {
+  membre     Membre   @relation(fields: [membreId], references: [id], onDelete: Cascade)
+  membreId   String
+  lundi      String
+  neVientPas Boolean  @default(false)
+  reponduLe  DateTime @default(now())
+
+  @@id([membreId, lundi])
+}
+
+model AbonnementPush {
+  id       String   @id @default(cuid())
+  membre   Membre   @relation(fields: [membreId], references: [id], onDelete: Cascade)
+  membreId String
+  endpoint String   @unique
+  p256dh   String
+  auth     String
+  appareil String?
+  creeLe   DateTime @default(now())
+}
