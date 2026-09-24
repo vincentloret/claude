@@ -9,7 +9,8 @@
     "lint": "eslint",
     "postinstall": "prisma generate",
     "db:studio": "prisma studio",
-    "db:seed": "prisma db seed"
+    "db:seed": "prisma db seed",
+    "db:turso": "node prisma/migrer-turso.mjs"
   },
   "dependencies": {
     "@prisma/adapter-libsql": "^7.8.0",
