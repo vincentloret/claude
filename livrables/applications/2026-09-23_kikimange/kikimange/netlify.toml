@@ -4,6 +4,10 @@
 
 [build.environment]
   NODE_VERSION = "24"
+  # Ces deux variables ne sont pas secrètes : la clé publique VAPID est volontairement envoyée
+  # au navigateur, et VAPID_SUBJECT n'est qu'une adresse de contact. Le détecteur de secrets
+  # de Netlify les ignore donc (les autres variables restent surveillées).
+  SECRETS_SCAN_OMIT_KEYS = "NEXT_PUBLIC_VAPID_PUBLIC_KEY,VAPID_SUBJECT"
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
