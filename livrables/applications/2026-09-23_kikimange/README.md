@@ -2,7 +2,7 @@
 
 > Qui vient manger à la maison, à quel repas, avec qui.
 
-**Statut :** application complète en local, testée. Prochaine étape : déploiement (Turso, Netlify, clés de notification).
+**Statut :** en production sur https://kikimange.netlify.app (base Turso). Tests réussis sur Android et iPhone. Reste à observer le premier rappel du lundi (28 septembre, 11 h).
 
 | # | Étape | Outil | Statut |
 |---|---|---|---|
@@ -11,4 +11,4 @@
 | 3 | Palette et prompt de design (`palette.md`, `prompt-claude-design.md`) | Luna | Fait (v1.0) |
 | 4 | Maquettes (`Maquettes/`, design system Claude Design) | Claude Design | Fait (corrections intégrées) |
 | 5 | Développement (`kikimange/`, sur la base de Kikela) | Claude Code | Fait en local (itérations 1 et 2) |
-| 6 | Déploiement et test avec les enfants | Claude Code / Cowork | À faire |
+| 6 | Déploiement et test avec les enfants | Claude Code | Fait (rappel du lundi à confirmer) |
