@@ -7,6 +7,18 @@
 
 ---
 
+## 2026-09-26
+
+### Kikimange en production
+- Développement en deux itérations dans Claude Code : semaine enfant et parent, feuille de participation, confirmation, détail d'un repas, accompagnants (itération 1) ; périodes, mois, récap courses partageable, réglages des parents, notifications et écran d'installation, rappel du lundi (itération 2). Tests automatisés dans un navigateur piloté à chaque itération
+- Mise en ligne le 2026-09-24 : base Turso `kikimange` (tables créées par un script maison, la CLI Prisma ne gérant pas les URL Turso), site Netlify https://kikimange.netlify.app. Premier déploiement bloqué par le détecteur de secrets de Netlify (adresse e-mail dans `.env.example`), corrigé
+- Tests réussis avec la famille : notifications reçues sur Android et iPhone, parents prévenus quand un enfant valide, enfants invités aux repas ouverts
+- À suivre : premier rappel automatique le lundi 28 septembre à 11 h ; Pablo doit réactiver ses notifications (abonnement expiré), Claire à activer, Macéo sans rappel ni téléphone
+- Kikela et Kikimange ne se reconstruisent plus sur Netlify que si leur propre dossier change (économie de crédits)
+- Décision : pas de calendrier maison pour les dates pour l'instant (sélecteur natif), à revoir selon les retours d'usage
+
+---
+
 ## 2026-09-23
 
 ### Lancement du projet Kikimange
@@ -22,7 +34,7 @@
 - Décisions : les 2 parents comptent dans le total de couverts (sauf absence), pas de rappel à qui a déjà répondu, accompagnant ajouté à la volée enregistré, les parents ne s'inscrivent pas aux repas
 - Décision : une période ne vaut pas réponse, le rappel du lundi reste envoyé pendant un stage
 - Palette : vert basilic `#4F7F3A`, schéma Material 3 Tonal Spot (préféré à Fidelity, jugé trop lourd)
-- Maquettes des 12 écrans produites dans Claude Design en deux lots, design system Kikimange créé. Ajouts retenus : jours et nom d'une période, heure d'un repas ouvert, remarques prédéfinies des accompagnants. Prompt de corrections en attente d'envoi
+- Maquettes des 12 écrans produites dans Claude Design en deux lots, design system Kikimange créé. Ajouts retenus : jours et nom d'une période, heure d'un repas ouvert, remarques prédéfinies des accompagnants. Corrections appliquées et maquettes validées le jour même
 - Point de vigilance : sur iPhone, les notifications exigent d'installer l'appli sur l'écran d'accueil
 
 ### Code famille sur Kikela et Kikimange
