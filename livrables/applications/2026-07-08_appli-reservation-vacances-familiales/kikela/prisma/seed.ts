@@ -18,7 +18,7 @@ const lieux = [
     couleur: "var(--lieu-bolquere)",
     couleurContainer: "var(--lieu-bolquere-container)",
     couleurOnContainer: "var(--lieu-bolquere-on-container)",
-    icone: "apartment",
+    icone: "landscape",
     capacite: 6,
     chambres: 3,
     description:
