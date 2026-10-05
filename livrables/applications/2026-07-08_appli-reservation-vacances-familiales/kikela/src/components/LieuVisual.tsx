@@ -2,7 +2,7 @@ import type { Lieu } from "@/lib/data";
 
 const placeholderGradients: Record<string, string> = {
   bolquere: "repeating-linear-gradient(135deg,#F1E6CC 0 13px,#E9DBB8 13px 26px)",
-  gedre: "repeating-linear-gradient(135deg,#E4E2F0 0 13px,#D9D6EA 13px 26px)",
+  gedre: "repeating-linear-gradient(135deg,#F4DDE3 0 13px,#ECD0D8 13px 26px)",
   "saint-gilles": "repeating-linear-gradient(135deg,#D5E6F2 0 13px,#C8DCEC 13px 26px)",
 };
 
